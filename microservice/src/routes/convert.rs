@@ -1,7 +1,8 @@
 use crate::routes::HttpError;
 use actix_web::{web, HttpResponse, Result};
 use serde::{Deserialize, Serialize};
-use crate::services::{chars_to_jyutping, chars_to_yale};
+// use crate::services::{chars_to_jyutping, chars_to_yale};
+use crate::services::{chars_to_jyutping, chars_to_yale, CharsToJyutpingResult};
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -35,7 +36,7 @@ impl From<RequestQuery> for UnwrappedRequestQuery {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ConvertResponseBody {
     system_used: JyutpingSystem,
-    converted_text: String 
+    results: CharsToJyutpingResult 
 }
 
 pub async fn convert_chars_to_jyutping(
@@ -52,7 +53,7 @@ pub async fn convert_chars_to_jyutping(
 
     Ok(HttpResponse::Ok().json(ConvertResponseBody {
         system_used: unwrapped_query.to,
-        converted_text: converted
+        results: converted
     }))
 }
 
@@ -60,21 +61,5 @@ pub fn setup(cfg: &mut web::ServiceConfig) {
     cfg.service(
         web::scope("/convert")
             .route("/chars", web::get().to(convert_chars_to_jyutping))
-            // .route("", web::post().to(new_employee))
-            // .service(
-                // web::scope("/{id}")
-                    // .route("", web::get().to(get_employee))
-                    // .route("", web::put().to(update_employee))
-                    // .route("", web::delete().to(delete_employee))
-                    // .service(
-                        // web::scope("/sessions")
-                            // .route("", web::get().to(list_employee_sessions))
-                            // .service(
-                                // web::scope("/{sid}")
-                                    // .route("", web::put().to(assign_to_session))
-                                    // .route("", web::delete().to(remove_from_session)),
-                            // ),
-                    // ),
-            // ),
     );
 }
