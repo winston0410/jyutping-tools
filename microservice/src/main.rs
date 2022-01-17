@@ -1,39 +1,50 @@
+use actix_web::http::header::{LastModified, LAST_MODIFIED};
 use actix_web::{middleware, web, App, HttpServer};
 use std::env;
+mod middlewares;
 mod routes;
 mod services;
 use pyo3::prelude::*;
+use std::time::{Duration, SystemTime};
 
 // Use debug assertion for checking PYTHONPATH
 //REF https://stackoverflow.com/questions/39204908/how-to-check-release-debug-builds-using-cfg-in-rust
+
+const BUILD_TIME: &str = include!("/tmp/timestamp.txt");
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     env::set_var("RUST_LOG", "actix_web=info");
     env_logger::init();
 
-    // println!("Check equality {:?}", env::var("DEBUG_PYTHON").unwrap() == "1" );
-    Python::with_gil(|py| -> PyResult<()> {
-        py.run(
-            r#"
-import sys
-print(sys.executable, sys.path, sys.version)
-"#,
-            None,
-            None,
-        )
-        .unwrap();
-        Ok(())
-    });
+    // Python::with_gil(|py| -> PyResult<()> {
+    // py.run(
+    // r#"
+    // import sys
+    // print(sys.executable, sys.path, sys.version)
+    // "#,
+    // None,
+    // None,
+    // )
+    // .unwrap();
+    // Ok(())
+    // });
 
-    println!("Starting microservice...");
+    println!(
+        "{}",
+        format!("Starting microservice..., built at {}", BUILD_TIME)
+    );
 
     HttpServer::new(move || {
         App::new()
+            .wrap(middleware::Compress::default())
             .wrap(middleware::Logger::default())
-            .service(web::scope("/v1")
-                .configure(routes::convert::setup)
-                .configure(routes::segment::setup)
+            .service(
+                web::scope("/v1")
+                    .wrap(middlewares::CacheHeader::default())
+                    .wrap(middleware::DefaultHeaders::new().add((LAST_MODIFIED, BUILD_TIME)))
+                    .configure(routes::convert::setup)
+                    .configure(routes::segment::setup),
             )
             .service(web::scope("").configure(routes::health_check::setup))
     })
