@@ -1,3 +1,4 @@
+use actix_cors::Cors;
 use actix_web::http::header::{LastModified, LAST_MODIFIED};
 use actix_web::{middleware, web, App, HttpServer};
 use std::env;
@@ -29,7 +30,8 @@ async fn main() -> std::io::Result<()> {
     // .unwrap();
     // Ok(())
     // });
-
+    //
+    
     println!(
         "{}",
         format!("Starting microservice..., built at {}", BUILD_TIME)
@@ -37,8 +39,14 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
-            .wrap(middleware::Compress::default())
             .wrap(middleware::Logger::default())
+            .wrap(if env::var("PRODUCTION").is_ok() {
+                println!("Using restrictive CORS for production");
+                Cors::default()
+            } else {
+                println!("Using permissive CORS for development");
+                Cors::permissive()
+            })
             .service(
                 web::scope("/v1")
                     .wrap(middlewares::CacheHeader::default())

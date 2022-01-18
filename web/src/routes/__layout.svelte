@@ -8,6 +8,20 @@
 <div>
     <slot />
 </div>
+<footer>
+    <p></p>
+</footer>
 
-<style>
+<style lang="scss">
+    :global(body){
+        background: hsla(46, 75%, 87%, 1);
+    }
+
+    :global(button){
+        appearance: none;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        cursor: pointer;
+    }
 </style>

@@ -13,10 +13,10 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "next",
+		"@sveltejs/adapter-vercel": "next",
 		"@sveltejs/kit": "next",
 		"@typescript-eslint/eslint-plugin": "^4.31.1",
 		"@typescript-eslint/parser": "^4.31.1",
-		"@sveltejs/adapter-vercel": "next",
 		"eslint": "^7.32.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-svelte3": "^3.2.1",
@@ -30,6 +30,11 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"modern-css-reset": "^1.4.0"
+		"@felte/validator-zod": "^0.3.8",
+		"felte": "next",
+		"modern-css-reset": "^1.4.0",
+		"node-sass": "^7.0.1",
+		"svelte-use-local-storage": "github:winston0410/svelte-use-local-storage",
+		"zod": "^3.11.6"
 	}
 }

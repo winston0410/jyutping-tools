@@ -60,5 +60,5 @@ pub async fn convert_chars_to_jyutping(
 //NOTE Use GET as it is the only cacheable response
 //REF https://developer.mozilla.org/en-US/docs/Glossary/cacheable
 pub fn setup(cfg: &mut web::ServiceConfig) {
-    cfg.service(web::scope("/convert").route("/chars", web::get().to(convert_chars_to_jyutping)));
+    cfg.service(web::scope("/convert").route("", web::get().to(convert_chars_to_jyutping)));
 }
