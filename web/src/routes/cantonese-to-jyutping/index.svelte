@@ -6,6 +6,7 @@
 	import { PROXY_ROOT, MICROSERVICE_ROOT, CONVERT_ACTION } from '$lib/const';
 	import * as z from 'zod';
 	import { validator } from '@felte/validator-zod';
+    import { onMount } from 'svelte';
 
 	export const load = async ({ fetch }) => {
 		return {
@@ -19,7 +20,7 @@
 		'convert-characters': z.string().nonempty()
 	});
 
-	const { form, errors, validate } = createForm({
+	const { form, errors, touched, validate, data, isValid } = createForm({
 		onSubmit: async (values) => {
 			const payload = {
 				input: values['convert-characters']
@@ -42,20 +43,28 @@
 		extend: validator,
 		validateSchema: schema
 	});
+
+    onMount(async () => {
+        if($data['convert-characters']){
+            await validate()
+        }
+    })
 </script>
 
 <MetaData title="Jyutping converter" description="This is the description" url="" image="" />
 <h1>Cantonese to Jyutping</h1>
+<!-- TODO How to use type assertion in svelte?  -->
 <form use:form>
 	<Input
         type="textarea"
 		name={'convert-characters'}
-        error={$errors['convert-characters']}
+        error={$errors}
+        touched={$touched}
 		on:input={async () => {
 			await validate();
 		}}
 	>
 		<span>Cantonese</span>
 	</Input>
-	<Button type="submit">Convert</Button>
+	<Button type="submit" disabled={!$isValid}>Convert</Button>
 </form>

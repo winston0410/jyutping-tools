@@ -1,6 +1,9 @@
 use rscantonese;
 
 #[test]
-fn test_add() {
-    assert_eq!(rscantonese::sum(4, 5).unwrap(), 9);
+fn segment() {
+    assert_eq!(
+        rscantonese::segment("廣東話好難學？").unwrap(),
+        vec!["廣東話", "好", "難", "學", "？"]
+    );
 }

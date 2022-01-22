@@ -9,7 +9,7 @@
     <slot />
 </div>
 <footer>
-    <p></p>
+    <p>Hello world</p>
 </footer>
 
 <style lang="scss">
@@ -23,5 +23,10 @@
         padding: 0;
         border: 0;
         cursor: pointer;
+    }
+
+    footer{
+        background: $white;
+        padding: 12px;
     }
 </style>

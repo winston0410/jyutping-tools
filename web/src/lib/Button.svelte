@@ -6,32 +6,26 @@
 	export let href: string | null = null;
 	export let type: string = 'button';
 	export let disabled: boolean = false;
-
-	const handleClick = (e: Event) => {
-		if (disabled) {
-			e.preventDefault();
-		}
-	};
+    export let hover: boolean = true;
 </script>
 
 <!-- REF https://www.joshwcomeau.com/animation/3d-button/  -->
-
 {#if href}
-	<a {href} class="govuk__button" on:click on:click={handleClick}>
-		<span class="govuk__button__text" class:govuk__button__text--disabled={disabled}>
+	<a {href} class="button" on:click>
+		<span class="button-text" class:disabled class:hover>
 			<slot />
 		</span>
 	</a>
 {:else}
-	<button {type} class="govuk__button" on:click on:click={handleClick}>
-		<span class="govuk__button__text" class:govuk__button__text--disabled={disabled}>
+	<button {type} class="button" on:click {disabled}>
+		<span class="button-text" class:disabled class:hover>
 			<slot />
 		</span>
 	</button>
 {/if}
 
 <style lang="scss">
-	.govuk__button {
+	.button {
 		display: block;
 		width: fit-content;
 		color: #ffffff;
@@ -41,9 +35,10 @@
 		user-select: none;
 		background-color: #000000;
         cursor: pointer;
+        transition: all 0.5s;
 	}
 
-	.govuk__button__text {
+	.button-text {
 		display: block;
 		padding: 12px 26px;
 		border-radius: 5px;
@@ -51,9 +46,14 @@
 		transform: translateY(-4px);
 		min-width: 100px;
 		text-align: center;
+        transition: all 0.5s;
 	}
 
-	.govuk__button__text--disabled {
+    .hover:not(.disabled):hover {
+        background-color: beige;
+    }
+
+	.disabled {
 		background-color: #777777;
 		cursor: not-allowed;
 	}

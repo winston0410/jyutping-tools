@@ -1,6 +1,6 @@
-use std::{env, io::Write, fs};
+use actix_web::http::header::LastModified;
 use std::time::{Duration, SystemTime};
-use actix_web::http::header::{LastModified};
+use std::{env, fs, io::Write};
 
 fn main() {
     let outdir = "/tmp";

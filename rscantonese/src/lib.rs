@@ -1,9 +1,14 @@
 use pyo3::prelude::*;
 
-/// Formats the sum of two numbers as string.
 #[pyfunction]
 pub fn sum(a: usize, b: usize) -> PyResult<usize> {
     Ok(a + b)
+}
+
+#[pyfunction]
+pub fn segment(unsegmented: &str) -> PyResult<Vec<&str>> {
+    let result = vec!["hello"];
+    Ok(result)
 }
 
 /// A Python module implemented in Rust. The name of this function must match

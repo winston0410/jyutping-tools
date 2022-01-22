@@ -34,7 +34,9 @@
         inherit defaultPackage;
 
         packages = {
-          image = pkgs.callPackage ./image.nix { inherit defaultPackage pythonWithLib; };
+          image = pkgs.callPackage ./image.nix {
+            inherit defaultPackage pythonWithLib;
+          };
         };
 
         defaultApp = utils.lib.mkApp { drv = self.defaultPackage."${system}"; };
@@ -43,7 +45,7 @@
           mkShell {
             buildInputs =
               [ cargo-watch rust-bin.nightly.latest.default pythonWithLib ];
-            DEBUG_PYTHON=1;
+            DEBUG_PYTHON = 1;
             shellHook = ''
               PYTHONPATH=${pythonWithLib}/${pythonWithLib.sitePackages}
               PYO3_PRINT_CONFIG=1;
