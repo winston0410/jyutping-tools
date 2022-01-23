@@ -1,18 +1,32 @@
 <script lang="ts" context="module">
     import 'modern-css-reset'
+    import { SvelteToast } from '@zerodevx/svelte-toast'
+    import "@fontsource/karla"
 </script>
 
 <script lang="ts">
+    const toastOpts = {
+
+    }
 </script>
 
 <div>
     <slot />
 </div>
+<SvelteToast options={toastOpts}/>
 <footer>
     <p>Hello world</p>
 </footer>
 
 <style lang="scss">
+    :global(html){
+        font-size: 16px;
+    }
+    :global(body){
+        font-family: "Karla";
+        color: $black;
+    }
+        
     :global(body){
         background: hsla(46, 75%, 87%, 1);
     }
