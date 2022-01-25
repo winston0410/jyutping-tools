@@ -1,13 +1,44 @@
-import { toast } from '@zerodevx/svelte-toast';
-import Toast from '$lib/Toast.svelte';
+import type { addNotification, DefaultNotificationOptions } from 'svelte-notifications';
 
-export const mkErrorToast = (message: string): void => {
-	toast.push({
-		component: {
-			src: Toast,
-			props: {
-				message
-			}
-		}
-	});
+type MkToast = (text: string) => void;
+
+type Toaster = {
+	mkError: MkToast;
+	mkWarning: MkToast;
 };
+
+export enum ToastKind {
+	Error = 'error',
+	Warning = 'warning',
+	Info = 'info',
+	Ok = 'ok'
+}
+
+export interface Toast extends Omit<DefaultNotificationOptions, 'type'> {
+	kind: ToastKind;
+}
+
+const position = 'bottom-center';
+
+const mkToaster = (add: addNotification): Toaster => {
+	return {
+		mkError: (text) => {
+			add({
+				text,
+				kind: ToastKind.Error,
+				position,
+                removeAfter: 3000
+			});
+		},
+		mkWarning: (text) => {
+			add({
+				text,
+				kind: ToastKind.Warning,
+				position,
+                removeAfter: 3000
+			});
+		}
+	};
+};
+
+export default mkToaster;

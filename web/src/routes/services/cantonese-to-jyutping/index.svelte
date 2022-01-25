@@ -10,7 +10,8 @@
 	import { validator } from '@felte/validator-zod';
 	import { onMount } from 'svelte';
 	import { isCantoneseOnly, isTraditionalOnly } from '$lib/helper';
-	import { mkErrorToast } from '$lib/toast';
+	import mkToast from '$lib/toast';
+	import { getNotificationsContext } from 'svelte-notifications';
 
 	export const load = async ({ fetch }) => {
 		return {
@@ -20,18 +21,9 @@
 </script>
 
 <script lang="ts">
-	const warningSchema2 = z.object({
-		'convert-characters': z.string().nonempty()
-	});
-    
-    const { warnings } = createForm({
-        onSubmit: () => {},
-        warningSchema: warningSchema2,
-        extends: validator
-    })
+	const { addNotification } = getNotificationsContext();
+	const toast = mkToast(addNotification);
 
-    console.log($warnings)
-    
 	const schema = z.object({
 		'convert-characters': z.string().nonempty()
 	});
@@ -40,7 +32,7 @@
 		'convert-characters': z.string().refine(isCantoneseOnly, {
 			message: 'Non chinese characters might make the translator fail.'
 		})
-		//  .refine(isTraditionalOnly, {
+		//  .refine(isTraditggionalOnly, {
 		//  message: 'Simplified characters might make the translator fail.'
 		//  })
 	});
@@ -68,9 +60,9 @@
 		onError: (_: Error) => {
 			// TODO Differentiate errors with err.message and err.name
 			if (navigator.onLine) {
-				mkErrorToast('Service is temporaily unavailable.');
+				toast.mkError('Service is temporaily unavailable.');
 			} else {
-				mkErrorToast('You are not connected with the Internet.');
+				toast.mkError('You are not connected with the Internet.');
 			}
 		},
 		extend: validator,
@@ -86,23 +78,36 @@
 </script>
 
 <MetaData title="Jyutping converter" description="This is the description" url="" image="" />
+
 <h1>Cantonese to Jyutping</h1>
-<!-- TODO How to use type assertion in svelte?  -->
 <form use:form>
 	<!--  warnings={$warnings}  -->
-	<Input
-		type="textarea"
-		name={'convert-characters'}
-		error={$errors}
-		touched={$touched}
-		spellcheck={false}
-		placeholder="我係香港人"
-		on:input={async () => {
-			await validate();
-		}}
-	>
-		<span>Cantonese</span>
-	</Input>
-	<Separator />
-	<Button type="submit" disabled={!$isValid}>Convert</Button>
+	<div class="layout">
+		<Input
+			type="textarea"
+			name={'convert-characters'}
+			error={$errors}
+			touched={$touched}
+			spellcheck={false}
+			placeholder="我係香港人"
+			on:input={async () => {
+				await validate();
+			}}
+		>
+			<span>Cantonese</span>
+		</Input>
+		<Separator />
+
+		<div class="control-panel">
+			<Button type="submit" disabled={!$isValid}>Convert</Button>
+		</div>
+	</div>
 </form>
+
+<style lang="scss">
+    .layout {
+    }
+
+	.control-panel {
+	}
+</style>
