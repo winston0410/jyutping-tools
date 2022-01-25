@@ -3,23 +3,20 @@
 	import '@fontsource/karla';
 	import Notifications from 'svelte-notifications';
 	import Toast from '$lib/Toast.svelte';
-    import SkipToContent from "carbon-components-svelte/src/UIShell/SkipToContent.svelte"
-    import Content from "carbon-components-svelte/src/UIShell/Content.svelte"
 </script>
 
 <script lang="ts">
 </script>
 
-<SkipToContent />
-<Content>
-    <Notifications item={Toast}>
+<Notifications item={Toast}>
+    <main id="main-content">
         <slot />
-    </Notifications>
-</Content>
+    </main>
+</Notifications>
 <!--  <footer>  -->
 <!--  <p>Hello world</p>  -->
-<!--  </footer>  -->
 
+<!--  </footer>  -->
 <style lang="scss">
 	:global(html) {
 		font-size: 16px;

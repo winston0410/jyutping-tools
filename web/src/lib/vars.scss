@@ -1,7 +1,30 @@
-$white: #FFFFFF;
+$white: #ffffff;
 $black: hsla(205, 20%, 16%, 1);
-$grey: #DDD;
+$grey: #ddd;
 $error: #be3a34;
 $warning: #ffc845;
 $info: blue;
 $ok: #00664f;
+
+$tablet-width: 768px;
+$desktop-width: 1024px;
+
+@mixin tablet {
+	@media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
+		@content;
+	}
+}
+
+@mixin desktop {
+	@media (min-width: #{$desktop-width}) {
+		@content;
+	}
+}
+
+@mixin two-columns {
+	--left-width: 61.8%;
+	--right-width: 38.2%;
+
+	display: grid;
+    grid-template-columns: var(--left-width) var(--right-width);
+}

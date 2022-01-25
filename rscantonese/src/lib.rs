@@ -1,4 +1,5 @@
 use pyo3::prelude::*;
+mod wordseg;
 
 #[pyfunction]
 pub fn sum(a: usize, b: usize) -> PyResult<usize> {

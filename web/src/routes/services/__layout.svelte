@@ -9,8 +9,12 @@
 <!--  <slot name="form"/>  -->
 <!--  <slot name="panel"/>  -->
 <!--  <slot name="rest"/>  -->
-
-<slot />
+<div class="shell">
+    <slot />
+</div>
 
 <style lang="scss">
+.shell{
+    padding: 20px;
+}
 </style>

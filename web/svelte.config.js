@@ -1,10 +1,11 @@
 import adapter from '@sveltejs/adapter-vercel';
 import preprocess from 'svelte-preprocess';
-import path, { dirname } from 'path'
-import { fileURLToPath } from 'url'
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import Icons from 'unplugin-icons/vite';
 
-const filePath = dirname(fileURLToPath(import.meta.url))
-const sassPath = `${filePath}/src/lib`
+const filePath = dirname(fileURLToPath(import.meta.url));
+const sassPath = `${filePath}/src/lib`;
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	// Consult https://github.com/sveltejs/svelte-preprocess
@@ -13,13 +14,20 @@ const config = {
 		scss: {
 			prependData: `@import '${sassPath}/vars.scss';`
 		}
-    }),
+	}),
 
 	kit: {
 		adapter: adapter(),
 
 		// hydrate the <div id="svelte"> element in src/app.html
-		target: '#svelte'
+		target: '#svelte',
+		vite: {
+			plugins: [
+				Icons({
+					compiler: 'svelte'
+				})
+			]
+		}
 	}
 };
 

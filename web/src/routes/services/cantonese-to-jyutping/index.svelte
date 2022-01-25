@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
 	import MetaData from '$lib/MetaData.svelte';
-	import Input from '$lib/Input.svelte';
+	import Input from '$lib/inputs/Input.svelte';
 	import Button from '$lib/Button.svelte';
 	import Separator from '$lib/Separator.svelte';
 	import { createForm } from 'felte';
@@ -12,6 +12,7 @@
 	import { isCantoneseOnly, isTraditionalOnly } from '$lib/helper';
 	import mkToast from '$lib/toast';
 	import { getNotificationsContext } from 'svelte-notifications';
+	//  import SideBarLayout from '$lib/layouts/SideBarLayout.svelte';
 
 	export const load = async ({ fetch }) => {
 		return {
@@ -28,7 +29,7 @@
 		'convert-characters': z.string().nonempty()
 	});
 
-	const warningSchema = z.object({
+	const warnSchema = z.object({
 		'convert-characters': z.string().refine(isCantoneseOnly, {
 			message: 'Non chinese characters might make the translator fail.'
 		})
@@ -37,7 +38,7 @@
 		//  })
 	});
 
-	const { form, errors, touched, validate, data, isValid } = createForm<
+	const { form, errors, touched, validate, data, isValid, warnings } = createForm<
 		z.infer<typeof schema>,
 		ValidatorConfig
 	>({
@@ -51,6 +52,7 @@
 
 			if (!res.ok) {
 				console.log('handle err', res);
+				toast.mkError('Something wrong!');
 			}
 
 			const body = await res.json();
@@ -67,7 +69,7 @@
 		},
 		extend: validator,
 		validateSchema: schema,
-		warningSchema
+        warnSchema
 	});
 
 	onMount(async () => {
@@ -78,36 +80,33 @@
 </script>
 
 <MetaData title="Jyutping converter" description="This is the description" url="" image="" />
-
 <h1>Cantonese to Jyutping</h1>
-<form use:form>
-	<!--  warnings={$warnings}  -->
-	<div class="layout">
-		<Input
-			type="textarea"
-			name={'convert-characters'}
-			error={$errors}
-			touched={$touched}
-			spellcheck={false}
-			placeholder="我係香港人"
-			on:input={async () => {
-				await validate();
-			}}
-		>
-			<span>Cantonese</span>
-		</Input>
-		<Separator />
+<form use:form class="sidebar-layout">
+    <!-- TODO Investigate how to leak style all component  -->
+	<Input
+		type="textarea"
+		name={'convert-characters'}
+		errors={$errors}
+        warnings={$warnings}
+		touched={$touched}
+		spellcheck={false}
+		placeholder="我係香港人"
+		on:input={async () => {
+			await validate();
+		}}
+	>
+		<span>Cantonese</span>
+	</Input>
 
-		<div class="control-panel">
-			<Button type="submit" disabled={!$isValid}>Convert</Button>
-		</div>
+	<div>
+		<Button type="submit" disabled={!$isValid}>Convert</Button>
 	</div>
 </form>
 
 <style lang="scss">
-    .layout {
+.sidebar-layout {
+    @include desktop {
+        @include two-columns;
     }
-
-	.control-panel {
-	}
+}
 </style>

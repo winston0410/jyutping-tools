@@ -14,12 +14,12 @@
 	"devDependencies": {
 		"@felte/validator-zod": "^0.3.8",
 		"@fontsource/karla": "^4.5.0",
+		"@iconify-json/carbon": "1.0.14",
 		"@sveltejs/adapter-auto": "next",
 		"@sveltejs/adapter-vercel": "next",
 		"@sveltejs/kit": "next",
 		"@typescript-eslint/eslint-plugin": "^4.31.1",
 		"@typescript-eslint/parser": "^4.31.1",
-		"carbon-components-svelte": "0.55.0",
 		"eslint": "^7.32.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-svelte3": "^3.2.1",
@@ -35,6 +35,7 @@
 		"svelte-use-local-storage": "github:winston0410/svelte-use-local-storage",
 		"tslib": "^2.3.1",
 		"typescript": "^4.4.3",
+		"unplugin-icons": "0.13.0",
 		"zod": "^3.11.6"
 	},
 	"type": "module"
