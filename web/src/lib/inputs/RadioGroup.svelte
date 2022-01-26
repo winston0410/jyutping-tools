@@ -1,5 +1,7 @@
 <script lang="ts" context="module">
 	import Radio from './Radio.svelte';
+	//  import storage from './debug';
+	import storage from 'svelte-use-local-storage';
 </script>
 
 <script lang="ts">
@@ -9,7 +11,8 @@
 </script>
 
 <!-- REF https://accessibility.blog.gov.uk/2016/07/22/using-the-fieldset-and-legend-elements/  -->
-<fieldset>
+<!-- REF https://www.w3.org/WAI/tutorials/forms/grouping/  -->
+<fieldset use:storage={name}>
 	<legend>
 		<slot />
 	</legend>

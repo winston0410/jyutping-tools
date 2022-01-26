@@ -111,7 +111,9 @@
 			values={Object.values(TargetPhoneticSystem)}
 			name={'to'}
 			checked={TargetPhoneticSystem.Jyutping}
-		/>
+		>
+			Target phonetic system
+		</RadioGroup>
 		<Button type="submit" disabled={!$isValid}>Convert</Button>
 	</div>
 </form>

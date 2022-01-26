@@ -1,5 +1,4 @@
 <script lang="ts" context="module">
-	import storage from 'svelte-use-local-storage';
 </script>
 
 <script lang="ts">
