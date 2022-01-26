@@ -10,6 +10,8 @@
 	export let errors: Errors<Obj>;
 	export let warnings: Errors<Obj>;
 	export let touched: Touched<Obj>;
+	export let placeholder: string;
+	export let spellcheck = true;
 </script>
 
 {#if type === 'textarea'}
@@ -26,7 +28,8 @@
 				class:ok-border={touched[name] && !errors[name] && !warnings[name]}
 				use:storage={name}
 				{name}
-				{...$$restProps}
+				{placeholder}
+				{spellcheck}
 				on:input
 				on:change
 			/>

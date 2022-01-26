@@ -1,6 +1,7 @@
 <script lang="ts" context="module">
 	import MetaData from '$lib/MetaData.svelte';
 	import Input from '$lib/inputs/Input.svelte';
+	import RadioGroup from '$lib/inputs/RadioGroup.svelte';
 	import Button from '$lib/Button.svelte';
 	import Separator from '$lib/Separator.svelte';
 	import { createForm } from 'felte';
@@ -22,11 +23,18 @@
 </script>
 
 <script lang="ts">
+	enum TargetPhoneticSystem {
+		Jyutping = 'jyutping',
+		Yale = 'yale'
+	}
+
 	const { addNotification } = getNotificationsContext();
 	const toast = mkToast(addNotification);
 
 	const schema = z.object({
-		'convert-characters': z.string().nonempty()
+		'convert-characters': z.string().nonempty(),
+		// REF https://github.com/colinhacks/zod/issues/8
+		to: z.nativeEnum(TargetPhoneticSystem)
 	});
 
 	const warnSchema = z.object({
@@ -69,7 +77,7 @@
 		},
 		extend: validator,
 		validateSchema: schema,
-        warnSchema
+		warnSchema
 	});
 
 	onMount(async () => {
@@ -82,12 +90,12 @@
 <MetaData title="Jyutping converter" description="This is the description" url="" image="" />
 <h1>Cantonese to Jyutping</h1>
 <form use:form class="sidebar-layout">
-    <!-- TODO Investigate how to leak style all component  -->
+	<!-- TODO Investigate how to leak style all component  -->
 	<Input
 		type="textarea"
 		name={'convert-characters'}
 		errors={$errors}
-        warnings={$warnings}
+		warnings={$warnings}
 		touched={$touched}
 		spellcheck={false}
 		placeholder="我係香港人"
@@ -99,14 +107,19 @@
 	</Input>
 
 	<div>
+		<RadioGroup
+			values={Object.values(TargetPhoneticSystem)}
+			name={'to'}
+			checked={TargetPhoneticSystem.Jyutping}
+		/>
 		<Button type="submit" disabled={!$isValid}>Convert</Button>
 	</div>
 </form>
 
 <style lang="scss">
-.sidebar-layout {
-    @include desktop {
-        @include two-columns;
-    }
-}
+	.sidebar-layout {
+		@include desktop {
+			@include two-columns;
+		}
+	}
 </style>
