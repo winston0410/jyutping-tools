@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
 	import storage from 'svelte-use-local-storage';
 	import type { Obj, Errors, Touched } from '@felte/common';
-    import ErrorMessage from './ErrorMessage.svelte'
+	import ErrorMessage from './ErrorMessage.svelte';
 </script>
 
 <script lang="ts">
@@ -10,7 +10,6 @@
 	export let errors: Errors<Obj>;
 	export let warnings: Errors<Obj>;
 	export let touched: Touched<Obj>;
-	export let placeholder: string = '';
 </script>
 
 {#if type === 'textarea'}
@@ -21,7 +20,6 @@
 			</span>
 			<textarea
 				id={name}
-				{placeholder}
 				class="input"
 				class:error-border={touched[name] && errors[name]}
 				class:warning-border={touched[name] && !errors[name] && warnings[name]}
@@ -33,10 +31,9 @@
 				on:change
 			/>
 		</label>
-        <ErrorMessage {errors} {warnings} {name}/>
+		<ErrorMessage {errors} {warnings} {name} />
 	</div>
-{:else}
-{/if}
+{:else}{/if}
 
 <style lang="scss">
 	$outline-width: 3px;

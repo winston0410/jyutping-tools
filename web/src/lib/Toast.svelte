@@ -2,6 +2,7 @@
 	import type { Toast } from '$lib/toast';
 	import { ToastKind } from '$lib/toast';
 	import { fade } from 'svelte/transition';
+	//  @ts-ignore
 	import Close from 'virtual:icons/carbon/close';
 </script>
 
@@ -13,7 +14,7 @@
 	// NOTE withoutStyle prop will be passed in, but will not be used
 	export const withoutStyles = false;
 
-    const {kind, text } = notification
+	const { kind, text } = notification;
 
 	const handleClick = () => {
 		onRemove();
@@ -32,7 +33,7 @@
 	out:fade
 >
 	<div class="toast-inner">
-        <!--  <svelte:component this={icon}/>  -->
+		<!--  <svelte:component this={icon}/>  -->
 		<span class="jam">
 			{text}
 		</span>
@@ -43,22 +44,22 @@
 </div>
 
 <style lang="scss">
-    $radius: 8px;
+	$radius: 8px;
 
 	.toast {
 		border-radius: $radius;
 		color: $white;
-        margin-bottom: 12px;
+		margin-bottom: 12px;
 	}
 
-    .jam{
-        padding: 12px;
-    }
+	.jam {
+		padding: 12px;
+	}
 
-    .toast-inner{
-        display: flex;
-        flex-wrap: wrap;
-    }
+	.toast-inner {
+		display: flex;
+		flex-wrap: wrap;
+	}
 
 	.error {
 		background-color: $error;
@@ -80,14 +81,14 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-        background: $white;
-        padding: 12px;
-        border-top-right-radius: $radius;
-        border-bottom-right-radius: $radius;
-        transition: background 500ms;
+		background: $white;
+		padding: 12px;
+		border-top-right-radius: $radius;
+		border-bottom-right-radius: $radius;
+		transition: background 500ms;
 	}
 
-    .close-button:hover{
-        background: darken($white, 10%);
-    }
+	.close-button:hover {
+		background: darken($white, 10%);
+	}
 </style>

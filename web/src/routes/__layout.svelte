@@ -8,10 +8,11 @@
 <script lang="ts">
 </script>
 
+<!--  @ts-ignore  -->
 <Notifications item={Toast}>
-    <main id="main-content">
-        <slot />
-    </main>
+	<main id="main-content">
+		<slot />
+	</main>
 </Notifications>
 <!--  <footer>  -->
 <!--  <p>Hello world</p>  -->
