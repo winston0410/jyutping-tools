@@ -1,3 +1,4 @@
+<!--  Not in use due to the design  -->
 <script lang="ts" context="module">
 	import storage from 'svelte-use-local-storage';
 </script>

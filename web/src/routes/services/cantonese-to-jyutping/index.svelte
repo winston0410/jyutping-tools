@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
 	import MetaData from '$lib/MetaData.svelte';
 	import Input from '$lib/inputs/Input.svelte';
-	import RadioGroup from '$lib/inputs/RadioGroup.svelte';
+	import OutputArea from '$lib/Output.svelte';
 	import Button from '$lib/Button.svelte';
 	import Separator from '$lib/Separator.svelte';
 	import { createForm } from 'felte';
@@ -13,6 +13,7 @@
 	import { isCantoneseOnly, isTraditionalOnly } from '$lib/helper';
 	import mkToast from '$lib/toast';
 	import { getNotificationsContext } from 'svelte-notifications';
+	import { TargetPhoneticSystem } from '$lib/types';
 	//  import SideBarLayout from '$lib/layouts/SideBarLayout.svelte';
 
 	export const load = async ({ fetch }) => {
@@ -23,18 +24,16 @@
 </script>
 
 <script lang="ts">
-	enum TargetPhoneticSystem {
-		Jyutping = 'jyutping',
-		Yale = 'yale'
-	}
+	export let result = '';
 
+	//  Not using the enum now
 	const { addNotification } = getNotificationsContext();
 	const toast = mkToast(addNotification);
 
 	const schema = z.object({
-		'convert-characters': z.string().nonempty(),
+		'convert-characters': z.string().nonempty()
 		// REF https://github.com/colinhacks/zod/issues/8
-		to: z.nativeEnum(TargetPhoneticSystem)
+		//  to: z.nativeEnum(TargetPhoneticSystem)
 	});
 
 	const warnSchema = z.object({
@@ -68,6 +67,7 @@
 			console.log('result', body);
 		},
 		onError: (_: Error) => {
+			result = 'hello world';
 			// TODO Differentiate errors with err.message and err.name
 			if (navigator.onLine) {
 				toast.mkError('Service is temporaily unavailable.');
@@ -106,22 +106,20 @@
 		<span>Cantonese</span>
 	</Input>
 
-	<div>
-		<RadioGroup
-			values={Object.values(TargetPhoneticSystem)}
-			name={'to'}
-			checked={TargetPhoneticSystem.Jyutping}
-		>
-			Target phonetic system
-		</RadioGroup>
+	<div class="center">
 		<Button type="submit" disabled={!$isValid}>Convert</Button>
 	</div>
 </form>
 
+<OutputArea {result} systems={Object.values(TargetPhoneticSystem)} />
+
 <style lang="scss">
 	.sidebar-layout {
-		@include desktop {
-			@include two-columns;
-		}
+	}
+
+	.center {
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 </style>

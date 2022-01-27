@@ -41,5 +41,8 @@
 		"unplugin-icons": "0.13.0",
 		"zod": "3.11.6"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"svelte-action-type": "github:winston0410/svelte-action-type"
+	}
 }
