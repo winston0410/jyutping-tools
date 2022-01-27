@@ -1,6 +1,4 @@
 <script lang="ts" context="module">
-	import Radio from './Radio.svelte';
-	//  import storage from './debug';
 	import storage from 'svelte-use-local-storage';
 </script>
 
@@ -18,6 +16,29 @@
 	</legend>
 
 	{#each values as value}
-		<Radio {name} type="radio" {value} checked={checked === value} />
+		<div>
+			<!-- REF https://github.com/sveltejs/rfcs/pull/33  -->
+			<!--  {@const id = `${id}-${value}`}          -->
+			<label for={`${name}-${value}`}>
+				<span class="radio-name">
+					{value}
+				</span>
+				<input
+					type="radio"
+					id={`${name}-${value}`}
+					{name}
+					{value}
+					checked={value === checked}
+					on:input
+					on:change
+				/>
+			</label>
+		</div>
 	{/each}
 </fieldset>
+
+<style lang="scss">
+	.radio-name {
+		text-transform: capitalize;
+	}
+</style>
