@@ -85,11 +85,13 @@
 			await validate();
 		}
 	});
+
+	const id = 'cantonese-to-jyutping';
 </script>
 
 <MetaData title="Jyutping converter" description="This is the description" url="" image="" />
 <h1>Cantonese to Jyutping</h1>
-<form use:form class="sidebar-layout">
+<form use:form class="sidebar-layout" {id}>
 	<!-- TODO Investigate how to leak style all component  -->
 	<Input
 		type="textarea"
@@ -111,7 +113,7 @@
 	</div>
 </form>
 
-<OutputArea {result} systems={Object.values(TargetPhoneticSystem)} />
+<OutputArea {result} systems={Object.values(TargetPhoneticSystem)} form={id} />
 
 <style lang="scss">
 	.sidebar-layout {
