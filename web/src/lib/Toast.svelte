@@ -12,7 +12,7 @@
 	export let notification: Toast;
 	export let onRemove = null;
 	// NOTE withoutStyle prop will be passed in, but will not be used
-	export const withoutStyles = false;
+	export let withoutStyles = false;
 
 	const { kind, text } = notification;
 

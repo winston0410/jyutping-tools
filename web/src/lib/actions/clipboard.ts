@@ -3,12 +3,16 @@ import copy from 'copy-text-to-clipboard';
 
 const useClipBoard: Action<HTMLElement, HTMLElement> = (node, ref) => {
 	const handleClick = () => {
-		console.log('copying', node, ref);
+		const text = ref.textContent;
+		copy(text);
 	};
 
 	node.addEventListener('click', handleClick);
 
 	return {
+		update(newRef) {
+			ref = newRef;
+		},
 		destroy() {
 			node.removeEventListener('click', handleClick);
 		}
