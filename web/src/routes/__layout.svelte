@@ -9,6 +9,10 @@
 </script>
 
 <!--  @ts-ignore  -->
+
+<header class="header">
+	<span class="logo">Cantonese.tool</span>
+</header>
 <Notifications item={Toast}>
 	<main id="main-content">
 		<slot />
@@ -37,6 +41,17 @@
 		padding: 0;
 		border: 0;
 		cursor: pointer;
+	}
+
+	.header {
+		min-height: $header-height;
+		padding: 12px;
+		display: flex;
+		align-items: center;
+	}
+
+	.logo {
+		font-weight: 700;
 	}
 
 	footer {

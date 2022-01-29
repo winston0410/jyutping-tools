@@ -11,6 +11,7 @@
 	export let form: string;
 	export let result: string;
 	export let systems: Array<TargetPhoneticSystem>;
+	export let placeholder: string = '';
 
 	const { tab, currentTab } = mkTabs({
 		initial: TargetPhoneticSystem.Jyutping
@@ -34,16 +35,14 @@
 </ul>
 <div class="wrapper">
 	<button class="overlay-button" type="button" use:clipboard={outputElem}>
-		<CopyIcon />
+		<CopyIcon class="copy-icon" />
 	</button>
 	<div class="output">
-		<output {form} class="output-inner" bind:this={outputElem}>
+		<output {form} class="output-inner" bind:this={outputElem} class:placeholder={result === ''}>
 			{#if $currentTab === TargetPhoneticSystem.Jyutping}
-				{$currentTab}
-				{result}
+				{result !== '' ? result : placeholder}
 			{:else if $currentTab === TargetPhoneticSystem.Yale}
-				{$currentTab}
-				{result}
+				{result !== '' ? result : placeholder}
 			{/if}
 		</output>
 	</div>
@@ -95,7 +94,19 @@
 		color: $black;
 	}
 
+	.placeholder {
+		@include placeholder-text;
+	}
+
 	.output-inner {
 		display: block;
+	}
+
+	:global(.copy-icon path) {
+		transition: fill 300ms;
+	}
+
+	:global(.copy-icon:hover path) {
+		fill: #be132d;
 	}
 </style>

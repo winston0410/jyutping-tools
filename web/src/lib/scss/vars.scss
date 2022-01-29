@@ -5,6 +5,7 @@ $error: #be3a34;
 $warning: #ffc845;
 $info: blue;
 $ok: #00664f;
+$header-height: 5rem;
 
 $tablet-width: 768px;
 $desktop-width: 1024px;
@@ -58,4 +59,8 @@ $outline-width: 0.2rem;
 
 @mixin warning-text {
 	color: $warning;
+}
+
+@mixin placeholder-text {
+	color: $grey;
 }

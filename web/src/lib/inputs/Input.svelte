@@ -64,7 +64,7 @@
 	}
 
 	.input::placeholder {
-		color: $grey;
+		@include placeholder-text;
 	}
 
 	.number-input {

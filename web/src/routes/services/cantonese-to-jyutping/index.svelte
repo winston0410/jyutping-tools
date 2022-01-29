@@ -10,7 +10,7 @@
 	import * as z from 'zod';
 	import { validator } from '@felte/validator-zod';
 	import { onMount } from 'svelte';
-	import { isCantoneseOnly, isTraditionalOnly } from '$lib/helper';
+	import { hasCantonese, isCantoneseOnly, isTraditionalOnly } from '$lib/helper';
 	import mkToast from '$lib/toast';
 	import { getNotificationsContext } from 'svelte-notifications';
 	import { TargetPhoneticSystem } from '$lib/types';
@@ -31,17 +31,9 @@
 	const toast = mkToast(addNotification);
 
 	const schema = z.object({
-		'convert-characters': z
-			.string()
-			.nonempty()
-			.refine(
-				(val) => {
-					return false;
-				},
-				{
-					message: 'No cantonese found in the input'
-				}
-			)
+		'convert-characters': z.string().nonempty().refine(hasCantonese, {
+			message: 'No cantonese found in the input'
+		})
 		// REF https://github.com/colinhacks/zod/issues/8
 		//  to: z.nativeEnum(TargetPhoneticSystem)
 	});
@@ -123,7 +115,12 @@
 	</div>
 </form>
 
-<OutputArea {result} systems={Object.values(TargetPhoneticSystem)} form={id} />
+<OutputArea
+	{result}
+	systems={Object.values(TargetPhoneticSystem)}
+	form={id}
+	placeholder={'ngo5 hai6 hoeng1 gong2 jan4'}
+/>
 
 <style lang="scss">
 	.submit-button {
