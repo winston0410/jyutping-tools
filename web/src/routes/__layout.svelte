@@ -24,11 +24,11 @@
 	}
 	:global(body) {
 		font-family: 'Karla';
-		color: $black;
+		color: $white;
 	}
 
 	:global(body) {
-		background: hsla(46, 75%, 87%, 1);
+		background: $black;
 	}
 
 	:global(button) {

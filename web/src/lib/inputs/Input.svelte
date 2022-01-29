@@ -16,7 +16,7 @@
 
 {#if type === 'textarea'}
 	<div>
-		<label class="textarea" for={name}>
+		<label for={name}>
 			<span class="label">
 				<slot />
 			</span>
@@ -36,32 +36,44 @@
 		</label>
 		<ErrorMessage {errors} {warnings} {name} />
 	</div>
-{:else}{/if}
+{:else if type === 'number'}
+	<div>
+		<label for={name}>
+			<span class="label">
+				<slot />
+			</span>
+			<input
+				id={name}
+				class="number-input"
+				class:error-border={touched[name] && errors[name]}
+				class:warning-border={touched[name] && !errors[name] && warnings[name]}
+				class:ok-border={touched[name] && !errors[name] && !warnings[name]}
+				use:storage={name}
+				{name}
+				on:input
+				on:change
+			/>
+		</label>
+		<ErrorMessage {errors} {warnings} {name} />
+	</div>
+{/if}
 
 <style lang="scss">
-	$outline-width: 3px;
-
-	@mixin input-field {
-		display: block;
-		border: 2px solid $black;
-		background: $white;
-		outline: none;
-	}
-
-	.label {
-		font-weight: 700;
-	}
-
 	.input {
-		@include input-field;
-		width: 100%;
-		resize: none;
-		padding: 12px;
-		height: 225px;
+		@include textarea;
 	}
 
 	.input::placeholder {
 		color: $grey;
+	}
+
+	.number-input {
+		@include textarea;
+		height: initial;
+	}
+
+	.label {
+		font-weight: 700;
 	}
 
 	.error-border {
@@ -74,13 +86,5 @@
 
 	.ok-border {
 		outline: $outline-width solid $ok;
-	}
-
-	.error {
-		color: $error;
-	}
-
-	.warning {
-		color: $warning;
 	}
 </style>

@@ -31,7 +31,17 @@
 	const toast = mkToast(addNotification);
 
 	const schema = z.object({
-		'convert-characters': z.string().nonempty()
+		'convert-characters': z
+			.string()
+			.nonempty()
+			.refine(
+				(val) => {
+					return false;
+				},
+				{
+					message: 'No cantonese found in the input'
+				}
+			)
 		// REF https://github.com/colinhacks/zod/issues/8
 		//  to: z.nativeEnum(TargetPhoneticSystem)
 	});
@@ -108,7 +118,7 @@
 		<span>Cantonese</span>
 	</Input>
 
-	<div class="center">
+	<div class="submit-button">
 		<Button type="submit" disabled={!$isValid}>Convert</Button>
 	</div>
 </form>
@@ -116,12 +126,8 @@
 <OutputArea {result} systems={Object.values(TargetPhoneticSystem)} form={id} />
 
 <style lang="scss">
-	.sidebar-layout {
-	}
-
-	.center {
-		display: flex;
-		justify-content: center;
-		align-items: center;
+	.submit-button {
+		@include center;
+		margin: 1.5rem 0;
 	}
 </style>

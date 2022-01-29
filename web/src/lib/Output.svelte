@@ -22,21 +22,32 @@
 
 <ul role="list" class="switcher">
 	{#each systems as system}
-		<li><button class="switcher-button" type="button" use:tab={system}>{system}</button></li>
+		<li>
+			<button
+				class="switcher-button"
+				class:active={$currentTab === system}
+				type="button"
+				use:tab={system}>{system}</button
+			>
+		</li>
 	{/each}
 </ul>
-<button type="button" use:clipboard={outputElem}>
-	<CopyIcon />
-</button>
-<output {form} class="" bind:this={outputElem}>
-	{#if $currentTab === TargetPhoneticSystem.Jyutping}
-		{$currentTab}
-		{result}
-	{:else if $currentTab === TargetPhoneticSystem.Yale}
-		{$currentTab}
-		{result}
-	{/if}
-</output>
+<div class="wrapper">
+	<button class="overlay-button" type="button" use:clipboard={outputElem}>
+		<CopyIcon />
+	</button>
+	<div class="output">
+		<output {form} class="output-inner" bind:this={outputElem}>
+			{#if $currentTab === TargetPhoneticSystem.Jyutping}
+				{$currentTab}
+				{result}
+			{:else if $currentTab === TargetPhoneticSystem.Yale}
+				{$currentTab}
+				{result}
+			{/if}
+		</output>
+	</div>
+</div>
 
 <style lang="scss">
 	.switcher {
@@ -44,10 +55,47 @@
 		flex-direction: row;
 		justify-content: flex-end;
 		padding: 0;
+		margin: 0;
 	}
 
 	.switcher-button {
+		@include center;
 		padding: 12px;
 		text-transform: capitalize;
+		min-width: 100px;
+		transition: background 300ms;
+	}
+
+	.switcher-button:hover {
+		background: darken(#be132d, 20%);
+	}
+
+	.active {
+		background: #be132d;
+	}
+
+	.active:hover {
+		background: darken(#be132d, 20%);
+	}
+
+	.overlay-button {
+		@include center;
+		position: absolute;
+		right: 12px;
+		top: 12px;
+		background-color: $white;
+	}
+
+	.wrapper {
+		position: relative;
+	}
+
+	.output {
+		@include textarea;
+		color: $black;
+	}
+
+	.output-inner {
+		display: block;
 	}
 </style>

@@ -15,3 +15,13 @@
 		{invalidity[0]}
 	</span>
 {/if}
+
+<style lang="scss">
+	.error {
+		@include error-text;
+	}
+
+	.warning {
+		@include warning-text;
+	}
+</style>

@@ -26,5 +26,36 @@ $desktop-width: 1024px;
 	--right-width: 38.2%;
 
 	display: grid;
-    grid-template-columns: var(--left-width) var(--right-width);
+	grid-template-columns: var(--left-width) var(--right-width);
+}
+
+@mixin center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+$outline-width: 0.2rem;
+
+@mixin input-base {
+	display: block;
+	background: $white;
+	border: none;
+	outline: none;
+}
+
+@mixin textarea {
+	@include input-base;
+	width: 100%;
+	resize: none;
+	padding: 12px;
+	height: 200px;
+}
+
+@mixin error-text {
+	color: $error;
+}
+
+@mixin warning-text {
+	color: $warning;
 }
