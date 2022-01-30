@@ -1,3 +1,5 @@
+<svelte:options immutable={true} />
+
 <script lang="ts" context="module">
 	import { TargetPhoneticSystem } from '$lib/types';
 	import mkTabs from '$lib/actions/mkTabs';
@@ -16,8 +18,6 @@
 	const { tab, currentTab } = mkTabs({
 		initial: TargetPhoneticSystem.Jyutping
 	});
-
-	let outputElem: HTMLOutputElement;
 </script>
 
 <ul role="list" class="switcher">
@@ -32,12 +32,12 @@
 		</li>
 	{/each}
 </ul>
-<div class="wrapper">
-	<button class="overlay-button" type="button" use:clipboard={outputElem} on:copy>
+<div class="output-wrapper">
+	<button class="overlay-button" type="button">
 		<CopyIcon class="copy-icon" />
 	</button>
 	<div class="output">
-		<output {form} class="output-inner" bind:this={outputElem} class:placeholder={result === ''}>
+		<output {form} class="output-inner" class:placeholder={result === ''} use:clipboard on:copy>
 			{#if $currentTab === TargetPhoneticSystem.Jyutping}
 				{result !== '' ? result : placeholder}
 			{:else if $currentTab === TargetPhoneticSystem.Yale}
@@ -46,7 +46,13 @@
 		</output>
 	</div>
 </div>
+<!--  :global(.copy-icon path) {  -->
+<!--  transition: fill 300ms;  -->
+<!--  }  -->
+<!--  :global(.copy-icon:hover path) {  -->
+<!--  fill: #be132d;  -->
 
+<!--  }  -->
 <style lang="scss">
 	.switcher {
 		display: flex;
@@ -84,8 +90,9 @@
 		background-color: $white;
 	}
 
-	.wrapper {
+	.output-wrapper {
 		position: relative;
+		cursor: pointer;
 	}
 
 	.output {
@@ -99,13 +106,5 @@
 
 	.output-inner {
 		display: block;
-	}
-
-	:global(.copy-icon path) {
-		transition: fill 300ms;
-	}
-
-	:global(.copy-icon:hover path) {
-		fill: #be132d;
 	}
 </style>

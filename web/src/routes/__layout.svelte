@@ -8,8 +8,6 @@
 <script lang="ts">
 </script>
 
-<!--  @ts-ignore  -->
-
 <header class="header">
 	<span class="logo">Cantonese.tool</span>
 </header>
@@ -18,10 +16,10 @@
 		<slot />
 	</main>
 </Notifications>
-<!--  <footer>  -->
-<!--  <p>Hello world</p>  -->
+<footer>
+	<p>Hello world</p>
+</footer>
 
-<!--  </footer>  -->
 <style lang="scss">
 	:global(html) {
 		font-size: 16px;

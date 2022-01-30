@@ -10,11 +10,11 @@
 <!--  <slot name="panel"/>  -->
 <!--  <slot name="rest"/>  -->
 <div class="shell">
-    <slot />
+	<slot />
 </div>
 
 <style lang="scss">
-.shell{
-    padding: 20px;
-}
+	.shell {
+		padding: 20px;
+	}
 </style>

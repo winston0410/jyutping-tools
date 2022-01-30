@@ -1,3 +1,5 @@
+<svelte:options immutable={true} />
+
 <script lang="ts" context="module">
 	import storage from 'svelte-use-local-storage';
 	import type { Obj, Errors, Touched } from '@felte/common';

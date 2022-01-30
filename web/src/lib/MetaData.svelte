@@ -1,3 +1,5 @@
+<svelte:options immutable={true} />
+
 <script lang="ts">
 	export let title: string, description: string, image: string, url: string;
 </script>

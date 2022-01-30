@@ -3,20 +3,22 @@
 	import Input from '$lib/inputs/Input.svelte';
 	import OutputArea from '$lib/Output.svelte';
 	import Button from '$lib/Button.svelte';
-	import Separator from '$lib/Separator.svelte';
 	import { createForm } from 'felte';
 	import type { ValidatorConfig } from '@felte/validator-zod';
 	import { PROXY_ROOT, MICROSERVICE_ROOT, CONVERT_ACTION } from '$lib/const';
 	import * as z from 'zod';
 	import { validator } from '@felte/validator-zod';
 	import { onMount } from 'svelte';
-	import { hasCantonese, isCantoneseOnly, isTraditionalOnly } from '$lib/helper';
+	import { hasCantonese, isCantoneseOnly, isTraditionalOnly, hasNumber } from '$lib/helper';
 	import mkToast from '$lib/toast';
 	import { getNotificationsContext } from 'svelte-notifications';
 	import { TargetPhoneticSystem } from '$lib/types';
 	//  import SideBarLayout from '$lib/layouts/SideBarLayout.svelte';
 
-	export const load = async ({ fetch }) => {
+	export const load = async ({ fetch, url }) => {
+		const { searchParams } = url;
+		const input = searchParams.get('input');
+
 		return {
 			props: {}
 		};
@@ -39,9 +41,14 @@
 	});
 
 	const warnSchema = z.object({
-		'convert-characters': z.string().refine(isCantoneseOnly, {
-			message: 'Non chinese characters might make the translator fail.'
-		})
+		'convert-characters': z
+			.string()
+			.refine(hasNumber, {
+				message: 'Arabic number might make the converter fail.'
+			})
+			.refine(isCantoneseOnly, {
+				message: 'Non chinese characters might make the converter fail.'
+			})
 		//  .refine(isTraditggionalOnly, {
 		//  message: 'Simplified characters might make the translator fail.'
 		//  })
@@ -55,6 +62,7 @@
 			const payload = {
 				input: values['convert-characters']
 			};
+
 			const res = await fetch(
 				MICROSERVICE_ROOT + CONVERT_ACTION + `?${new URLSearchParams(payload)}`
 			);
@@ -66,7 +74,7 @@
 
 			const body = await res.json();
 
-			console.log('result', body);
+			toast.mkOk('Conversion successful!');
 		},
 		onError: (_: Error) => {
 			result = 'hello world';

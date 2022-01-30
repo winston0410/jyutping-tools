@@ -1,3 +1,6 @@
+<!-- REF https://www.joshwcomeau.com/animation/3d-button/  -->
+<svelte:options immutable={true} />
+
 <!--  Good usage on translate: transformY  -->
 <script lang="ts" context="module">
 </script>
@@ -6,10 +9,9 @@
 	export let href: string | null = null;
 	export let type: string = 'button';
 	export let disabled: boolean = false;
-    export let hover: boolean = true;
+	export let hover: boolean = true;
 </script>
 
-<!-- REF https://www.joshwcomeau.com/animation/3d-button/  -->
 {#if href}
 	<a {href} class="button" on:click>
 		<span class="button-text" class:disabled class:hover>
@@ -34,8 +36,8 @@
 		text-decoration: none;
 		user-select: none;
 		background-color: #000000;
-        cursor: pointer;
-        transition: all 0.5s;
+		cursor: pointer;
+		transition: all 0.5s;
 	}
 
 	.button-text {
@@ -46,12 +48,12 @@
 		transform: translateY(-4px);
 		min-width: 100px;
 		text-align: center;
-        transition: all 0.5s;
+		transition: all 0.5s;
 	}
 
-    .hover:not(.disabled):hover {
-        background-color: beige;
-    }
+	.hover:not(.disabled):hover {
+		background-color: beige;
+	}
 
 	.disabled {
 		background-color: #777777;

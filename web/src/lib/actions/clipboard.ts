@@ -4,7 +4,7 @@ import { custom_event } from 'svelte/internal';
 
 const useClipBoard: Action<HTMLElement, HTMLElement> = (node, ref) => {
 	const handleClick = () => {
-		const text = ref.textContent;
+		const text = (ref ?? node).textContent;
 
 		copy(text);
 
@@ -18,6 +18,7 @@ const useClipBoard: Action<HTMLElement, HTMLElement> = (node, ref) => {
 	node.addEventListener('click', handleClick);
 
 	return {
+		// NOTE update function will only run if ref is a bind:this ref
 		update(newRef) {
 			ref = newRef;
 		},

@@ -1,3 +1,5 @@
+<svelte:options immutable={true} />
+
 <script lang="ts" context="module">
 	import type { Toast } from '$lib/toast';
 	import { ToastKind } from '$lib/toast';
@@ -16,9 +18,9 @@
 
 	const { kind, text } = notification;
 
-	const handleClick = () => {
-		onRemove();
-	};
+	//  const handleClick = () => {
+	//  onRemove();
+	//  };
 </script>
 
 <div

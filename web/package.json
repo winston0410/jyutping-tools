@@ -16,11 +16,11 @@
 		"@felte/validator-zod": "0.3.8",
 		"@fontsource/karla": "4.5.0",
 		"@iconify-json/carbon": "1.0.14",
-		"@sveltejs/adapter-auto": "next",
 		"@sveltejs/adapter-vercel": "next",
 		"@sveltejs/kit": "next",
 		"@typescript-eslint/eslint-plugin": "4.31.1",
 		"@typescript-eslint/parser": "4.31.1",
+		"chinese-numbering": "1.0.0",
 		"copy-text-to-clipboard": "3.0.1",
 		"eslint": "7.32.0",
 		"eslint-config-prettier": "8.3.0",
@@ -34,6 +34,7 @@
 		"prettier-plugin-svelte": "2.4.0",
 		"sass": "1.49.0",
 		"svelte": "3.44.0",
+		"svelte-action-type": "github:winston0410/svelte-action-type",
 		"svelte-check": "2.2.6",
 		"svelte-notifications": "0.9.93",
 		"svelte-preprocess": "4.9.4",
@@ -43,8 +44,5 @@
 		"unplugin-icons": "0.13.0",
 		"zod": "3.11.6"
 	},
-	"type": "module",
-	"dependencies": {
-		"svelte-action-type": "github:winston0410/svelte-action-type"
-	}
+	"type": "module"
 }

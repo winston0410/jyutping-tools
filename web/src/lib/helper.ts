@@ -16,3 +16,9 @@ export const isCantoneseOnly: InputPredicate = (val) => {
 export const isTraditionalOnly: InputPredicate = (val) => {
 	return false;
 };
+
+const numberRegex = '\\d+';
+
+export const hasNumber: InputPredicate = (val) => {
+	return ![...val].some((char) => char.match(new RegExp(numberRegex)));
+};
