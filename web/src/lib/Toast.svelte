@@ -33,13 +33,12 @@
 	out:fade
 >
 	<div class="toast-inner">
-		<!--  <svelte:component this={icon}/>  -->
 		<span class="jam">
 			{text}
 		</span>
-		<button class="close-button" type="button" on:click={handleClick}>
-			<Close />
-		</button>
+		<!--  <button class="close-button" type="button" on:click={handleClick}>  -->
+		<!--  <Close />  -->
+		<!--  </button>  -->
 	</div>
 </div>
 

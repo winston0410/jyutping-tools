@@ -120,6 +120,9 @@
 	systems={Object.values(TargetPhoneticSystem)}
 	form={id}
 	placeholder={'ngo5 hai6 hoeng1 gong2 jan4'}
+	on:copy={() => {
+		toast.mkOk('Copied result to clipboard.');
+	}}
 />
 
 <style lang="scss">

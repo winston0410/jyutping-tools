@@ -18,7 +18,6 @@
 	});
 
 	let outputElem: HTMLOutputElement;
-	//  let outputElem = "hello";
 </script>
 
 <ul role="list" class="switcher">
@@ -34,7 +33,7 @@
 	{/each}
 </ul>
 <div class="wrapper">
-	<button class="overlay-button" type="button" use:clipboard={outputElem}>
+	<button class="overlay-button" type="button" use:clipboard={outputElem} on:copy>
 		<CopyIcon class="copy-icon" />
 	</button>
 	<div class="output">
