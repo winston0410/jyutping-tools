@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "svelte-action-type",
+  "name": "jyutping-helpers",
   "version": "1.0.0",
   "type": "module",
   "main": "./dist/index.js",
