@@ -17,8 +17,7 @@ export const isTraditionalOnly: InputPredicate = (val) => {
 	return false;
 };
 
-const numberRegex = '\\d+';
-
 export const hasNumber: InputPredicate = (val) => {
+	const numberRegex = '\\d+';
 	return ![...val].some((char) => char.match(new RegExp(numberRegex)));
 };

@@ -13,6 +13,7 @@
 	import mkToast from '$lib/toast';
 	import { getNotificationsContext } from 'svelte-notifications';
 	import { TargetPhoneticSystem } from '$lib/types';
+	import { extractPhonetic } from '$lib/format';
 	//  import SideBarLayout from '$lib/layouts/SideBarLayout.svelte';
 
 	export const load = async ({ fetch, url }) => {
@@ -72,12 +73,18 @@
 				toast.mkError('Something wrong!');
 			}
 
+			// TODO Add typing for json response, typing avaliable in types.ts
 			const body = await res.json();
+
+			const phonetics = extractPhonetic(body.results);
+
+			console.log('check phonetics', phonetics);
+
+			result = phonetics.join(' ');
 
 			toast.mkOk('Conversion successful!');
 		},
 		onError: (_: Error) => {
-			result = 'hello world';
 			// TODO Differentiate errors with err.message and err.name
 			if (navigator.onLine) {
 				toast.mkError('Service is temporaily unavailable.');

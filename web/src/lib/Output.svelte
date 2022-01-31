@@ -1,5 +1,3 @@
-<svelte:options immutable={true} />
-
 <script lang="ts" context="module">
 	import { TargetPhoneticSystem } from '$lib/types';
 	import mkTabs from '$lib/actions/mkTabs';

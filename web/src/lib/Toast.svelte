@@ -1,5 +1,3 @@
-<svelte:options immutable={true} />
-
 <script lang="ts" context="module">
 	import type { Toast } from '$lib/toast';
 	import { ToastKind } from '$lib/toast';

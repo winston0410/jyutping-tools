@@ -1,6 +1,3 @@
-<!-- REF https://www.joshwcomeau.com/animation/3d-button/  -->
-<svelte:options immutable={true} />
-
 <!--  Good usage on translate: transformY  -->
 <script lang="ts" context="module">
 </script>
@@ -11,6 +8,9 @@
 	export let disabled: boolean = false;
 	export let hover: boolean = true;
 </script>
+
+<!-- REF https://www.joshwcomeau.com/animation/3d-button/  -->
+
 
 {#if href}
 	<a {href} class="button" on:click>
