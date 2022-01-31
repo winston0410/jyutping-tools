@@ -1,4 +1,8 @@
 module.exports = {
-    coverageReporters: ['json-summary', 'text', 'lcov'],
-    collectCoverageFrom: ['**/*.{ts,tsx}'],
+  preset: "ts-jest",
+  transform: {
+    "^.+\\.(ts|tsx)?$": "ts-jest",
+  },
+  coverageReporters: ["json-summary", "text", "lcov"],
+  collectCoverageFrom: ["**/*.{ts,tsx}"],
 };

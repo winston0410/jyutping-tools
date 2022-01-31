@@ -11,7 +11,8 @@
   "scripts": {
     "prepare": "npm run build",
     "build": "node ./esbuild.config.js && $(npm bin)/tsc",
-    "test": "jest --watch -u",
+    "test": "jest",
+    "test:watch": "jest --watch -u",
     "test:ci": "jest --ci",
     "test:coverage": "jest --coverage",
     "test:badges": "npm run test:coverage && jest-coverage-badges --output \"./badges\""
@@ -22,12 +23,17 @@
   "author": "Hugo Sum",
   "license": "MIT",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "4.31.1",
+    "@typescript-eslint/parser": "4.31.1",
+    "eslint": "7.32.0",
+    "eslint-config-prettier": "8.3.0",
     "@tsconfig/svelte": "^2.0.1",
     "@types/jest": "27.4.0",
     "esbuild": "^0.12.24",
     "jest": "27.4.7",
     "lint-staged": "12.3.1",
     "prettier": "2.4.1",
+    "ts-jest": "27.1.3",
     "typescript": "^4.4.2"
   }
 }
