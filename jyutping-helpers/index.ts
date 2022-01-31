@@ -26,8 +26,8 @@ export const jyutpingToYale: ConversionFn = (inputs) => {
       // NOTE Check for double letters replacement first, as jyu > yu conversion will be eaten up by j -> y conversion
       const doubleSub = jyutpingToYaleDict[`${mutable[i]}${mutable[j]}`];
       if (doubleSub) {
-        mutable[i] = doubleSub[0];
-        mutable[j] = doubleSub[1] ?? "";
+        mutable[j] = "";
+        mutable[i] = doubleSub;
         i++;
         j++;
       } else {
