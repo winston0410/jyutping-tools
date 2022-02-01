@@ -4,12 +4,14 @@
 	import clipboard from '$lib/actions/clipboard';
 	//  @ts-ignore
 	import CopyIcon from 'virtual:icons/carbon/copy';
+	import { jyutpingToYale } from 'jyutping-helpers';
+	import storage from 'svelte-use-local-storage';
 </script>
 
 <script lang="ts">
 	// REF https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output#attr-form
 	export let form: string;
-	export let result: string;
+	export let result: Array<string> | null;
 	export let systems: Array<TargetPhoneticSystem>;
 	export let placeholder: string = '';
 
@@ -35,11 +37,19 @@
 		<CopyIcon class="copy-icon" />
 	</button>
 	<div class="output">
-		<output {form} class="output-inner" class:placeholder={result === ''} use:clipboard on:copy>
+		<!--  use:storage={'output-field'}  -->
+		<output
+			{form}
+			class="output-inner"
+			class:placeholder={!result}
+			use:clipboard
+			on:copy
+			use:storage={{ name: 'output-field' }}
+		>
 			{#if $currentTab === TargetPhoneticSystem.Jyutping}
-				{result !== '' ? result : placeholder}
+				{result ? result.join(' ') : placeholder}
 			{:else if $currentTab === TargetPhoneticSystem.Yale}
-				{result !== '' ? result : placeholder}
+				{result ? jyutpingToYale(result).join(' ') : placeholder}
 			{/if}
 		</output>
 	</div>

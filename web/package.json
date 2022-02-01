@@ -42,8 +42,10 @@
 		"tslib": "2.3.1",
 		"typescript": "4.4.3",
 		"unplugin-icons": "0.13.0",
-		"zod": "3.11.6",
-		"jyutping-helpers": "file:../jyutping-helpers"
+		"zod": "3.11.6"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"jyutping-helpers": "file:../jyutping-helpers"
+	}
 }

@@ -16,18 +16,21 @@
 	import { extractPhonetic } from '$lib/format';
 	//  import SideBarLayout from '$lib/layouts/SideBarLayout.svelte';
 
-	export const load = async ({ fetch, url }) => {
+	export const load = async ({ url }) => {
 		const { searchParams } = url;
-		const input = searchParams.get('input');
+		const input = searchParams.get('input') ?? '';
 
 		return {
-			props: {}
+			props: {
+				input
+			}
 		};
 	};
 </script>
 
 <script lang="ts">
-	export let result = '';
+	export let result: Array<string> | null = null;
+	export let input: string;
 
 	//  Not using the enum now
 	const { addNotification } = getNotificationsContext();
@@ -78,11 +81,10 @@
 
 			const phonetics = extractPhonetic(body.results);
 
-			console.log('check phonetics', phonetics);
-
-			result = phonetics.join(' ');
+			result = phonetics;
 
 			toast.mkOk('Conversion successful!');
+			// TODO Add input into query string after conversion, properly using goto
 		},
 		onError: (_: Error) => {
 			// TODO Differentiate errors with err.message and err.name
@@ -118,10 +120,14 @@
 		touched={$touched}
 		spellcheck={false}
 		placeholder="我係香港人"
+		initValue={input}
 		on:input={async () => {
 			await validate();
 		}}
 	>
+		<!--  on:beforesetfromstorage={(e) => {  -->
+		<!--  console.log(e.detail)  -->
+		<!--  }}  -->
 		<span>Cantonese</span>
 	</Input>
 

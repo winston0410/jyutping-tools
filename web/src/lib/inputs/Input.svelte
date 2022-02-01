@@ -2,11 +2,13 @@
 	import storage from 'svelte-use-local-storage';
 	import type { Obj, Errors, Touched } from '@felte/common';
 	import ErrorMessage from './ErrorMessage.svelte';
+	import mount from '$lib/actions/mounted';
 </script>
 
 <script lang="ts">
 	export let name: string;
 	export let type: string;
+	export let initValue: string;
 	export let errors: Errors<Obj>;
 	export let warnings: Errors<Obj>;
 	export let touched: Touched<Obj>;
@@ -26,7 +28,7 @@
 				class:error-border={touched[name] && errors[name]}
 				class:warning-border={touched[name] && !errors[name] && warnings[name]}
 				class:ok-border={touched[name] && !errors[name] && !warnings[name]}
-				use:storage={name}
+				use:storage={{ name, initValue }}
 				{name}
 				{placeholder}
 				{spellcheck}
@@ -48,7 +50,7 @@
 				class:error-border={touched[name] && errors[name]}
 				class:warning-border={touched[name] && !errors[name] && warnings[name]}
 				class:ok-border={touched[name] && !errors[name] && !warnings[name]}
-				use:storage={name}
+				use:storage={{ name }}
 				{name}
 				on:input
 				on:change

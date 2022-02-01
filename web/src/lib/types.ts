@@ -9,3 +9,10 @@ export type ConvertResponse = {
 	system_used: TargetPhoneticSystem;
 	results: Array<ResultTuple>;
 };
+
+export enum InvalidCode {
+	FoundArabicNumber,
+	FoundNonCantoneseCharacter,
+	FoundSimplifiedCharacter,
+	NoCantoneseCharacter
+}
