@@ -4,9 +4,7 @@
     in {
       devShell.${system} = (({ pkgs, ... }:
         pkgs.mkShell {
-          buildInputs = with pkgs; [
-            nodejs
-          ];
+          buildInputs = with pkgs; [ nodejs-16_x ];
 
           shellHook = ''
           '';

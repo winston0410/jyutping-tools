@@ -1,7 +1,14 @@
-type ConversionFn = (inputs: Array<string>) => Array<string>;
+type ConversionDict = {
+  [key: string]: string;
+};
+type ConversionFn = (
+  inputs: Array<string>,
+  dict?: ConversionDict
+) => Array<string>;
 
 const jyutpingToYaleDict = {
   oe: "eu",
+  eo: "eu",
   j: "y",
   aa: "a",
   z: "j",
@@ -11,7 +18,14 @@ const jyutpingToYaleDict = {
   jy: "y",
 };
 
-export const jyutpingToYale: ConversionFn = (inputs) => {
+const jyutpingToTraditionalYaleDict = {
+  ...jyutpingToYaleDict,
+};
+
+export const jyutpingToYale: ConversionFn = (
+  inputs,
+  dict = jyutpingToYaleDict
+) => {
   const result = [...inputs];
   let index = 0;
 
@@ -24,7 +38,7 @@ export const jyutpingToYale: ConversionFn = (inputs) => {
       const cur = mutable[i];
 
       // NOTE Check for double letters replacement first, as jyu > yu conversion will be eaten up by j -> y conversion
-      const doubleSub = jyutpingToYaleDict[`${mutable[i]}${mutable[j]}`];
+      const doubleSub = dict[`${mutable[i]}${mutable[j]}`];
       if (doubleSub) {
         mutable[j] = "";
         mutable[i] = doubleSub;
@@ -32,7 +46,7 @@ export const jyutpingToYale: ConversionFn = (inputs) => {
         j++;
       } else {
         // NOTE Check for single letter replacement
-        const sub = jyutpingToYaleDict[cur];
+        const sub = dict[cur];
         if (sub) {
           mutable[i] = sub;
         }

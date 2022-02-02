@@ -7,6 +7,13 @@ describe("oe in Jyutping", () => {
   });
 });
 
+describe("eo in Jyutping", () => {
+  it("should be converted to eu in Yale", () => {
+    //  鋸
+    expect(jyutpingToYale(["geoi3"])).toEqual(["geui3"]);
+  });
+});
+
 describe("j in Jyutping", () => {
   it("should be converted to y in Yale", () => {
     //  人
@@ -41,3 +48,10 @@ describe("jyu in Jyutping", () => {
     expect(jyutpingToYale(["jyu4"])).toEqual(["yu4"]);
   });
 });
+
+//  describe("tone 4 in Jyutping", () => {
+//  //  人
+//  it("should be converted to h in Yale", () => {
+//  expect(jyutpingToYale(["jan4"])).toEqual(["jahn"]);
+//  });
+//  });
