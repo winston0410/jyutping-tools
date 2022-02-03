@@ -9,10 +9,11 @@
 	import * as z from 'zod';
 	import { validator } from '@felte/validator-zod';
 	import { onMount } from 'svelte';
-	import { hasCantonese, isCantoneseOnly, isTraditionalOnly, hasNumber } from '$lib/helper';
+	import { hasCantonese, isCantoneseOnly, isTraditionalOnly, hasNumber } from '$lib/predicate';
+	import { replaceArabicNumber } from '$lib/transformer';
 	import mkToast from '$lib/toast';
 	import { getNotificationsContext } from 'svelte-notifications';
-	import { TargetPhoneticSystem } from '$lib/types';
+	import { TargetPhoneticSystem, InvalidCode } from '$lib/types';
 	import { extractPhonetic } from '$lib/format';
 	//  import SideBarLayout from '$lib/layouts/SideBarLayout.svelte';
 
@@ -29,17 +30,23 @@
 </script>
 
 <script lang="ts">
-	export let result: Array<string> | null = null;
 	export let input: string;
 
-	//  Not using the enum now
+	let result: Array<string> | null = null;
+	let textareaValue = '';
+
 	const { addNotification } = getNotificationsContext();
 	const toast = mkToast(addNotification);
 
 	const schema = z.object({
-		'convert-characters': z.string().nonempty().refine(hasCantonese, {
-			message: 'No cantonese found in the input'
-		})
+		'convert-characters': z
+			.string()
+			.nonempty({
+				message: InvalidCode.EmptySelfInput
+			})
+			.refine(hasCantonese, {
+				message: InvalidCode.NoCantoneseCharacter
+			})
 		// REF https://github.com/colinhacks/zod/issues/8
 		//  to: z.nativeEnum(TargetPhoneticSystem)
 	});
@@ -48,10 +55,10 @@
 		'convert-characters': z
 			.string()
 			.refine(hasNumber, {
-				message: 'Arabic number might make the converter fail.'
+				message: InvalidCode.FoundArabicNumber
 			})
 			.refine(isCantoneseOnly, {
-				message: 'Non chinese characters might make the converter fail.'
+				message: InvalidCode.FoundNonCantoneseCharacter
 			})
 		//  .refine(isTraditggionalOnly, {
 		//  message: 'Simplified characters might make the translator fail.'
@@ -99,13 +106,11 @@
 		warnSchema
 	});
 
-	onMount(async () => {
-		if ($data['convert-characters']) {
-			await validate();
-		}
-	});
-
 	const id = 'cantonese-to-jyutping';
+	const textareaName = 'convert-characters';
+
+	$: errorCode = $errors[textareaName]?.[0];
+	$: warningCode = $warnings[textareaName]?.[0];
 </script>
 
 <MetaData title="Jyutping converter" description="This is the description" url="" image="" />
@@ -114,7 +119,8 @@
 	<!-- TODO Investigate how to leak style all component  -->
 	<Input
 		type="textarea"
-		name={'convert-characters'}
+		name={textareaName}
+		bind:value={textareaValue}
 		errors={$errors}
 		warnings={$warnings}
 		touched={$touched}
@@ -125,10 +131,34 @@
 			await validate();
 		}}
 	>
-		<!--  on:beforesetfromstorage={(e) => {  -->
-		<!--  console.log(e.detail)  -->
-		<!--  }}  -->
 		<span>Cantonese</span>
+		<div slot="error">
+			{#if errorCode === InvalidCode.NoCantoneseCharacter}
+				<span class="error">No Cantonese characters.</span>
+			{:else if errorCode === InvalidCode.EmptySelfInput}
+				<span class="error">The input field is empty.</span>
+			{/if}
+		</div>
+		<div slot="warning">
+			{#if warningCode === InvalidCode.FoundArabicNumber}
+				<span class="warning"
+					>Arabic numbers might yield unexpected result.
+					<button
+						class="fix-hints"
+						type="button"
+						on:click={() => (textareaValue = replaceArabicNumber(textareaValue))}
+						>Convert all arabic numbers to Cantonese numbers</button
+					>.</span
+				>
+			{:else if warningCode === InvalidCode.FoundNonCantoneseCharacter}
+				<span class="warning"
+					>Non Cantonese characters might yield unexpected result. <button
+						class="fix-hints"
+						type="button">Strip off all non Cantonese characters</button
+					>.</span
+				>
+			{/if}
+		</div>
 	</Input>
 
 	<div class="submit-button">

@@ -1,19 +1,21 @@
 <script lang="ts" context="module">
 	import storage from 'svelte-use-local-storage';
+    //  import storage from './debug'
 	import type { Obj, Errors, Touched } from '@felte/common';
-	import ErrorMessage from './ErrorMessage.svelte';
-	import mount from '$lib/actions/mounted';
 </script>
 
 <script lang="ts">
 	export let name: string;
 	export let type: string;
+	export let value: string = '';
 	export let initValue: string;
 	export let errors: Errors<Obj>;
 	export let warnings: Errors<Obj>;
 	export let touched: Touched<Obj>;
 	export let placeholder: string;
 	export let spellcheck = true;
+
+	$: isInvalid = errors[name] || warnings[name]
 </script>
 
 {#if type === 'textarea'}
@@ -25,10 +27,11 @@
 			<textarea
 				id={name}
 				class="input"
-				class:error-border={touched[name] && errors[name]}
-				class:warning-border={touched[name] && !errors[name] && warnings[name]}
-				class:ok-border={touched[name] && !errors[name] && !warnings[name]}
-				use:storage={{ name, initValue }}
+				class:error-border={errors[name]}
+				class:warning-border={!errors[name] && warnings[name]}
+				class:ok-border={!errors[name] && !warnings[name]}
+				bind:value
+                use:storage={{ name, initValue }}
 				{name}
 				{placeholder}
 				{spellcheck}
@@ -36,7 +39,14 @@
 				on:change
 			/>
 		</label>
-		<ErrorMessage {errors} {warnings} {name} />
+
+		{#if isInvalid}
+			{#if !errors[name] && warnings[name]}
+				<slot name="warning" />
+			{:else}
+				<slot name="error" />
+			{/if}
+		{/if}
 	</div>
 {:else if type === 'number'}
 	<div>
@@ -51,12 +61,19 @@
 				class:warning-border={touched[name] && !errors[name] && warnings[name]}
 				class:ok-border={touched[name] && !errors[name] && !warnings[name]}
 				use:storage={{ name }}
+				bind:value
 				{name}
 				on:input
 				on:change
 			/>
 		</label>
-		<ErrorMessage {errors} {warnings} {name} />
+		{#if isInvalid}
+			{#if !errors[name] && warnings[name]}
+				<slot name="warning" />
+			{:else}
+				<slot name="error" />
+			{/if}
+		{/if}
 	</div>
 {/if}
 
