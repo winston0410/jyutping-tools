@@ -3,7 +3,6 @@ type ConversionDict = {
 };
 type ConversionFn = (
   inputs: Array<string>,
-  dict?: ConversionDict
 ) => Array<string>;
 
 const jyutpingToYaleDict = {
@@ -18,14 +17,10 @@ const jyutpingToYaleDict = {
   jy: "y",
 };
 
-const jyutpingToTraditionalYaleDict = {
-  ...jyutpingToYaleDict,
-};
-
 export const jyutpingToYale: ConversionFn = (
   inputs,
-  dict = jyutpingToYaleDict
 ) => {
+  const dict = jyutpingToYaleDict
   const result = [...inputs];
   let index = 0;
 
@@ -61,3 +56,8 @@ export const jyutpingToYale: ConversionFn = (
 
   return result;
 };
+
+export const jyutpingToTraditionalYale: ConversionFn = (inputs) => {
+  // TODO Complete the function
+  return inputs
+}
