@@ -26,6 +26,13 @@ describe("aa in Jyutping", () => {
     //  沙
     expect(jyutpingToYale(["saa1"])).toEqual(["sa1"]);
   });
+
+  describe("when aa is followed by ending consonant", () => {
+    it("should be converted to aa in Yale", () => {
+      //  生
+      expect(jyutpingToYale(["saang1"])).toEqual(["saang1"]);
+    });
+  });
 });
 
 describe("z in Jyutping", () => {
@@ -49,18 +56,26 @@ describe("jyu in Jyutping", () => {
   });
 });
 
-
 describe("tone 1 in Jyutping", () => {
   //  因
-  it("should be converted correctly in traditional Yale", () => {
-    expect(jyutpingToTraditionalYale(["jan1"])).toEqual(["yān"]);
+  describe("when the final is a single character", () => {
+    it("should be converted correctly in traditional Yale", () => {
+      expect(jyutpingToTraditionalYale(["jan1"])).toEqual(["yān"]);
+    });
   });
+
+  //  生
+  //  describe("when the final is two characters", () => {
+  //  it("should be converted correctly in traditional Yale", () => {
+  //  expect(jyutpingToTraditionalYale(["saang1"])).toEqual(["sāang"]);
+  //  });
+  //  });
 });
 
 describe("tone 2 in Jyutping", () => {
   //  隱
   it("should be converted correctly in traditional Yale", () => {
-    expect(jyutpingToTraditionalYale(["jan2"])).toEqual(["yán"]);
+    expect(jyutpingToTraditionalYale(["jan2"])).toEqual(["yán"]);
   });
 });
 
@@ -74,14 +89,14 @@ describe("tone 3 in Jyutping", () => {
 describe("tone 4 in Jyutping", () => {
   //  人
   it("should be converted correctly in traditional Yale", () => {
-    expect(jyutpingToTraditionalYale(["jan4"])).toEqual(["yàhn"]);
+    expect(jyutpingToTraditionalYale(["jan4"])).toEqual(["yàhn"]);
   });
 });
 
 describe("tone 5 in Jyutping", () => {
   //  癮
   it("should be converted correctly in traditional Yale", () => {
-    expect(jyutpingToTraditionalYale(["jan5"])).toEqual(["yáhn"]);
+    expect(jyutpingToTraditionalYale(["jan5"])).toEqual(["yáhn"]);
   });
 });
 
@@ -89,5 +104,55 @@ describe("tone 6 in Jyutping", () => {
   //  韌
   it("should be converted correctly in traditional Yale", () => {
     expect(jyutpingToTraditionalYale(["jan6"])).toEqual(["yahn"]);
+  });
+});
+
+describe("vowel i in Jyutping", () => {
+  //  英
+  it("should be mark with tone mark correctly in traditional Yale", () => {
+    expect(jyutpingToTraditionalYale(["jing1"])).toEqual(["yīng"]);
+  });
+});
+
+describe("vowel e in Jyutping", () => {
+  //  咩
+  it("should be mark with tone mark correctly in traditional Yale", () => {
+    expect(jyutpingToTraditionalYale(["me1"])).toEqual(["mē"]);
+  });
+});
+
+describe("vowel o in Jyutping", () => {
+  //  好
+  it("should be mark with tone mark correctly in traditional Yale", () => {
+    expect(jyutpingToTraditionalYale(["hou2"])).toEqual(["hóu"]);
+  });
+});
+
+describe("vowel u in Jyutping", () => {
+  //  碗
+  it("should be mark with tone mark correctly in traditional Yale", () => {
+    expect(jyutpingToTraditionalYale(["wun2"])).toEqual(["wún"]);
+  });
+});
+
+describe("vowel m in Jyutping", () => {
+  //  唔
+  it("should be mark with tone mark correctly in traditional Yale", () => {
+    // NOTE Cannot display m with tone mark in unicode correctly in terminal
+    expect(jyutpingToTraditionalYale(["m4"])).toEqual(["m̀h"]);
+  });
+});
+
+describe("vowel ng in Jyutping", () => {
+  //  五
+  it("should be mark with tone mark correctly in traditional Yale", () => {
+    expect(jyutpingToTraditionalYale(["ng5"])).toEqual(["ńgh"]);
+  });
+});
+
+describe("vowel oe in Jyutping", () => {
+  //  香
+  it("should be mark with tone mark correctly in traditional Yale", () => {
+    expect(jyutpingToTraditionalYale(["hoeng1"])).toEqual(["hēung"]);
   });
 });

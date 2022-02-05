@@ -1,13 +1,13 @@
 <script lang="ts" context="module">
 	import storage from 'svelte-use-local-storage';
-    //  import storage from './debug'
+	//  import storage from './debug'
 	import type { Obj, Errors, Touched } from '@felte/common';
 </script>
 
 <script lang="ts">
 	export let name: string;
 	export let type: string;
-	export let value: string = '';
+    export let ref = null;
 	export let initValue: string;
 	export let errors: Errors<Obj>;
 	export let warnings: Errors<Obj>;
@@ -15,7 +15,7 @@
 	export let placeholder: string;
 	export let spellcheck = true;
 
-	$: isInvalid = errors[name] || warnings[name]
+	$: isInvalid = errors[name] || warnings[name];
 </script>
 
 {#if type === 'textarea'}
@@ -30,8 +30,8 @@
 				class:error-border={errors[name]}
 				class:warning-border={!errors[name] && warnings[name]}
 				class:ok-border={!errors[name] && !warnings[name]}
-				bind:value
-                use:storage={{ name, initValue }}
+                bind:this={ref}
+				use:storage={{ name, initValue }}
 				{name}
 				{placeholder}
 				{spellcheck}
@@ -61,7 +61,6 @@
 				class:warning-border={touched[name] && !errors[name] && warnings[name]}
 				class:ok-border={touched[name] && !errors[name] && !warnings[name]}
 				use:storage={{ name }}
-				bind:value
 				{name}
 				on:input
 				on:change

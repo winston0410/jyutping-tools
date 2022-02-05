@@ -75,12 +75,12 @@ $outline-width: 0.2rem;
 }
 
 .fix-hints {
-    appearance: none;
-    background: none;
-    color: lighten($blue, 20%);
-    text-decoration: underline;
+	appearance: none;
+	background: none;
+	color: lighten($blue, 20%);
+	text-decoration: underline;
 }
 
 .fix-hints:hover {
-    color: $blue;
+	color: $blue;
 }
