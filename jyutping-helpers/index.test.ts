@@ -65,11 +65,11 @@ describe("tone 1 in Jyutping", () => {
   });
 
   //  生
-  //  describe("when the final is two characters", () => {
-  //  it("should be converted correctly in traditional Yale", () => {
-  //  expect(jyutpingToTraditionalYale(["saang1"])).toEqual(["sāang"]);
-  //  });
-  //  });
+  describe("when the final is two characters", () => {
+    it("should be converted correctly in traditional Yale", () => {
+      expect(jyutpingToTraditionalYale(["saang1"])).toEqual(["sāang"]);
+    });
+  });
 });
 
 describe("tone 2 in Jyutping", () => {
@@ -91,6 +91,13 @@ describe("tone 4 in Jyutping", () => {
   it("should be converted correctly in traditional Yale", () => {
     expect(jyutpingToTraditionalYale(["jan4"])).toEqual(["yàhn"]);
   });
+
+  describe("when the final is two characters", () => {
+    it("should be converted correctly in traditional Yale", () => {
+      //  牆
+      expect(jyutpingToTraditionalYale(["coeng4"])).toEqual(["chèuhng"]);
+    });
+  });
 });
 
 describe("tone 5 in Jyutping", () => {
@@ -98,12 +105,27 @@ describe("tone 5 in Jyutping", () => {
   it("should be converted correctly in traditional Yale", () => {
     expect(jyutpingToTraditionalYale(["jan5"])).toEqual(["yáhn"]);
   });
+
+  describe("when the final is two characters", () => {
+    it("should be converted correctly in traditional Yale", () => {
+      expect(jyutpingToTraditionalYale(["laang5"])).toEqual(["láahng"]);
+    });
+  });
 });
 
 describe("tone 6 in Jyutping", () => {
   //  韌
   it("should be converted correctly in traditional Yale", () => {
     expect(jyutpingToTraditionalYale(["jan6"])).toEqual(["yahn"]);
+  });
+
+  describe("when the final is two characters", () => {
+    it("should be converted correctly in traditional Yale", () => {
+      //  上
+      expect(jyutpingToTraditionalYale(["soeng6"])).toEqual(["seuhng"]);
+      //  弱
+      expect(jyutpingToTraditionalYale(["joek6"])).toEqual(["yeuhk"]);
+    });
   });
 });
 
@@ -125,6 +147,8 @@ describe("vowel o in Jyutping", () => {
   //  好
   it("should be mark with tone mark correctly in traditional Yale", () => {
     expect(jyutpingToTraditionalYale(["hou2"])).toEqual(["hóu"]);
+    //  浪
+    expect(jyutpingToTraditionalYale(["long6"])).toEqual(["lohng"]);
   });
 });
 
@@ -153,6 +177,20 @@ describe("vowel ng in Jyutping", () => {
 describe("vowel oe in Jyutping", () => {
   //  香
   it("should be mark with tone mark correctly in traditional Yale", () => {
-    expect(jyutpingToTraditionalYale(["hoeng1"])).toEqual(["hēung"]);
+    expect(jyutpingToTraditionalYale(["hoeng1"])).toEqual(["hēung"]);
+  });
+});
+
+//  describe("vowel eo in Jyutping", () => {
+//  //  律
+//  it("should be mark with tone mark correctly in traditional Yale", () => {
+//  expect(jyutpingToTraditionalYale(["leot6"])).toEqual(["leuht"]);
+//  });
+//  });
+
+describe("vowel eoi in Jyutping", () => {
+  //  水
+  it("should be mark with tone mark correctly in traditional Yale", () => {
+    expect(jyutpingToTraditionalYale(["seoi2"])).toEqual(["séui"]);
   });
 });

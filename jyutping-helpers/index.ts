@@ -65,6 +65,7 @@ const toneMarkDict: ConversionDict = {
   "1": "\u0304",
   "2": "\u0301",
   "3": "",
+  // NOTE Cannot prepend h directly due to vowel with two characters
   "4": "\u0300h",
   "5": "\u0301h",
   "6": "h",
@@ -72,13 +73,13 @@ const toneMarkDict: ConversionDict = {
 
 //  Dict that list all vowels in Yale, as it will be transfered from Jyutping to Yale first
 const vowelDict = {
-    a: true,
-    e: true,
-    i: true,
-    o: true,
-    u: true,
-    m: true,
-    n: true
+  a: true,
+  e: true,
+  i: true,
+  o: true,
+  u: true,
+  m: true,
+  n: true,
 };
 
 export const jyutpingToTraditionalYale: ConversionFn = (inputs) => {
@@ -110,11 +111,14 @@ export const jyutpingToTraditionalYale: ConversionFn = (inputs) => {
         if (doubleSub) {
           //Check if ending consonant exists. Only do the conversion when
           if (doubleCur !== "aa" || numberRegex.test(mutable[j + 1])) {
-            mutable[j] = "";
-            mutable[i] = doubleSub;
+            //  mutable[j] = "";
+            //  mutable[i] = doubleSub;
+            mutable[j] = doubleSub[1];
+            mutable[i] = doubleSub[0];
           }
-          i++;
-          j++;
+          // TODO Jump i further while keeping the test correct
+          //  i++;
+          //  j++;
         } else {
           // NOTE Check for single letter replacement
           const sub = dict[cur];
@@ -124,29 +128,49 @@ export const jyutpingToTraditionalYale: ConversionFn = (inputs) => {
         }
 
         //  Handle tone replacement
-        if(vowelDict[cur] && toneNumber){
-            switch (cur) {
-                case "m":
-                    // NOTE Only add tone to m if the next characters is tone
-                    if(!mutable[i + 1]){
-                        mutable[i] += toneMarkDict[toneNumber] 
-                        toneNumber = ""
-                    }
-                    break;
-                case 'n':
-                    // NOTE check if being used as a vowel
-                    //  The number will be stripped off previously
-                    if(!mutable[i + 2]){
-                        mutable[i] += toneMarkDict[toneNumber][0]
-                        mutable[i + 1] += toneMarkDict[toneNumber][1]
-                    }
-                    break;
+        if (vowelDict[cur] && toneNumber) {
+          switch (cur) {
+            case "m":
+              // NOTE Only add tone to m if the next characters is tone
+              if (!mutable[i + 1]) {
+                mutable[i] += toneMarkDict[toneNumber];
+                toneNumber = "";
+              }
+              break;
+            case "n":
+              // NOTE check if being used as a vowel
+              //  The number will be stripped off previously
+              if (!mutable[i + 2]) {
+                mutable[i] += toneMarkDict[toneNumber][0];
+                mutable[i + 1] += toneMarkDict[toneNumber][1];
+              }
+              break;
 
-                default:
-                    mutable[i] += toneMarkDict[toneNumber] 
-                    toneNumber = ""
-                    break;
-            }
+            default:
+              if (
+                toneNumber === "4" ||
+                toneNumber === "5" ||
+                toneNumber === "6"
+              ) {
+                if (
+                  vowelDict[mutable[j]] &&
+                  mutable[j] !== "m" &&
+                  mutable[j] !== "n"
+                ) {
+                  mutable[i] +=
+                    toneMarkDict[toneNumber].length === 1
+                      ? ""
+                      : toneMarkDict[toneNumber][0];
+                  mutable[j] += "h";
+                } else {
+                  mutable[i] += toneMarkDict[toneNumber];
+                }
+              } else {
+                mutable[i] += toneMarkDict[toneNumber];
+              }
+              toneNumber = "";
+              break;
+          }
         }
 
         i++;
