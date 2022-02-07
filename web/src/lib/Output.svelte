@@ -48,7 +48,9 @@
 		>
 			{#if $currentTab === TargetPhoneticSystem.Jyutping}
 				{result ? result.join(' ') : placeholder}
-			{:else if $currentTab === TargetPhoneticSystem.Yale}
+			{:else if $currentTab === TargetPhoneticSystem.ToneNumberYale}
+				{result ? jyutpingToYale(result).join(' ') : placeholder}
+			{:else if $currentTab === TargetPhoneticSystem.ToneMarkYale}
 				{result ? jyutpingToYale(result).join(' ') : placeholder}
 			{/if}
 		</output>

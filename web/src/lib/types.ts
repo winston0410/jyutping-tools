@@ -1,6 +1,7 @@
 export enum TargetPhoneticSystem {
 	Jyutping = 'jyutping',
-	Yale = 'yale'
+	ToneNumberYale = 'yale(tone number)',
+	ToneMarkYale = 'yale(tone mark)'
 }
 
 export type ResultTuple = [string, string];
@@ -16,5 +17,5 @@ export enum InvalidCode {
 	FoundNonCantoneseCharacter = 2,
 	FoundSimplifiedCharacter = 3,
 	NoCantoneseCharacter = 4,
-    EmptySelfInput = 5
+	EmptySelfInput = 5
 }

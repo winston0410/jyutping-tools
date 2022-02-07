@@ -8,13 +8,13 @@
 	import { PROXY_ROOT, MICROSERVICE_ROOT, CONVERT_ACTION } from '$lib/const';
 	import * as z from 'zod';
 	import { validator } from '@felte/validator-zod';
-	import { onMount } from 'svelte';
 	import { hasCantonese, isCantoneseOnly, isTraditionalOnly, hasNumber } from '$lib/predicate';
 	import { replaceArabicNumber } from '$lib/transformer';
 	import mkToast from '$lib/toast';
 	import { getNotificationsContext } from 'svelte-notifications';
 	import { TargetPhoneticSystem, InvalidCode } from '$lib/types';
 	import { extractPhonetic } from '$lib/format';
+	import { handleReplaceArabicNumber } from '$lib/handler';
 	//  import SideBarLayout from '$lib/layouts/SideBarLayout.svelte';
 
 	export const load = async ({ url }) => {
@@ -33,7 +33,6 @@
 	export let input: string;
 
 	let result: Array<string> | null = null;
-	let textareaValue = '';
 
 	const { addNotification } = getNotificationsContext();
 	const toast = mkToast(addNotification);
@@ -108,6 +107,7 @@
 
 	const id = 'cantonese-to-jyutping';
 	const textareaName = 'convert-characters';
+	let textareaRef: HTMLTextAreaElement;
 
 	$: errorCode = $errors[textareaName]?.[0];
 	$: warningCode = $warnings[textareaName]?.[0];
@@ -120,7 +120,7 @@
 	<Input
 		type="textarea"
 		name={textareaName}
-		bind:value={textareaValue}
+		bind:ref={textareaRef}
 		errors={$errors}
 		warnings={$warnings}
 		touched={$touched}
@@ -143,10 +143,7 @@
 			{#if warningCode === InvalidCode.FoundArabicNumber}
 				<span class="warning"
 					>Arabic numbers might yield unexpected result.
-					<button
-						class="fix-hints"
-						type="button"
-						on:click={() => (textareaValue = replaceArabicNumber(textareaValue))}
+					<button class="fix-hints" type="button" on:click={handleReplaceArabicNumber(textareaRef)}
 						>Convert all arabic numbers to Cantonese numbers</button
 					>.</span
 				>
