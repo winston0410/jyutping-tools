@@ -181,16 +181,23 @@ describe("vowel oe in Jyutping", () => {
   });
 });
 
-//  describe("vowel eo in Jyutping", () => {
-//  //  律
-//  it("should be mark with tone mark correctly in traditional Yale", () => {
-//  expect(jyutpingToTraditionalYale(["leot6"])).toEqual(["leuht"]);
-//  });
-//  });
+describe("vowel eo in Jyutping", () => {
+  //  律
+  it("should be mark with tone mark correctly in traditional Yale", () => {
+    expect(jyutpingToTraditionalYale(["leot6"])).toEqual(["leuht"]);
+  });
+});
 
 describe("vowel eoi in Jyutping", () => {
   //  水
   it("should be mark with tone mark correctly in traditional Yale", () => {
     expect(jyutpingToTraditionalYale(["seoi2"])).toEqual(["séui"]);
+  });
+});
+
+describe("when given two characters", () => {
+  //  香港
+  it("should be mark with tone mark correctly in traditional Yale", () => {
+    expect(jyutpingToTraditionalYale(["hoeng1gong2"])).toEqual(["hēunggóng"]);
   });
 });
