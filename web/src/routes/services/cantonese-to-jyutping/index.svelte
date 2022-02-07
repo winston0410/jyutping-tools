@@ -87,6 +87,9 @@
 
 			const phonetics = extractPhonetic(body.results);
 
+			console.log('check body: ', body);
+			console.log('check phonetics: ', phonetics);
+
 			result = phonetics;
 
 			toast.mkOk('Conversion successful!');

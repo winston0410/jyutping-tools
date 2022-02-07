@@ -4,7 +4,7 @@
 	import clipboard from '$lib/actions/clipboard';
 	//  @ts-ignore
 	import CopyIcon from 'virtual:icons/carbon/copy';
-	import { jyutpingToYale } from 'jyutping-helpers';
+	import { jyutpingToYale, jyutpingToTraditionalYale } from 'jyutping-helpers';
 	import storage from 'svelte-use-local-storage';
 </script>
 
@@ -38,20 +38,13 @@
 	</button>
 	<div class="output">
 		<!--  use:storage={'output-field'}  -->
-		<output
-			{form}
-			class="output-inner"
-			class:placeholder={!result}
-			use:clipboard
-			on:copy
-			use:storage={{ name: 'output-field' }}
-		>
+		<output {form} class="output-inner" class:placeholder={!result} use:clipboard on:copy>
 			{#if $currentTab === TargetPhoneticSystem.Jyutping}
 				{result ? result.join(' ') : placeholder}
 			{:else if $currentTab === TargetPhoneticSystem.ToneNumberYale}
 				{result ? jyutpingToYale(result).join(' ') : placeholder}
 			{:else if $currentTab === TargetPhoneticSystem.ToneMarkYale}
-				{result ? jyutpingToYale(result).join(' ') : placeholder}
+				{result ? jyutpingToTraditionalYale(result).join(' ') : placeholder}
 			{/if}
 		</output>
 	</div>
