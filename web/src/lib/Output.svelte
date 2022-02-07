@@ -100,6 +100,7 @@
 
 	.output {
 		@include textarea;
+		padding: 0;
 		color: $black;
 	}
 
@@ -109,5 +110,7 @@
 
 	.output-inner {
 		display: block;
+		height: 100%;
+		padding: 12px;
 	}
 </style>

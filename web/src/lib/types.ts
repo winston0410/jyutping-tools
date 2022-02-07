@@ -1,7 +1,7 @@
 export enum TargetPhoneticSystem {
 	Jyutping = 'jyutping',
-	ToneNumberYale = 'yale-tone-number',
-	ToneMarkYale = 'yale-tone-mark'
+	ToneNumberYale = 'yale(tone number)',
+	ToneMarkYale = 'yale(tone mark)'
 }
 
 export type ResultTuple = [string, string];
