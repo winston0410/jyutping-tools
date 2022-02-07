@@ -6,7 +6,7 @@ WEB_ROOT="$GIT_ROOT/web";
 HELPER_ROOT="$GIT_ROOT/jyutping-helpers"
 
 # WEB
-"$WEB_ROOT/node_modules/.bin/tsc-files" --noEmit
+# "$WEB_ROOT/node_modules/.bin/svelte-check"
 "$WEB_ROOT/node_modules/.bin/lint-staged" --cwd "$WEB_ROOT"
 
 # HELPER
