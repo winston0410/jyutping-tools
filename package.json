@@ -1,4 +1,10 @@
 {
   "private": true,
-  "workspaces": ["./web", "./jyutping-helpers"]
+  "workspaces": [
+    "./web",
+    "./jyutping-helpers"
+  ],
+  "devDependencies": {
+    "lint-staged": "12.3.2"
+  }
 }
