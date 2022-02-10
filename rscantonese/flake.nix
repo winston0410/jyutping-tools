@@ -42,7 +42,7 @@
         devShell = with pkgs;
           mkShell {
             buildInputs =
-              [ cargo-watch rust-bin.nightly.latest.default pythonWithLib maturin];
+              [ cargo-watch rust-bin.nightly.latest.default pythonWithLib maturin pre-commit];
             DEBUG_PYTHON=1;
             shellHook = ''
               PYTHONPATH=${pythonWithLib}/${pythonWithLib.sitePackages}

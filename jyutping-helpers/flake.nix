@@ -4,7 +4,7 @@
     in {
       devShell.${system} = (({ pkgs, ... }:
         pkgs.mkShell {
-          buildInputs = with pkgs; [ nodejs-16_x ];
+          buildInputs = with pkgs; [ nodejs-16_x pre-commit];
 
           shellHook = ''
           '';

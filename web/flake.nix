@@ -11,7 +11,7 @@
         pkgs = import nixpkgs { inherit system; };
       in {
         devShell = with pkgs; mkShell {
-          buildInputs = [ nodejs-16_x ];
+          buildInputs = [ nodejs-16_x pre-commit];
         };
       });
 
