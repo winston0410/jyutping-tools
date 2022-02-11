@@ -6,8 +6,9 @@ repos:
       - id: fmt
       - id: cargo-check
       - id: clippy
-  #  - repo: https://github.com/winston0401/pre-commit-node
-    #  rev: develop
-    #  hooks:
-      #  - id: lint-staged
-        #  args: ["--cwd", "./web"]
+  - repo: https://github.com/winston0410/pre-commit-node
+    rev: develop
+    hooks:
+      - id: lint-staged
+        files: ./web/*.*
+        args: ["--cwd", "./web"]
