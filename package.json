@@ -6,5 +6,9 @@
   ],
   "devDependencies": {
     "lint-staged": "12.3.2"
+  },
+  "scripts": {
+    "syncpack": "syncpack list-mismatches",
+    "synpack:fix": "syncpack fix-mismatches"
   }
 }
