@@ -10,5 +10,5 @@ repos:
     rev: cfe12b0
     hooks:
       - id: lint-staged
-        files: ./web/*.*
+        files: \/web
         args: ["--cwd", "./web"]
