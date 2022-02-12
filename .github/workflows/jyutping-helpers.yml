@@ -9,6 +9,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: ./shared-actions/setup-node-ci.yml
+      - uses: ./setup-node
       - name: Run CI test
         run: npm test:ci
