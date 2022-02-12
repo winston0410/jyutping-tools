@@ -15,7 +15,8 @@
     "test:watch": "jest --watch -u",
     "test:ci": "jest --ci",
     "test:coverage": "jest --coverage",
-    "test:badges": "npm run test:coverage && jest-coverage-badges --output \"./badges\""
+    "test:badges": "npm run test:coverage && jest-coverage-badges --output \"./badges\"",
+    "typecheck": "tsc --noEmitOnError"
   },
   "keywords": [
     "jyutping"

@@ -21,7 +21,7 @@ jobs:
         run: npm install
 
       - name: Run CI test
-        run: npm test:ci
+        run: npm run test:ci
   typecheck:
     runs-on: ubuntu-latest
     steps:
@@ -36,4 +36,4 @@ jobs:
         run: npm install
 
       - name: Run tsc
-        run: npm tsc
+        run: npm run typecheck
