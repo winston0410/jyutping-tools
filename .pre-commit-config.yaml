@@ -6,10 +6,12 @@ repos:
       - id: fmt
       - id: cargo-check
       - id: clippy
-  #  Files setting doesn't work
   - repo: https://github.com/winston0410/pre-commit-node
     rev: 7d90f85
     hooks:
       - id: lint-staged
         files: \/web
         args: ["--cwd", "./web"]
+      - id: lint-staged
+        files: \/jyutping-helpers
+        args: ["--cwd", "./jyutping-helpers"]
