@@ -11,5 +11,5 @@ repos:
     rev: 7d90f85
     hooks:
       - id: lint-staged
-        files: .*
+        files: \/web
         args: ["--cwd", "./web"]
