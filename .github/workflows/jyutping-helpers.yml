@@ -10,8 +10,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Node and NPM
-        working-directory: ./.github
-        uses: ./setup-node
+      #  Cannot use the extracted action here, as working-directory cannot be defined for local action
+      # REF https://stackoverflow.com/questions/67299058/running-github-actions-for-uses-in-another-directory
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm install
+
       - name: Run CI test
         run: npm test:ci
+  typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      #  Check previous comment
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run tsc
+        run: npm tsc

@@ -1,3 +1,8 @@
+#  This is a composite action
+# REF https://github.blog/changelog/2021-08-25-github-actions-reduce-duplication-with-action-composition/
+
+#  This file cannot be used correctly right now, as working directory cannot be set for composite action
+# REF https://stackoverflow.com/questions/58139175/running-actions-in-another-directory
 name: "NPM"
 description: "Set up Node environment in CI and install required dependencies with NPM"
 
