@@ -2,6 +2,8 @@
 name: Actions for jyutping-helpers
 on:
   push:
+    paths:
+      - "jyutping-helpers/**"
 defaults:
   run:
     working-directory: ./jyutping-helpers

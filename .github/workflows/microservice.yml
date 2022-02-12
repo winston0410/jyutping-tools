@@ -2,6 +2,8 @@
 name: Actions for microservice
 on:
   push:
+    paths:
+      - "microservice/**"
 defaults:
   run:
     working-directory: ./microservice
