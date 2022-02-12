@@ -5,7 +5,6 @@ repos:
     hooks:
       - id: fmt
       - id: cargo-check
-      - id: clippy
   - repo: https://github.com/winston0410/pre-commit-node
     rev: 7d90f85
     hooks:

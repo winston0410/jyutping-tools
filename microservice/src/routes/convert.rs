@@ -1,8 +1,7 @@
 use crate::routes::HttpError;
+use crate::services::{chars_to_jyutping, CharsToJyutpingResult};
 use actix_web::{web, HttpResponse, Result};
 use serde::{Deserialize, Serialize};
-// use crate::services::{chars_to_jyutping, chars_to_yale};
-use crate::services::{chars_to_jyutping, chars_to_yale, CharsToJyutpingResult};
 
 #[derive(Debug, Deserialize)]
 pub struct RequestQuery {
