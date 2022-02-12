@@ -1,0 +1,14 @@
+name: "NPM"
+description: "Set up Node environment in CI and install required dependencies with NPM"
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: "16"
+        cache: "npm"
+
+    - name: Install Dependencies
+      run: npm install

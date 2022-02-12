@@ -1,0 +1,14 @@
+---
+name: Actions for jyutping-helpers
+on:
+  push:
+defaults:
+  run:
+    working-directory: ./jyutping-helpers
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - use: ./shared-actions/setup-node-ci.yml
+      - name: Run CI test
+        run: npm test:ci
