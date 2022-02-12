@@ -1,21 +1,25 @@
 ---
+name: Actions for microservice
 on:
   push:
-
-name: Code Coverage
-
+    paths:
+      - "**/Cargo.toml"
+      - "**/Cargo.lock"
 defaults:
   run:
-    working-directory: microservice
+    working-directory: ./microservice
 jobs:
-  lint:
+  security_audit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - uses: actions-rs/toolchain@v1
+      - uses: actions-rs/audit-check@v1
         with:
-          toolchain: nightly
-          override: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
       - uses: actions-rs/cargo@v1
         with:
           command: test
