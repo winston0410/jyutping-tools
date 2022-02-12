@@ -17,17 +17,9 @@
           overlays = [ rust-overlay.overlay ];
         };
         python = pkgs.python310;
-        # wordseg = pkgs.callPackage ./wordseg.nix { pkgs = python.pkgs; };
-        # pylangacq = pkgs.callPackage ./pylangacq.nix { pkgs = python.pkgs; };
-        # pycantonese = pkgs.callPackage ./pycantonese.nix {
-          # pkgs = python.pkgs;
-          # inherit pylangacq wordseg;
-        # };
-        # pythonWithLib = python.withPackages (p: with p; [ pycantonese ]);
-        pythonWithLib = python.withPackages (p: with p; []);
         defaultPackage = naersk-lib.buildPackage {
           root = ./.;
-          buildInputs = with pkgs; [ pythonWithLib ];
+          buildInputs = with pkgs; [];
         };
         naersk-lib = pkgs.callPackage naersk { };
       in {
@@ -38,18 +30,5 @@
         };
 
         defaultApp = utils.lib.mkApp { drv = self.defaultPackage."${system}"; };
-
-        devShell = with pkgs;
-          mkShell {
-            buildInputs =
-              [ cargo-watch rust-bin.nightly.latest.default pythonWithLib maturin pre-commit];
-            DEBUG_PYTHON=1;
-            shellHook = ''
-              PYTHONPATH=${pythonWithLib}/${pythonWithLib.sitePackages}
-              PYO3_PRINT_CONFIG=1;
-              DEBUG_PYTHON=1;
-              echo "Using Nix built Python environment for this project..."
-            '';
-          };
       });
 }

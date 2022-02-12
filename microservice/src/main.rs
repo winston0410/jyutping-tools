@@ -31,7 +31,7 @@ async fn main() -> std::io::Result<()> {
     // Ok(())
     // });
     //
-    
+
     println!(
         "{}",
         format!("Starting microservice..., built at {}", BUILD_TIME)
@@ -51,10 +51,8 @@ async fn main() -> std::io::Result<()> {
                 web::scope("/v1")
                     .wrap(middlewares::CacheHeader::default())
                     .wrap(middleware::DefaultHeaders::new().add((LAST_MODIFIED, BUILD_TIME)))
-                    .configure(routes::convert::setup)
-                    .configure(routes::segment::setup),
+                    .configure(routes::convert::setup),
             )
-            .service(web::scope("").configure(routes::health_check::setup))
     })
     .bind("0.0.0.0:8080")?
     .run()

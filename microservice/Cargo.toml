@@ -10,7 +10,7 @@ build = "./src/build.rs"
 pyo3 = { version = "0.15.1", features = [ "auto-initialize"] }
 actix-web = "4.0.0-beta.20"
 actix-cors = "0.6.0-beta.8"
-serde = "1.0.130"
+serde = { version = "1.0.130", features = [ "derive" ] }
 env_logger = "0.9.0"
 derive_more = "0.99.16"
 #TODO Memoize input for better performance
@@ -21,3 +21,6 @@ futures = "0.3.19"
 
 [build-dependencies]
 actix-web = "4.0.0-beta.20"
+
+[profile.release]
+lto = "thin"

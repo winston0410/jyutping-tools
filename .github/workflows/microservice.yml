@@ -2,9 +2,6 @@
 name: Actions for microservice
 on:
   push:
-    paths:
-      - "**/Cargo.toml"
-      - "**/Cargo.lock"
 defaults:
   run:
     working-directory: ./microservice

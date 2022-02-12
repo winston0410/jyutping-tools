@@ -1,0 +1,9 @@
+[workspace]
+
+members = [
+    "microservice",
+    # "rscantonese",
+]
+
+[profile.dev.package."*"]
+opt-level = 3

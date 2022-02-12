@@ -40,19 +40,5 @@
         };
 
         defaultApp = utils.lib.mkApp { drv = self.defaultPackage."${system}"; };
-
-        devShell = with pkgs;
-          mkShell {
-            buildInputs =
-              [ cargo-watch rust-bin.nightly.latest.default pythonWithLib pre-commit];
-            DEBUG_PYTHON = 1;
-            shellHook = ''
-              PYTHONPATH=${pythonWithLib}/${pythonWithLib.sitePackages}
-              PYO3_PRINT_CONFIG=1;
-              DEBUG_PYTHON=1;
-              echo "Using Nix built Python environment for this project..."
-            '';
-          };
       });
-
 }
