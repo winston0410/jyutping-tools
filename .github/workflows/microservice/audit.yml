@@ -5,6 +5,9 @@ on:
     paths:
       - "**/Cargo.toml"
       - "**/Cargo.lock"
+defaults:
+  run:
+    working-directory: microservice
 jobs:
   security_audit:
     runs-on: ubuntu-latest
