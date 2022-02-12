@@ -65,7 +65,6 @@ const toneMarkDict: ConversionDict = {
   "1": "\u0304",
   "2": "\u0301",
   "3": "",
-  // NOTE Cannot prepend h directly due to vowel with two characters
   "4": "\u0300h",
   "5": "\u0301h",
   "6": "h",
@@ -109,16 +108,11 @@ export const jyutpingToTraditionalYale: ConversionFn = (inputs) => {
         // NOTE Check for double letters replacement first, as jyu > yu conversion will be eaten up by j -> y conversion
         const doubleSub = dict[doubleCur];
         if (doubleSub) {
-          //Check if ending consonant exists. Only do the conversion when
+          //  Check if ending consonant exists. Only do the conversion when
           if (doubleCur !== "aa" || numberRegex.test(mutable[j + 1])) {
-            //  mutable[j] = "";
-            //  mutable[i] = doubleSub;
             mutable[j] = doubleSub[1];
             mutable[i] = doubleSub[0];
           }
-          // TODO Jump i further while keeping the test correct
-          //  i++;
-          //  j++;
         } else {
           // NOTE Check for single letter replacement
           const sub = dict[cur];
@@ -134,6 +128,9 @@ export const jyutpingToTraditionalYale: ConversionFn = (inputs) => {
               // NOTE Only add tone to m if the next characters is tone
               if (!mutable[i + 1]) {
                 mutable[i] += toneMarkDict[toneNumber];
+                //  Move i and j forward to the last found tone position, to avoid match again after match
+                i = k;
+                j = i + 1;
                 toneNumber = "";
               }
               break;
@@ -143,6 +140,10 @@ export const jyutpingToTraditionalYale: ConversionFn = (inputs) => {
               if (!mutable[i + 2]) {
                 mutable[i] += toneMarkDict[toneNumber][0];
                 mutable[i + 1] += toneMarkDict[toneNumber][1];
+                //  Move i and j forward to the last found tone position, to avoid match again after match
+                i = k;
+                j = i + 1;
+                toneNumber = "";
               }
               break;
 
@@ -168,6 +169,9 @@ export const jyutpingToTraditionalYale: ConversionFn = (inputs) => {
               } else {
                 mutable[i] += toneMarkDict[toneNumber];
               }
+              //  Move i and j forward to the last found tone position, to avoid match again after match
+              i = k;
+              j = i + 1;
               toneNumber = "";
               break;
           }

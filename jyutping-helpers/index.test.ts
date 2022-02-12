@@ -198,6 +198,6 @@ describe("vowel eoi in Jyutping", () => {
 describe("when given two characters", () => {
   //  香港
   it("should be mark with tone mark correctly in traditional Yale", () => {
-    expect(jyutpingToTraditionalYale(["hoeng1gong2"])).toEqual(["hēunggóng"]);
+    expect(jyutpingToTraditionalYale(["hoeng1gong2"])).toEqual(["hēunggóng"]);
   });
 });
