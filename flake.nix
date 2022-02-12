@@ -19,7 +19,8 @@
             pre-commit
           ];
           shellHook = ''
-
+          pre-commit install
+          PATH=$PATH:$(npm bin)
           '';
         }) { inherit pkgs; });
     };
