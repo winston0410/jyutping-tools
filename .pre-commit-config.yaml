@@ -10,8 +10,8 @@ repos:
     rev: 7d90f85
     hooks:
       - id: lint-staged
-        files: \/web
+        files: '^web/'
         args: ["--cwd", "./web"]
       - id: lint-staged
-        files: \/jyutping-helpers
+        files: '^jyutping-helpers/'
         args: ["--cwd", "./jyutping-helpers"]
