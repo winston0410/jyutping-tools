@@ -14,7 +14,7 @@ pub enum HttpError {
     InvalidRequest { message: String },
     NotFound { message: String },
     ServerError {},
-    // TemporarilyUnavailable {},
+    Unauthorized {}, // TemporarilyUnavailable {},
 }
 
 //REF https://stackoverflow.com/questions/40538554/is-it-possible-to-pattern-match-in-rust-with-multiple-types
@@ -54,6 +54,10 @@ impl ResponseError for HttpError {
             HttpError::ServerError { .. } => {
                 return HttpResponseBuilder::new(self.status_code()).finish()
             }
+
+            HttpError::Unauthorized { .. } => {
+                return HttpResponseBuilder::new(self.status_code()).finish()
+            }
         }
     }
 
@@ -64,6 +68,8 @@ impl ResponseError for HttpError {
             HttpError::ServerError { .. } => StatusCode::INTERNAL_SERVER_ERROR,
 
             HttpError::NotFound { .. } => StatusCode::NOT_FOUND,
+
+            HttpError::Unauthorized { .. } => StatusCode::UNAUTHORIZED,
         }
     }
 }

@@ -28,8 +28,9 @@
       devShell.${system} = (({ pkgs, ... }:
         pkgs.mkShell {
           buildInputs = with pkgs; [
-            # For compatibility with Vercel
+            # For compatibility with Vercel, need nodejs16
             nodejs-16_x
+            cargo-watch
             pre-commit
             (rust-bin.selectLatestNightlyWith (toolchain: toolchain.default))
             pythonWithLib

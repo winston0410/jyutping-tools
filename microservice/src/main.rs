@@ -1,6 +1,7 @@
 use actix_cors::Cors;
+use actix_web::dev::ServiceRequest;
 use actix_web::http::header::{LastModified, LAST_MODIFIED};
-use actix_web::{middleware, web, App, HttpServer};
+use actix_web::{middleware, web, App, Error, HttpServer};
 use std::env;
 mod middlewares;
 mod routes;
@@ -8,10 +9,20 @@ mod services;
 use pyo3::prelude::*;
 use std::time::{Duration, SystemTime};
 
+use actix_web_httpauth::extractors::basic::BasicAuth;
+use actix_web_httpauth::middleware::HttpAuthentication;
+
 // Use debug assertion for checking PYTHONPATH
 //REF https://stackoverflow.com/questions/39204908/how-to-check-release-debug-builds-using-cfg-in-rust
-
 const BUILD_TIME: &str = include!("/tmp/timestamp.txt");
+
+async fn validator(req: ServiceRequest, credentials: BasicAuth) -> Result<ServiceRequest, Error> {
+    if credentials.user_id() == "user" {
+        Ok(req)
+    } else {
+        Err(routes::HttpError::Unauthorized {}.into())
+    }
+}
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -38,8 +49,10 @@ async fn main() -> std::io::Result<()> {
     );
 
     HttpServer::new(move || {
+        let auth = HttpAuthentication::basic(validator);
         App::new()
             .wrap(middleware::Logger::default())
+            .wrap(auth)
             .wrap(if env::var("PRODUCTION").is_ok() {
                 println!("Using restrictive CORS for production");
                 Cors::default()
