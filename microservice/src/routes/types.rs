@@ -14,7 +14,7 @@ pub enum HttpError {
     InvalidRequest { message: String },
     NotFound { message: String },
     ServerError {},
-    Unauthorized {}, // TemporarilyUnavailable {},
+    Unauthorized {},
 }
 
 //REF https://stackoverflow.com/questions/40538554/is-it-possible-to-pattern-match-in-rust-with-multiple-types

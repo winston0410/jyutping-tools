@@ -37,6 +37,7 @@
             cargo-outdated
           ];
           DEBUG_PYTHON=1;
+          # PYO3_PRINT_CONFIG=1;
           shellHook = ''
             # Setting pre-commit
             pre-commit install
@@ -44,7 +45,6 @@
             PATH=$PATH:$(npm bin)
             # Setting Python
             PYTHONPATH=${pythonWithLib}/${pythonWithLib.sitePackages}
-            PYO3_PRINT_CONFIG=1;
             echo "Using Nix built Python environment for this project..."
             # Updating cargo dep
             cargo outdated

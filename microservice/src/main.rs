@@ -17,16 +17,21 @@ use actix_web_httpauth::middleware::HttpAuthentication;
 const BUILD_TIME: &str = include!("/tmp/timestamp.txt");
 
 async fn validator(req: ServiceRequest, credentials: BasicAuth) -> Result<ServiceRequest, Error> {
-    if credentials.user_id() == "user" {
-        Ok(req)
-    } else {
-        Err(routes::HttpError::Unauthorized {}.into())
+    if credentials.user_id() != &env::var("API_USER").unwrap() {
+        return Err(routes::HttpError::Unauthorized {}.into());
     }
+
+    if credentials.password().unwrap() != &env::var("API_PWD").unwrap() {
+        return Err(routes::HttpError::Unauthorized {}.into());
+    }
+    Ok(req)
 }
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     env::set_var("RUST_LOG", "actix_web=info");
+    env::var("API_USER").expect("You need to set env variable API_USER for Basic Auth's user");
+    env::var("API_PWD").expect("You need to set env variable API_PWD for Basic Auth's password");
     env_logger::init();
 
     // Python::with_gil(|py| -> PyResult<()> {
