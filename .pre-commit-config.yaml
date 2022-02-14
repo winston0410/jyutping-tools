@@ -4,13 +4,14 @@ repos:
     rev: v1.0
     hooks:
       - id: fmt
+        args: ["--edition", "2021", "--"]
       - id: cargo-check
   - repo: https://github.com/winston0410/pre-commit-node
     rev: 7d90f85
     hooks:
       - id: lint-staged
-        files: '^web/'
+        files: "^web/"
         args: ["--cwd", "./web"]
       - id: lint-staged
-        files: '^jyutping-helpers/'
+        files: "^jyutping-helpers/"
         args: ["--cwd", "./jyutping-helpers"]
