@@ -42,7 +42,7 @@
             # Setting pre-commit
             pre-commit install
             # Setting NPM
-            PATH=$PATH:$(npm bin)
+            export PATH=$PATH:$(npm bin)
             # Setting Python
             PYTHONPATH=${pythonWithLib}/${pythonWithLib.sitePackages}
             echo "Using Nix built Python environment for this project..."

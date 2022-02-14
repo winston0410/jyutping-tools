@@ -19,7 +19,6 @@ const config = {
 
 	kit: {
 		adapter: adapter(),
-		target: '#svelte',
 		vite: {
 			build: {
 				minify: true

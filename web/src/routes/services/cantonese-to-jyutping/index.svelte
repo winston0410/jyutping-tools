@@ -5,7 +5,7 @@
 	import Button from '$lib/Button.svelte';
 	import { createForm } from 'felte';
 	import type { ValidatorConfig } from '@felte/validator-zod';
-	import { PROXY_ROOT, MICROSERVICE_ROOT, CONVERT_ACTION } from '$lib/const';
+	import { PROXY_ROOT, CONVERT_ACTION } from '$lib/const';
 	import * as z from 'zod';
 	import { validator } from '@felte/validator-zod';
 	import { hasCantonese, isCantoneseOnly, isTraditionalOnly, hasNumber } from '$lib/predicate';
@@ -73,12 +73,9 @@
 				input: values['convert-characters']
 			};
 
-			const res = await fetch(
-				MICROSERVICE_ROOT + CONVERT_ACTION + `?${new URLSearchParams(payload)}`
-			);
+			const res = await fetch(PROXY_ROOT + CONVERT_ACTION + `?${new URLSearchParams(payload)}`);
 
 			if (!res.ok) {
-				console.log('handle err', res);
 				toast.mkError('Something wrong!');
 			}
 
@@ -86,9 +83,6 @@
 			const body = await res.json();
 
 			const phonetics = extractPhonetic(body.results);
-
-			console.log('check body: ', body);
-			console.log('check phonetics: ', phonetics);
 
 			result = phonetics;
 
