@@ -34,6 +34,7 @@
             pre-commit
             (rust-bin.selectLatestNightlyWith (toolchain: toolchain.default))
             pythonWithLib
+            cargo-outdated
           ];
           DEBUG_PYTHON=1;
           shellHook = ''
@@ -45,6 +46,8 @@
             PYTHONPATH=${pythonWithLib}/${pythonWithLib.sitePackages}
             PYO3_PRINT_CONFIG=1;
             echo "Using Nix built Python environment for this project..."
+            # Updating cargo dep
+            cargo outdated
           '';
         }) { inherit pkgs; });
     };
