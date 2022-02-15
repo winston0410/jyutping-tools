@@ -56,8 +56,10 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         let auth = HttpAuthentication::basic(validator);
         App::new()
-            .wrap(middleware::Logger::default())
             .wrap(auth)
+            //REF https://discord.com/channels/771444961383153695/942504625133731952
+            //TODO Map the auth error to Response OK path for connecting with the rest of the middlewares
+            .wrap(middleware::Logger::default())
             .wrap(if env::var("PRODUCTION").is_ok() {
                 println!("Using restrictive CORS for production");
                 Cors::default()

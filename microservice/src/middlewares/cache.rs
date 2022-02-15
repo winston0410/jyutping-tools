@@ -1,7 +1,6 @@
 use actix_service::{Service, Transform};
 use actix_web::{dev::ServiceRequest, dev::ServiceResponse, Error};
 use futures::future::{ok, LocalBoxFuture, Ready};
-use futures::Future;
 //NOTE Dependency for the middleware's content, should be extracted later
 use actix_web::http::header::{
     CacheControl, CacheDirective, Expires, HeaderValue, CACHE_CONTROL, EXPIRES,

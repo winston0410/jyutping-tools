@@ -42,6 +42,7 @@
             # Setting pre-commit
             pre-commit install
             # Setting NPM
+            echo "Pointing PATH to binaries in NPM"
             export PATH=$PATH:$(npm bin)
             # Setting Python
             PYTHONPATH=${pythonWithLib}/${pythonWithLib.sitePackages}
