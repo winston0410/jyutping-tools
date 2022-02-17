@@ -3,6 +3,7 @@
 members = [
     "microservice",
     "wordseg",
+    "rscantonese",
 ]
 
 [profile.dev.package."*"]

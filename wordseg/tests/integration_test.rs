@@ -1,5 +1,3 @@
-use wordseg::Segmenter;
-
 #[cfg(test)]
 mod tests {
     #[test]
