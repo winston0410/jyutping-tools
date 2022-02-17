@@ -1,3 +1,4 @@
+use chat_parser::Parser;
 use wordseg::Segmenter;
 
 /// Convert cantonese characters to jyutping

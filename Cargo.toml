@@ -4,6 +4,7 @@ members = [
     "microservice",
     "wordseg",
     "rscantonese",
+    "chat-parser"
 ]
 
 [profile.dev.package."*"]
