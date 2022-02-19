@@ -1,4 +1,13 @@
 use std::fmt;
+/// Token for containing all data included in the CHAT file
+pub struct Token {
+    /// Cantonese characters
+    word: String,
+    /// Jyutping romanization
+    jyutping: String,
+    /// Part-of-speech
+    pos: String,
+}
 
 #[derive(Debug)]
 pub enum ChatEncoding {
