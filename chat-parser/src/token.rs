@@ -1,6 +1,8 @@
-use nom::bytes::complete::tag;
+use crate::predicates::is_punctuation;
+use nom::branch::alt;
+use nom::bytes::complete::{tag, take_while};
 use nom::character::complete::{alpha1, line_ending, newline, not_line_ending, space0, space1};
-use nom::combinator::{map, not, opt};
+use nom::combinator::iterator;
 use nom::multi::{separated_list0, separated_list1};
 use nom::sequence::{pair, preceded, separated_pair, terminated, tuple};
 use nom::IResult;
@@ -22,19 +24,26 @@ impl Token {
     }
 
     pub fn parse_characters(raw: &str) -> IResult<&str, Vec<&str>> {
-        let match_word = separated_list0(space1, nom_unicode::complete::alpha1);
+        let match_word = separated_list0(
+            space1,
+            alt((nom_unicode::complete::alpha1, take_while(is_punctuation))),
+        );
 
         preceded(tuple((tag("*"), alpha1, tag(":"), space0)), match_word)(raw)
     }
 
     pub fn parse_jyutping(raw: &str) -> IResult<&str, Vec<(&str, &str)>> {
-        let match_jyutping = separated_list1(
+        let match_jyutping = separated_list0(
             space1,
-            separated_pair(
-                nom::character::complete::alpha1,
-                tag("|"),
-                nom::character::complete::alphanumeric1,
-            ),
+            alt((
+                separated_pair(
+                    nom::character::complete::alpha1,
+                    tag("|"),
+                    nom::character::complete::alphanumeric1,
+                ),
+                //NOTE not sure if using take_while for the second input is the correct answer for matching returning type for alt
+                pair(take_while(is_punctuation), take_while(is_punctuation)),
+            )),
         );
 
         preceded(pair(tag("%mor:"), space0), match_jyutping)(raw)
@@ -72,30 +81,5 @@ mod test_parse_jyutping {
             Token::parse_jyutping("%mor:	a|hou2 y|aa1 ."),
             Ok(("", vec![("a", "hou2"), ("y", "aa1")]))
         );
-    }
-}
-
-#[derive(Debug)]
-pub enum ChatEncoding {
-    Utf8,
-    Unknown,
-}
-
-#[derive(Debug)]
-pub struct ChatMeta {
-    pub encoding: ChatEncoding,
-}
-
-#[derive(Debug)]
-pub struct ChatData {
-    pub meta: ChatMeta,
-}
-
-impl fmt::Display for ChatEncoding {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            ChatEncoding::Utf8 => write!(f, "utf8"),
-            ChatEncoding::Unknown => write!(f, "unknown"),
-        }
     }
 }
