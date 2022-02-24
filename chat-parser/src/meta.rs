@@ -1,24 +1,18 @@
 use nom::bytes::complete::tag;
 use nom::character::complete::{alphanumeric1, line_ending, newline, not_line_ending, space0};
 use nom::combinator::{map, opt};
-use nom::multi::separated_list0;
+use nom::multi::{fold_many0, separated_list0};
 use nom::sequence::{pair, preceded, terminated, tuple};
 use nom::IResult;
 
 // for ignoring all metadata
-fn match_metadata(raw: &str) -> IResult<&str, Meta> {
-    map(
-        preceded(
-            tag("@"),
-            pair(
-                alphanumeric1,
-                opt(preceded(pair(tag(":"), space0), not_line_ending)),
-            ),
+fn match_metadata(raw: &str) -> IResult<&str, (&str, Option<&str>)> {
+    preceded(
+        tag("@"),
+        pair(
+            alphanumeric1,
+            opt(preceded(pair(tag(":"), space0), not_line_ending)),
         ),
-        |(kind, value): (&str, Option<&str>)| Meta {
-            kind: kind.to_owned(),
-            value: value.map(String::from),
-        },
     )(raw)
 }
 
@@ -30,28 +24,13 @@ mod test_match_metadata {
     fn should_match_metadata_with_values() {
         assert_eq!(
             match_metadata("@Languages: yue , eng"),
-            Ok((
-                "",
-                Meta {
-                    kind: "Languages".to_owned(),
-                    value: Some("yue , eng".to_owned())
-                }
-            ))
+            Ok(("", ("Languages", Some("yue , eng"))))
         );
     }
 
     #[test]
     fn should_match_metadata_without_values() {
-        assert_eq!(
-            match_metadata("@Begin"),
-            Ok((
-                "",
-                Meta {
-                    kind: "Begin".to_owned(),
-                    value: None
-                }
-            ))
-        );
+        assert_eq!(match_metadata("@Begin"), Ok(("", ("Begin", None))));
     }
 }
 
@@ -60,46 +39,6 @@ mod test_match_metadata {
 // Utf8,
 // Unknown,
 // }
-
-#[derive(Debug, PartialEq)]
-pub struct Meta {
-    kind: String,
-    value: Option<String>,
-}
-
-impl Meta {
-    pub fn parse(raw: &str) -> IResult<&str, Vec<Meta>> {
-        separated_list0(tag("\n"), match_metadata)(raw)
-    }
-}
-
-#[cfg(test)]
-mod test_match_multiple_metadata {
-    use super::*;
-
-    #[test]
-    fn should_match_multiple_metadata() {
-        assert_eq!(
-            Meta::parse(
-                "@Begin
-@End"
-            ),
-            Ok((
-                "",
-                vec![
-                    Meta {
-                        kind: "Begin".to_owned(),
-                        value: None
-                    },
-                    Meta {
-                        kind: "End".to_owned(),
-                        value: None
-                    }
-                ]
-            ))
-        );
-    }
-}
 
 //TODO Handle metadata properly later
 // impl fmt::Display for ChatEncoding {
@@ -110,3 +49,60 @@ mod test_match_multiple_metadata {
 // }
 // }
 // }
+
+#[derive(Debug, PartialEq)]
+pub struct Meta {
+    encoding: String,
+}
+
+impl Default for Meta {
+    fn default() -> Self {
+        Meta {
+            encoding: "unknown".to_owned(),
+        }
+    }
+}
+
+//REF https://talkbank.org/manuals/CHAT.pdf
+impl Meta {
+    pub fn parse(raw: &str) -> IResult<&str, Meta> {
+        fold_many0(
+            separated_list0(line_ending, match_metadata),
+            Meta::default,
+            |acc: Meta, results| 
+            // mutate the Meta
+            acc,
+        )(raw)
+    }
+}
+
+// for (kind, value) in results.into_iter() {
+// match kind {
+// "UTF8" => {
+// acc.encoding = kind.to_owned();
+// }
+// _ => (),
+// }
+// }
+
+#[cfg(test)]
+mod test_match_multiple_metadata {
+    use super::*;
+
+    #[test]
+    fn should_parse_meta() {
+        assert_eq!(
+            Meta::parse(
+                "@UTF8
+@Begin
+@End"
+            ),
+            Ok((
+                "",
+                Meta {
+                    encoding: "UTF8".to_owned()
+                }
+            ))
+        );
+    }
+}
