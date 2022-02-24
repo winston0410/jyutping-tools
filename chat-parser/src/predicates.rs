@@ -20,17 +20,17 @@ mod test_is_punctuation {
     fn should_match_punctuation() {
         assert_eq!(is_punctuation(','), true);
     }
-    
+
     #[test]
     fn should_not_match_space() {
         assert_eq!(is_punctuation(' '), false);
     }
-    
+
     #[test]
     fn should_not_match_number() {
         assert_eq!(is_punctuation('2'), false);
     }
-    
+
     #[test]
     fn should_not_match_characters() {
         assert_eq!(is_punctuation('a'), false);
