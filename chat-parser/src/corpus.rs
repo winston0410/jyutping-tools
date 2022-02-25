@@ -1,10 +1,10 @@
 use crate::predicates::is_punctuation;
 use nom::branch::alt;
 use nom::bytes::complete::{tag, take_while};
-use nom::character::complete::{alpha1, line_ending, newline, not_line_ending, space0, space1};
+use nom::character::complete::{alpha1, line_ending, space0, space1};
 use nom::combinator::map;
-use nom::multi::{separated_list0, separated_list1};
-use nom::sequence::{pair, preceded, separated_pair, terminated, tuple};
+use nom::multi::separated_list0;
+use nom::sequence::{pair, preceded, separated_pair, tuple};
 use nom::IResult;
 
 /// Token for containing all data included in the CHAT file

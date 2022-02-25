@@ -1,8 +1,8 @@
 use nom::bytes::complete::tag;
-use nom::character::complete::{alphanumeric1, line_ending, newline, not_line_ending, space0};
-use nom::combinator::{map, opt};
-use nom::multi::{fold_many0, fold_many1, separated_list0, separated_list1};
-use nom::sequence::{pair, preceded, terminated, tuple};
+use nom::character::complete::{alphanumeric1, not_line_ending, space0};
+use nom::combinator::opt;
+
+use nom::sequence::{pair, preceded};
 use nom::IResult;
 
 /// Match all metadata

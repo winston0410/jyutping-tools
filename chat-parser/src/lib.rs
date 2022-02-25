@@ -4,7 +4,7 @@ mod predicates;
 use nom::branch::alt;
 use nom::character::complete::line_ending;
 use nom::combinator::map;
-use nom::multi::{fold_many1, separated_list1};
+use nom::multi::separated_list1;
 
 #[derive(Debug)]
 pub enum Token {
