@@ -32,7 +32,7 @@ impl Segmenter {
     }
 
     /// Insert unhanlded text for getting prediction
-    pub fn predict(&self, unsegmented: String) -> Vec<String> {
+    pub fn predict(&self, unsegmented: &str) -> Vec<String> {
         let mut result: Vec<String> = Vec::new();
         let unicoded = unsegmented.graphemes(true);
         let input_length = unicoded.to_owned().count();

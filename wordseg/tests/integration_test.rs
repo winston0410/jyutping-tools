@@ -15,7 +15,7 @@ mod tests {
             vec!["that", "is", "not", "a", "sentence"],
         ]);
 
-        let result = segmenter.predict("thatisadog".to_owned());
+        let result = segmenter.predict("thatisadog");
 
         assert_eq!(result, vec!["that", "is", "a", "d", "o", "g"]);
     }
@@ -26,7 +26,7 @@ mod tests {
 
         segmenter.fit(vec![vec!["我", "係", "香港", "人"]]);
 
-        let result = segmenter.predict("佢哋係香港人".to_owned());
+        let result = segmenter.predict("佢哋係香港人");
 
         assert_eq!(result, vec!["佢", "哋", "係", "香港", "人"]);
     }

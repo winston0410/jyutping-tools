@@ -1,5 +1,5 @@
 use crate::routes::HttpError;
-use crate::services::{chars_to_jyutping, CharsToJyutpingResult};
+use crate::AppData;
 use actix_web::{web, HttpResponse, Result};
 use serde::{Deserialize, Serialize};
 
@@ -12,6 +12,8 @@ pub struct RequestQuery {
 pub struct UnwrappedQuery {
     input: String,
 }
+
+type CharsToJyutpingResult = Vec<(String, String)>;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ConvertResponseBody {
@@ -28,10 +30,13 @@ impl From<RequestQuery> for UnwrappedQuery {
 //REF https://www.rfc-editor.org/rfc/rfc2616#section-9.3
 pub async fn convert_chars_to_jyutping(
     query: web::Query<RequestQuery>,
+    state: web::Data<AppData>,
 ) -> Result<HttpResponse, HttpError> {
     let unwrapped_query = UnwrappedQuery::from(query.into_inner());
 
-    let results = chars_to_jyutping(unwrapped_query.input.to_owned());
+    let results = state
+        .segmenter
+        .characters_to_jyutping(&unwrapped_query.input);
 
     Ok(HttpResponse::Ok().json(ConvertResponseBody { results }))
 }
