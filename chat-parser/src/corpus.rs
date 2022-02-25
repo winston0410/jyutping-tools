@@ -9,27 +9,27 @@ use nom::IResult;
 
 /// Token for containing all data included in the CHAT file
 #[derive(Debug, PartialEq)]
-pub struct Token {
+pub struct Corpus {
     /// Cantonese characters
-    word: String,
+    pub word: String,
     // /// Jyutping romanization
-    jyutping: String,
+    pub jyutping: String,
     // /// Part-of-speech
-    pos: String,
+    pub pos: String,
 }
 
-impl Token {
-    pub fn parse(raw: &str) -> IResult<&str, Vec<Token>> {
+impl Corpus {
+    pub fn parse(raw: &str) -> IResult<&str, Vec<Self>> {
         let corpus_parser =
             separated_pair(Self::parse_characters, line_ending, Self::parse_jyutping);
 
         map(corpus_parser, |(words, morphology)| -> Vec<Self> {
-            let mut result: Vec<Token> = Vec::new();
+            let mut result: Vec<Self> = Vec::new();
             let iter = words.iter().zip(morphology.iter());
 
             for (word, (pos, jyutping)) in iter {
                 if *jyutping != "" {
-                    result.push(Token {
+                    result.push(Self {
                         jyutping: (*jyutping).to_owned(),
                         pos: (*pos).to_owned(),
                         word: (*word).to_owned(),
@@ -78,7 +78,7 @@ mod test_parse_characters {
     #[test]
     fn should_handle_words() {
         assert_eq!(
-            Token::parse_characters("*XXB:	開 冷氣"),
+            Corpus::parse_characters("*XXB:	開 冷氣"),
             Ok(("", vec!["開", "冷氣"]))
         );
     }
@@ -86,7 +86,7 @@ mod test_parse_characters {
     #[test]
     fn should_handle_punctuation() {
         assert_eq!(
-            Token::parse_characters("*XXB:	見 到 , 呵 ?"),
+            Corpus::parse_characters("*XXB:	見 到 , 呵 ?"),
             Ok(("", vec!["見", "到", ",", "呵", "?"]))
         );
     }
@@ -99,7 +99,7 @@ mod test_parse_jyutping {
     #[test]
     fn should_handle_jyutping() {
         assert_eq!(
-            Token::parse_jyutping("%mor:	a|hou2 y|aa1 ."),
+            Corpus::parse_jyutping("%mor:	a|hou2 y|aa1 ."),
             Ok(("", vec![("a", "hou2"), ("y", "aa1"), (".", "")]))
         );
     }
@@ -112,19 +112,19 @@ mod test_parse {
     #[test]
     fn should_parse_as_token() {
         assert_eq!(
-            Token::parse(
+            Corpus::parse(
                 "*XXA:	好 吖 .
 %mor:	a|hou2 y|aa1 ."
             ),
             Ok((
                 "",
                 vec![
-                    Token {
+                    Corpus {
                         word: "好".to_owned(),
                         jyutping: "hou2".to_owned(),
                         pos: "a".to_owned()
                     },
-                    Token {
+                    Corpus {
                         word: "吖".to_owned(),
                         jyutping: "aa1".to_owned(),
                         pos: "y".to_owned()

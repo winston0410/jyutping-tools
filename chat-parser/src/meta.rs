@@ -36,7 +36,7 @@ mod test_match_metadata {
 
 #[derive(Debug, PartialEq)]
 pub struct Meta {
-    encoding: String,
+    pub encoding: String,
 }
 
 impl Default for Meta {
@@ -49,44 +49,25 @@ impl Default for Meta {
 
 //REF https://talkbank.org/manuals/CHAT.pdf
 impl Meta {
-    pub fn parse(raw: &str) -> IResult<&str, Self> {
-        fold_many1(
-            separated_list1(line_ending, match_metadata),
-            Meta::default,
-            |mut acc: Meta, results| -> Self {
-                for (kind, value) in results.into_iter() {
-                    match kind {
-                        "UTF8" => {
-                            acc.encoding = kind.to_owned();
-                        }
-                        _ => (),
-                    }
-                }
-
-                acc
-            },
-        )(raw)
+    pub fn parse(raw: &str) -> IResult<&str, (&str, Option<&str>)> {
+        match_metadata(raw)
     }
 }
 
-#[cfg(test)]
-mod test_match_multiple_metadata {
-    use super::*;
+// fold_many1(
+// separated_list1(line_ending, match_metadata),
+// Meta::default,
+// |mut acc: Meta, results| -> Self {
+// //TODO Apply the value for meta with values
+// for (kind, _value) in results.into_iter() {
+// match kind {
+// "UTF8" => {
+// acc.encoding = kind.to_owned();
+// }
+// _ => (),
+// }
+// }
 
-    #[test]
-    fn should_parse_meta() {
-        assert_eq!(
-            Meta::parse(
-                "@UTF8
-@Begin
-@End"
-            ),
-            Ok((
-                "",
-                Meta {
-                    encoding: "UTF8".to_owned()
-                }
-            ))
-        );
-    }
-}
+// acc
+// },
+// )(raw)
