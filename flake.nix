@@ -33,10 +33,11 @@
             cargo-watch
             pre-commit
             (rust-bin.selectLatestNightlyWith (toolchain: toolchain.default))
-            pythonWithLib
             cargo-outdated
+            #NOTE Removed all Python dependency for Rust
+            # pythonWithLib
           ];
-          DEBUG_PYTHON=1;
+          # DEBUG_PYTHON=1;
           # PYO3_PRINT_CONFIG=1;
           shellHook = ''
             # Setting pre-commit

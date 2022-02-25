@@ -6,7 +6,6 @@ use std::env;
 mod middlewares;
 mod routes;
 mod services;
-use pyo3::prelude::*;
 use std::time::{Duration, SystemTime};
 
 use actix_web_httpauth::extractors::basic::BasicAuth;
@@ -33,20 +32,6 @@ async fn main() -> std::io::Result<()> {
     env::var("API_USER").expect("You need to set env variable API_USER for Basic Auth's user");
     env::var("API_PWD").expect("You need to set env variable API_PWD for Basic Auth's password");
     env_logger::init();
-
-    // Python::with_gil(|py| -> PyResult<()> {
-    // py.run(
-    // r#"
-    // import sys
-    // print(sys.executable, sys.path, sys.version)
-    // "#,
-    // None,
-    // None,
-    // )
-    // .unwrap();
-    // Ok(())
-    // });
-    //
 
     println!(
         "{}",

@@ -14,7 +14,7 @@ mod tests {
 @End";
         let parsed = Corpora::parse(raw_data);
 
-        assert_eq!(parsed.meta.encoding.to_owned(), "UTF8".to_owned());
+        assert_eq!(parsed.meta.encoding, "UTF8".to_owned());
         assert_eq!(
             parsed.data,
             vec![
