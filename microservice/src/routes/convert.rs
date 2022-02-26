@@ -13,7 +13,7 @@ pub struct UnwrappedQuery {
     input: String,
 }
 
-type CharsToJyutpingResult = Vec<(String, String)>;
+type CharsToJyutpingResult = Vec<(String, Vec<String>)>;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ConvertResponseBody {

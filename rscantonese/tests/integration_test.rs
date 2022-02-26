@@ -1,16 +1,30 @@
+pub fn structure_result((word, jyutpings): (&str, Vec<&str>)) -> (String, Vec<String>) {
+    (
+        word.to_owned(),
+        jyutpings.into_iter().map(String::from).collect(),
+    )
+}
+
 #[cfg(test)]
 mod tests {
+    use super::structure_result;
+    use rscantonese::RsCantonese;
+
     #[test]
     fn should_convert_cantonese_to_jyutping() {
-        let result = rscantonese::characters_to_jyutping("香港人講廣東話");
+        let rscantonese = RsCantonese::default();
 
-        assert_eq!(
-            result,
-            vec![
-                ("香港人".to_owned(), "hoeng1gong2jan4".to_owned()),
-                ("講".to_owned(), "gong2".to_owned()),
-                ("廣東話".to_owned(), "gwong2dung1waa2".to_owned())
-            ]
-        );
+        let result = rscantonese.characters_to_jyutping("香港人講廣東話");
+
+        let expected_result: Vec<(String, Vec<String>)> = vec![
+            ("香港人", vec!["hoeng1gong2jan4"]),
+            ("講", vec!["gong2"]),
+            ("廣東話", vec!["gwong2dung1waa2"]),
+        ]
+        .into_iter()
+        .map(structure_result)
+        .collect();
+
+        assert_eq!(result, expected_result);
     }
 }
