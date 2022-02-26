@@ -1,6 +1,8 @@
 use std::collections::HashMap;
 use wordseg::Segmenter;
+mod data;
 
+#[derive(Default)]
 pub struct RsCantonese {
     pub segmenter: Segmenter,
     pub conversion_dict: HashMap<String, Vec<String>>,
@@ -28,40 +30,47 @@ impl RsCantonese {
     pub fn segment(&self, unsegmented: &str) -> Vec<String> {
         self.segmenter.predict(unsegmented)
     }
-}
 
-impl Default for RsCantonese {
-    /// Generate an instance of RsCantonese, loaded with data from words.hk
-    fn default() -> Self {
-        let data = include_str!("../data/words.hk/wordslist.json");
-        let deserialized: HashMap<String, Vec<String>> = serde_json::from_str(&data).unwrap();
-
-        //REF https://stackoverflow.com/questions/56724014/how-do-i-collect-the-values-of-a-hashmap-into-a-vector
-        let keys = deserialized.keys().cloned().collect::<Vec<String>>();
-        let mut segmenter = Segmenter::default();
-        segmenter.fit(&keys);
-
-        //Fix format of jyutping in dataset, from hoeng1 gong2 to hoeng1gong2
-        let formatted = deserialized
-            .into_iter()
-            .map(|(key, value)| {
-                (
-                    key,
-                    value
-                        .into_iter()
-                        .map(|mut s| -> String {
-                            s.retain(|c| !c.is_whitespace());
-                            s
-                        })
-                        .collect(),
-                )
-            })
-            .collect();
-
-        //TODO Provide option for using specific dataset
-        RsCantonese {
-            segmenter,
-            conversion_dict: formatted,
-        }
+    pub fn train(&mut self, data: &HashMap<String, Vec<String>>) {
+        // self.conversion_dict.extend(data.to_owned());
+        // &self
+        // .segmenter
+        // .max_word_length(self.get_longest_word_length());
     }
 }
+
+// impl Default for RsCantonese {
+// /// Generate an instance of RsCantonese, loaded with data from words.hk
+// fn default() -> Self {
+// let data = include_str!("../data/words.hk/wordslist.json");
+// let deserialized: HashMap<String, Vec<String>> = serde_json::from_str(&data).unwrap();
+
+// //REF https://stackoverflow.com/questions/56724014/how-do-i-collect-the-values-of-a-hashmap-into-a-vector
+// let keys = deserialized.keys().cloned().collect::<Vec<String>>();
+// let mut segmenter = Segmenter::default();
+// segmenter.fit(&keys);
+
+// //Fix format of jyutping in dataset, from hoeng1 gong2 to hoeng1gong2
+// let formatted = deserialized
+// .into_iter()
+// .map(|(key, value)| {
+// (
+// key,
+// value
+// .into_iter()
+// .map(|mut s| -> String {
+// s.retain(|c| !c.is_whitespace());
+// s
+// })
+// .collect(),
+// )
+// })
+// .collect();
+
+// //TODO Provide option for using specific dataset
+// RsCantonese {
+// segmenter,
+// conversion_dict: formatted,
+// }
+// }
+// }

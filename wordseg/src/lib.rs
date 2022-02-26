@@ -1,32 +1,22 @@
 use std::collections::HashSet;
 use unicode_segmentation::UnicodeSegmentation;
 
+#[derive(Default)]
 pub struct Segmenter {
     max_word_length: usize,
     model: HashSet<String>,
 }
 
 impl Segmenter {
-    //REF https://stackoverflow.com/questions/28469667/borrowed-value-does-not-live-long-enough-when-using-the-builder-pattern
-    // Have to return orignal copy to avoid reference error
-
-    /// Set the maximum word length for segmentation. The maximum word length cannot be smaller
-    /// than 2, as it will be meaningless for segmentation
-    pub fn max_word_length(mut self, max_word_length: usize) -> Segmenter {
-        if max_word_length < 2 {
-            panic!("max_word_length must be >= 2 to be meaningful")
-        }
-        self.max_word_length = max_word_length;
-        self
-    }
-
     /// Train the model by inputting words fragment. Duplication expected
-    pub fn fit(&mut self, segmented: &[String]) {
+    pub fn fit(mut self, segmented: &[String]) -> Self {
         for word in segmented.iter() {
             if word.graphemes(true).count() > 1 {
                 self.model.insert(word.to_owned());
             }
         }
+
+        self
     }
 
     /// Insert unhanlded text for getting prediction
@@ -54,13 +44,23 @@ impl Segmenter {
 
         return result;
     }
-}
 
-impl Default for Segmenter {
-    fn default() -> Self {
-        Segmenter {
-            max_word_length: 2,
-            model: HashSet::new(),
-        }
+    //REF https://stackoverflow.com/questions/28469667/borrowed-value-does-not-live-long-enough-when-using-the-builder-pattern
+    // Have to return orignal copy to avoid reference error
+
+    /// Update the max_word_length constraint based on the longest token found in model
+    pub fn update_constraint(mut self) -> Self {
+        let longest_length = self.model.iter().fold(0, |acc, item| {
+            let length = item.graphemes(true).count();
+
+            if length > acc {
+                length
+            } else {
+                acc
+            }
+        });
+
+        self.max_word_length = longest_length;
+        self
     }
 }
