@@ -10,10 +10,14 @@ mod tests {
     fn should_predicts_english() {
         let mut segmenter = wordseg::Segmenter::default().max_word_length(4);
 
-        segmenter.fit(vec![
-            vec!["this", "is", "a", "sentence"],
-            vec!["that", "is", "not", "a", "sentence"],
-        ]);
+        let data: Vec<String> = vec![
+            "this", "is", "a", "sentence", "that", "is", "not", "a", "sentence",
+        ]
+        .into_iter()
+        .map(String::from)
+        .collect();
+
+        segmenter.fit(&data);
 
         let result = segmenter.predict("thatisadog");
 
@@ -24,7 +28,12 @@ mod tests {
     fn should_predicts_unicode_characters() {
         let mut segmenter = wordseg::Segmenter::default().max_word_length(4);
 
-        segmenter.fit(vec![vec!["我", "係", "香港", "人"]]);
+        let data: Vec<String> = vec!["我", "係", "香港", "人"]
+            .into_iter()
+            .map(String::from)
+            .collect();
+
+        segmenter.fit(&data);
 
         let result = segmenter.predict("佢哋係香港人");
 

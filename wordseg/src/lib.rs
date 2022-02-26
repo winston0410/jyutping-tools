@@ -20,13 +20,11 @@ impl Segmenter {
         self
     }
 
-    /// Train the model by inputting existing result
-    pub fn fit(&mut self, segmented: Vec<Vec<&str>>) {
-        for s in segmented.into_iter() {
-            for word in s.into_iter() {
-                if word.graphemes(true).count() > 1 {
-                    self.model.insert(word.to_owned());
-                }
+    /// Train the model by inputting words fragment. Duplication expected
+    pub fn fit(&mut self, segmented: &[String]) {
+        for word in segmented.iter() {
+            if word.graphemes(true).count() > 1 {
+                self.model.insert(word.to_owned());
             }
         }
     }
