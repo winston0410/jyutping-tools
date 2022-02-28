@@ -3,13 +3,13 @@ use unicode_segmentation::UnicodeSegmentation;
 
 #[derive(Default)]
 pub struct Segmenter {
-    max_word_length: usize,
+    pub max_word_length: usize,
     model: HashSet<String>,
 }
 
-impl Segmenter {
+impl<'a> Segmenter {
     /// Train the model by inputting words fragment. Duplication expected
-    pub fn fit(mut self, segmented: &[String]) -> Self {
+    pub fn fit(&'a mut self, segmented: &[String]) -> &'a mut Self {
         for word in segmented.iter() {
             if word.graphemes(true).count() > 1 {
                 self.model.insert(word.to_owned());
@@ -19,7 +19,7 @@ impl Segmenter {
         self
     }
 
-    /// Insert unhanlded text for getting prediction
+    /// Insert unhandled text for getting prediction
     pub fn predict(&self, unsegmented: &str) -> Vec<String> {
         let mut result: Vec<String> = Vec::new();
         let unicoded = unsegmented.graphemes(true);
@@ -38,18 +38,15 @@ impl Segmenter {
                 i = j;
                 j = i + max_word_length;
             } else {
-                j = j - 1
+                j -= 1;
             };
         }
 
-        return result;
+        result
     }
 
-    //REF https://stackoverflow.com/questions/28469667/borrowed-value-does-not-live-long-enough-when-using-the-builder-pattern
-    // Have to return orignal copy to avoid reference error
-
     /// Update the max_word_length constraint based on the longest token found in model
-    pub fn update_constraint(mut self) -> Self {
+    pub fn update_constraint(&'a mut self) -> &'a mut Self {
         let longest_length = self.model.iter().fold(0, |acc, item| {
             let length = item.graphemes(true).count();
 

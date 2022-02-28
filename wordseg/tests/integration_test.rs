@@ -15,7 +15,10 @@ mod tests {
         .map(String::from)
         .collect();
 
-        let segmenter = wordseg::Segmenter::default().fit(&data).update_constraint();
+        let mut segmenter = wordseg::Segmenter::default();
+
+        // the calling of these functions should not affect the ownership of segmenter
+        segmenter.fit(&data).update_constraint();
 
         let result = segmenter.predict("thatisadog");
 
@@ -29,7 +32,9 @@ mod tests {
             .map(String::from)
             .collect();
 
-        let segmenter = wordseg::Segmenter::default().fit(&data).update_constraint();
+        let mut segmenter = wordseg::Segmenter::default();
+
+        segmenter.fit(&data).update_constraint();
 
         let result = segmenter.predict("佢哋係香港人");
 
@@ -43,7 +48,9 @@ mod tests {
             .map(String::from)
             .collect();
 
-        let segmenter = wordseg::Segmenter::default().fit(&data).update_constraint();
+        let mut segmenter = wordseg::Segmenter::default();
+
+        segmenter.fit(&data).update_constraint();
 
         let result = segmenter.predict("香港人講廣東話");
 

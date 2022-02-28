@@ -5,6 +5,7 @@ use std::env;
 mod middlewares;
 mod routes;
 mod services;
+use rscantonese::data::wordshk;
 use rscantonese::RsCantonese;
 use std::time::{Duration, SystemTime};
 
@@ -26,9 +27,11 @@ async fn main() -> std::io::Result<()> {
         format!("Starting microservice..., built at {}", BUILD_TIME)
     );
 
-    let state = web::Data::new(AppData {
-        segmenter: RsCantonese::default(),
-    });
+    let mut segmenter = RsCantonese::default();
+
+    segmenter.train(&wordshk());
+
+    let state = web::Data::new(AppData { segmenter });
 
     HttpServer::new(move || {
         App::new()
