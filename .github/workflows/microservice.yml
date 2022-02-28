@@ -3,10 +3,10 @@ name: Actions for microservice
 on:
   push:
     paths:
-      - "microservice/**"
+      - "jyutping-microservice/**"
 defaults:
   run:
-    working-directory: ./microservice
+    working-directory: ./jyutping-microservice
 jobs:
   security_audit:
     runs-on: ubuntu-latest
@@ -15,6 +15,13 @@ jobs:
       - uses: actions-rs/audit-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+  build-nix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: cachix/install-nix-action@v12
+      - name: Building image
+        run: nix build .#image
   clippy_check:
     runs-on: ubuntu-latest
     steps:

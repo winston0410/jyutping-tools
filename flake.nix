@@ -31,8 +31,9 @@
             cargo-criterion
           ];
           shellHook = ''
+            # Disable pre-commit for now
             # Setting pre-commit
-            pre-commit install
+            # pre-commit install
             # Setting NPM
             echo "Pointing PATH to binaries in NPM"
             export PATH=$PATH:$(npm bin)
