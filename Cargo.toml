@@ -1,7 +1,7 @@
 [workspace]
 
 members = [
-    "microservice",
+    "jyutping-microservice",
     "wordseg",
     "rscantonese",
     "chat-parser"

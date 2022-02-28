@@ -7,11 +7,11 @@ pub struct Segmenter {
     model: HashSet<String>,
 }
 
-impl<'a> Segmenter {
+impl Segmenter {
     /// Train the model by inputting words fragment. Duplication expected
-    pub fn fit<I, E>(&mut self, segmented: I) -> &mut Self
+    pub fn fit<T, E>(&mut self, segmented: T) -> &mut Self
     where
-        I: IntoIterator<Item = E>,
+        T: IntoIterator<Item = E>,
         E: AsRef<str> + Into<String>,
     {
         for word in segmented {
@@ -27,9 +27,12 @@ impl<'a> Segmenter {
     }
 
     /// Insert unhandled text for getting prediction
-    pub fn predict(&self, unsegmented: &str) -> Vec<String> {
+    pub fn predict<T>(&self, unsegmented: T) -> Vec<String>
+    where
+        T: AsRef<str> + Into<String>,
+    {
         let mut result: Vec<String> = Vec::new();
-        let unicoded = unsegmented.graphemes(true);
+        let unicoded = unsegmented.as_ref().graphemes(true);
         let input_length = unicoded.to_owned().count();
         let max_word_length = std::cmp::min(self.max_word_length, input_length);
 
