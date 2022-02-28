@@ -91,6 +91,9 @@
 	}
 
 	.label {
+        height: $input-header-height;
+        display: flex;
+        align-items: center;
 		font-weight: 700;
 	}
 

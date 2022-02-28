@@ -22,7 +22,7 @@
 
 <style lang="scss">
 	:global(html) {
-		font-size: 16px;
+		font-size: 20px;
 	}
 	:global(body) {
 		font-family: 'Karla';

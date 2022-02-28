@@ -16,7 +16,6 @@
 	import { extractPhonetic } from '$lib/format';
 	import { handleReplaceArabicNumber } from '$lib/handler';
 	import { page } from '$app/stores';
-	//  import SideBarLayout from '$lib/layouts/SideBarLayout.svelte';
 
 	export const load = async ({ url }) => {
 		const { searchParams } = url;
@@ -111,6 +110,7 @@
 
 	const id = 'cantonese-to-jyutping';
 	const textareaName = 'convert-characters';
+	const outputName = 'romanization';
 	let textareaRef: HTMLTextAreaElement;
 
 	$: errorCode = $errors[textareaName]?.[0];
@@ -167,6 +167,7 @@
 </form>
 
 <OutputArea
+	name={outputName}
 	{result}
 	systems={Object.values(TargetPhoneticSystem)}
 	form={id}

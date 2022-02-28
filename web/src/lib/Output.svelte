@@ -5,12 +5,12 @@
 	//  @ts-ignore
 	import CopyIcon from 'virtual:icons/carbon/copy';
 	import { jyutpingToYale, jyutpingToTraditionalYale } from 'jyutping-helpers';
-	import storage from 'svelte-use-local-storage';
 </script>
 
 <script lang="ts">
 	// REF https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output#attr-form
 	export let form: string;
+	export let name: string;
 	export let result: Array<string> | null;
 	export let systems: Array<TargetPhoneticSystem>;
 	export let placeholder: string = '';
@@ -20,25 +20,28 @@
 	});
 </script>
 
-<ul role="list" class="switcher">
-	{#each systems as system}
-		<li>
-			<button
-				class="switcher-button"
-				class:active={$currentTab === system}
-				type="button"
-				use:tab={system}>{system}</button
-			>
-		</li>
-	{/each}
-</ul>
+<div class="output-header">
+	<label for={name} class="label">Romanization</label>
+
+	<ul role="list" class="switcher">
+		{#each systems as system}
+			<li>
+				<button
+					class="switcher-button"
+					class:active={$currentTab === system}
+					type="button"
+					use:tab={system}>{system}</button
+				>
+			</li>
+		{/each}
+	</ul>
+</div>
 <div class="output-wrapper">
 	<button class="overlay-button" type="button">
 		<CopyIcon class="copy-icon" />
 	</button>
 	<div class="output">
-		<!--  use:storage={'output-field'}  -->
-		<output {form} class="output-inner" class:placeholder={!result} use:clipboard on:copy>
+		<output {name} {form} class="output-inner" class:placeholder={!result} use:clipboard on:copy>
 			{#if $currentTab === TargetPhoneticSystem.Jyutping}
 				{result ? result.join(' ') : placeholder}
 			{:else if $currentTab === TargetPhoneticSystem.ToneNumberYale}
@@ -57,6 +60,12 @@
 
 <!--  }  -->
 <style lang="scss">
+	.output-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
 	.switcher {
 		display: flex;
 		flex-direction: row;
@@ -71,6 +80,7 @@
 		text-transform: capitalize;
 		min-width: 100px;
 		transition: background 300ms;
+        height: $input-header-height;
 	}
 
 	.switcher-button:hover {
@@ -112,5 +122,9 @@
 		display: block;
 		height: 100%;
 		padding: 12px;
+	}
+
+	.label {
+		font-weight: 700;
 	}
 </style>
