@@ -310,10 +310,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "builder"
-version = "0.1.0"
-
-[[package]]
 name = "bumpalo"
 version = "3.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1241,6 +1237,7 @@ name = "rscantonese"
 version = "0.1.0"
 dependencies = [
  "chat-parser",
+ "criterion",
  "serde",
  "serde_json",
  "wordseg",

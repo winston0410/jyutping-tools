@@ -9,10 +9,17 @@ pub struct Segmenter {
 
 impl<'a> Segmenter {
     /// Train the model by inputting words fragment. Duplication expected
-    pub fn fit(&'a mut self, segmented: &[String]) -> &'a mut Self {
-        for word in segmented.iter() {
-            if word.graphemes(true).count() > 1 {
-                self.model.insert(word.to_owned());
+    pub fn fit<I, E>(&mut self, segmented: I) -> &mut Self
+    where
+        I: IntoIterator<Item = E>,
+        E: AsRef<str> + Into<String>,
+    {
+        for word in segmented {
+            let word_str = word.as_ref();
+            // take 2 so at most we see 2 graphemes instead of counting
+            // every grapheme in the string
+            if word_str.graphemes(true).take(2).count() > 1 {
+                self.model.insert(word.into());
             }
         }
 
@@ -34,7 +41,7 @@ impl<'a> Segmenter {
         while i < input_length {
             let segment = unicoded.to_owned().skip(i).take(j - i).collect::<String>();
             if self.model.contains(&segment) || j - i == 1 {
-                result.push(segment.to_owned());
+                result.push(segment);
                 i = j;
                 j = i + max_word_length;
             } else {
@@ -46,7 +53,7 @@ impl<'a> Segmenter {
     }
 
     /// Update the max_word_length constraint based on the longest token found in model
-    pub fn update_constraint(&'a mut self) -> &'a mut Self {
+    pub fn update_constraint(&mut self) -> &mut Self {
         let longest_length = self.model.iter().fold(0, |acc, item| {
             let length = item.graphemes(true).count();
 

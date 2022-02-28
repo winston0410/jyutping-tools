@@ -16,10 +16,12 @@ impl RsCantonese {
         let result: Vec<(String, Vec<String>)> = segmented
             .into_iter()
             .map(|word| -> (String, Vec<String>) {
-                (
-                    word.to_owned(),
-                    self.conversion_dict.get(&word).unwrap().to_owned(),
-                )
+                let jyutpings = self
+                    .conversion_dict
+                    .get(&word)
+                    .unwrap_or(&vec!["unknown".to_owned()])
+                    .to_owned();
+                (word, jyutpings)
             })
             .collect();
 
@@ -31,17 +33,13 @@ impl RsCantonese {
         self.segmenter.predict(unsegmented)
     }
 
+    /// Train the model
     pub fn train(&mut self, data: &HashMap<String, Vec<String>>) -> &Self {
         self.conversion_dict.extend(data.to_owned());
 
-        let keys: Vec<String> = self
-            .conversion_dict
-            .iter()
-            .map(|(key, _)| key.to_owned())
-            .collect();
-
-        self.segmenter.fit(&keys).update_constraint();
-
+        self.segmenter
+            .fit(self.conversion_dict.keys())
+            .update_constraint();
         self
     }
 }

@@ -16,14 +16,6 @@
         inherit system;
         overlays = [ rust-overlay.overlay ];
       };
-      python = pkgs.python310;
-      wordseg = pkgs.callPackage ./wordseg.nix { pkgs = python.pkgs; };
-      pylangacq = pkgs.callPackage ./pylangacq.nix { pkgs = python.pkgs; };
-      pycantonese = pkgs.callPackage ./pycantonese.nix {
-        pkgs = python.pkgs;
-        inherit pylangacq wordseg;
-      };
-      pythonWithLib = python.withPackages (p: with p; [ pycantonese ]);
     in {
       devShell.${system} = (({ pkgs, ... }:
         pkgs.mkShell {
@@ -34,20 +26,16 @@
             pre-commit
             (rust-bin.selectLatestNightlyWith (toolchain: toolchain.default))
             cargo-outdated
-            #NOTE Removed all Python dependency for Rust
-            # pythonWithLib
+            # For benchmarking
+            gnuplot
+            cargo-criterion
           ];
-          # DEBUG_PYTHON=1;
-          # PYO3_PRINT_CONFIG=1;
           shellHook = ''
             # Setting pre-commit
             pre-commit install
             # Setting NPM
             echo "Pointing PATH to binaries in NPM"
             export PATH=$PATH:$(npm bin)
-            # Setting Python
-            PYTHONPATH=${pythonWithLib}/${pythonWithLib.sitePackages}
-            echo "Using Nix built Python environment for this project..."
             # Updating cargo dep
             cargo outdated
           '';
