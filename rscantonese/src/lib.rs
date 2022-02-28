@@ -10,7 +10,10 @@ pub struct RsCantonese {
 
 impl RsCantonese {
     /// Convert cantonese characters to jyutping
-    pub fn characters_to_jyutping(&self, unsegmented: &str) -> Vec<(String, Vec<String>)> {
+    pub fn characters_to_jyutping<T>(&self, unsegmented: T) -> Vec<(String, Vec<String>)>
+    where
+        T: AsRef<str> + Into<String>,
+    {
         let segmented = self.segmenter.predict(unsegmented);
 
         let result: Vec<(String, Vec<String>)> = segmented
@@ -29,7 +32,10 @@ impl RsCantonese {
     }
 
     /// Segment Cantonese characters
-    pub fn segment(&self, unsegmented: &str) -> Vec<String> {
+    pub fn segment<T>(&self, unsegmented: T) -> Vec<String>
+    where
+        T: AsRef<str> + Into<String>,
+    {
         self.segmenter.predict(unsegmented)
     }
 
