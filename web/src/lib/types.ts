@@ -4,7 +4,7 @@ export enum TargetPhoneticSystem {
 	ToneMarkYale = 'yale(tone mark)'
 }
 
-export type ResultTuple = [string, string];
+export type ResultTuple = [string, Array<string>];
 
 export type ConvertResponse = {
 	system_used: TargetPhoneticSystem;

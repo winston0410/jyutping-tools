@@ -1,14 +1,14 @@
 import type { ResultTuple } from '$lib/types';
-type FormatFn = (input: any) => string;
+//  type FormatFn = (input: any) => string;
 
 type ExtractPhonetic = (results: Array<ResultTuple>) => Array<string>;
 
 export const extractPhonetic: ExtractPhonetic = (results) =>
 	results.map(([, phonetic]) => {
-		return phonetic;
+		return phonetic.join('/');
 	});
 
-export const formatPhonetic: FormatFn = (input: any) => {
-	console.log(input);
-	return input;
-};
+//  export const formatPhonetic: FormatFn = (input: any) => {
+	//  console.log(input);
+	//  return input;
+//  };

@@ -80,7 +80,7 @@
 		text-transform: capitalize;
 		min-width: 100px;
 		transition: background 300ms;
-        height: $input-header-height;
+		height: $input-header-height;
 	}
 
 	.switcher-button:hover {

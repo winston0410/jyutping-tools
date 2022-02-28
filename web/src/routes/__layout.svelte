@@ -17,7 +17,11 @@
 	</main>
 </Notifications>
 <footer>
-	<p>Hello world</p>
+	<nav>
+		<ul role="list">
+			<a href="/credits">Credits</a>
+		</ul>
+	</nav>
 </footer>
 
 <style lang="scss">
