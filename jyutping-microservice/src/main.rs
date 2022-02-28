@@ -1,13 +1,13 @@
 use actix_cors::Cors;
-use actix_web::http::header::{LastModified, LAST_MODIFIED};
-use actix_web::{middleware, web, App, Error, HttpServer};
+use actix_web::http::header::{LAST_MODIFIED};
+use actix_web::{middleware, web, App, HttpServer};
 use std::env;
 mod middlewares;
 mod routes;
 mod services;
 use rscantonese::data::wordshk;
 use rscantonese::RsCantonese;
-use std::time::{Duration, SystemTime};
+
 
 // Use debug assertion for checking PYTHONPATH
 //REF https://stackoverflow.com/questions/39204908/how-to-check-release-debug-builds-using-cfg-in-rust
