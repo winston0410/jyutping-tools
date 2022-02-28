@@ -8,22 +8,11 @@ pub struct RequestQuery {
     input: String,
 }
 
-#[derive(Debug)]
-pub struct UnwrappedQuery {
-    input: String,
-}
-
 type CharsToJyutpingResult = Vec<(String, Vec<String>)>;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ConvertResponseBody {
     results: CharsToJyutpingResult,
-}
-
-impl From<RequestQuery> for UnwrappedQuery {
-    fn from(orig: RequestQuery) -> Self {
-        Self { input: orig.input }
-    }
 }
 
 //NOTE Request body is not used for GET, only request URI will be considered
@@ -32,11 +21,7 @@ pub async fn convert_chars_to_jyutping(
     query: web::Query<RequestQuery>,
     state: web::Data<AppData>,
 ) -> Result<HttpResponse, HttpError> {
-    let unwrapped_query = UnwrappedQuery::from(query.into_inner());
-
-    let results = state
-        .segmenter
-        .characters_to_jyutping(&unwrapped_query.input);
+    let results = state.segmenter.characters_to_jyutping(&query.input);
 
     Ok(HttpResponse::Ok().json(ConvertResponseBody { results }))
 }

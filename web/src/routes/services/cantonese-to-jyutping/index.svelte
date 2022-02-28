@@ -15,7 +15,6 @@
 	import { TargetPhoneticSystem, InvalidCode } from '$lib/types';
 	import { extractPhonetic } from '$lib/format';
 	import { handleReplaceArabicNumber } from '$lib/handler';
-	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	//  import SideBarLayout from '$lib/layouts/SideBarLayout.svelte';
 
@@ -71,19 +70,20 @@
 		ValidatorConfig
 	>({
 		onSubmit: async (values) => {
+			const input = values['convert-characters'];
+
 			const payload = {
-				input: values['convert-characters']
+				input
 			};
 
 			const query = `?${new URLSearchParams(payload)}`;
 			const res = await fetch(PROXY_ROOT + CONVERT_ACTION + query);
-            
+
 			if (!res.ok) {
 				toast.mkError('Something wrong!');
-                return
+				return;
 			}
 
-			// TODO Add typing for json response, typing avaliable in types.ts
 			const body = await res.json();
 
 			const phonetics = extractPhonetic(body.results);
@@ -92,8 +92,9 @@
 
 			toast.mkOk('Conversion successful!');
 
-            //  Only push into history without actually navigate there
-			//  goto($page.url.pathname + query);
+			//  Somehow it is ok to mutate the searchParams of the url here...
+			$page.url.searchParams.set('input', input);
+			history.pushState({}, '', $page.url);
 		},
 		onError: (_: Error) => {
 			// TODO Differentiate errors with err.message and err.name
