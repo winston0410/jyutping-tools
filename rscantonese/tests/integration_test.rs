@@ -30,4 +30,24 @@ mod tests {
 
         assert_eq!(result, expected_result);
     }
+
+    #[test]
+    fn should_handle_unknown_input() {
+        let mut rscantonese = RsCantonese::default();
+
+        rscantonese.train(&wordshk());
+
+        let result = rscantonese.characters_to_jyutping("香港사람");
+
+        let expected_result: Vec<(String, Vec<String>)> = vec![
+            ("香港", vec!["hoeng1gong2"]),
+            ("사", vec!["unknown"]),
+            ("람", vec!["unknown"]),
+        ]
+        .into_iter()
+        .map(structure_result)
+        .collect();
+
+        assert_eq!(result, expected_result);
+    }
 }
