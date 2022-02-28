@@ -15,6 +15,8 @@
 	import { TargetPhoneticSystem, InvalidCode } from '$lib/types';
 	import { extractPhonetic } from '$lib/format';
 	import { handleReplaceArabicNumber } from '$lib/handler';
+	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	//  import SideBarLayout from '$lib/layouts/SideBarLayout.svelte';
 
 	export const load = async ({ url }) => {
@@ -73,10 +75,12 @@
 				input: values['convert-characters']
 			};
 
-			const res = await fetch(PROXY_ROOT + CONVERT_ACTION + `?${new URLSearchParams(payload)}`);
-
+			const query = `?${new URLSearchParams(payload)}`;
+			const res = await fetch(PROXY_ROOT + CONVERT_ACTION + query);
+            
 			if (!res.ok) {
 				toast.mkError('Something wrong!');
+                return
 			}
 
 			// TODO Add typing for json response, typing avaliable in types.ts
@@ -87,7 +91,9 @@
 			result = phonetics;
 
 			toast.mkOk('Conversion successful!');
-			// TODO Add input into query string after conversion, properly using goto
+
+            //  Only push into history without actually navigate there
+			//  goto($page.url.pathname + query);
 		},
 		onError: (_: Error) => {
 			// TODO Differentiate errors with err.message and err.name
@@ -113,7 +119,6 @@
 <MetaData title="Jyutping converter" description="This is the description" url="" image="" />
 <h1>Cantonese to Jyutping</h1>
 <form use:form class="sidebar-layout" {id}>
-	<!-- TODO Investigate how to leak style all component  -->
 	<Input
 		type="textarea"
 		name={textareaName}
