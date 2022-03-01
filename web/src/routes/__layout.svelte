@@ -12,7 +12,7 @@
 	<span class="logo">Cantonese.tool</span>
 </header>
 <Notifications item={Toast}>
-	<main id="main-content">
+	<main id="main-content" class="shell">
 		<slot />
 	</main>
 </Notifications>
@@ -43,6 +43,10 @@
 		padding: 0;
 		border: 0;
 		cursor: pointer;
+	}
+
+	.shell {
+		padding: 20px;
 	}
 
 	.header {
