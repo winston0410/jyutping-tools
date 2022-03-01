@@ -9,7 +9,6 @@
 	import * as z from 'zod';
 	import { validator } from '@felte/validator-zod';
 	import { hasCantonese, isCantoneseOnly, isTraditionalOnly, hasNumber } from '$lib/predicate';
-	import { replaceArabicNumber } from '$lib/transformer';
 	import mkToast from '$lib/toast';
 	import { getNotificationsContext } from 'svelte-notifications';
 	import { TargetPhoneticSystem, InvalidCode } from '$lib/types';

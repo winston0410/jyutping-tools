@@ -3,6 +3,8 @@ import preprocess from 'svelte-preprocess';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import Icons from 'unplugin-icons/vite';
+import { mdsvex } from 'mdsvex';
+import { imagetools } from 'vite-imagetools';
 
 const filePath = dirname(fileURLToPath(import.meta.url));
 const sassPath = `${filePath}/src/lib`;
@@ -11,11 +13,14 @@ const config = {
 	compilerOptions: {
 		immutable: true
 	},
-	preprocess: preprocess({
-		scss: {
-			prependData: `@import '${sassPath}/scss/vars.scss';`
-		}
-	}),
+	preprocess: [
+		mdsvex({ extensions: ['.md'] }),
+		preprocess({
+			scss: {
+				prependData: `@import '${sassPath}/scss/vars.scss';`
+			}
+		})
+	],
 
 	kit: {
 		adapter: adapter(),
@@ -26,7 +31,8 @@ const config = {
 			plugins: [
 				Icons({
 					compiler: 'svelte'
-				})
+				}),
+				imagetools({ force: true })
 			]
 		}
 	}
