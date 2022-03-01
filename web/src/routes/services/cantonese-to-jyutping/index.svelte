@@ -122,7 +122,8 @@
 	url=""
 	image=""
 />
-<h1>Cantonese to Jyutping</h1>
+<h1>Cantonese to romanization</h1>
+<p>Convert Cantonese characters to romanization easily, supporting Jyutping and Yale.</p>
 <form use:form class="sidebar-layout" {id}>
 	<Input
 		type="textarea"

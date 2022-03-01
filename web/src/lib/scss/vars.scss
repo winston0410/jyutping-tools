@@ -40,9 +40,13 @@ $desktop-width: 1024px;
 
 $outline-width: 0.2rem;
 
-@mixin card {
-	background: var(--color-background);
+@mixin card-shadow {
 	box-shadow: rgba(0, 0, 0, 0.12) 0px 5px 10px 0px;
+}
+
+@mixin card {
+    @include card-shadow;
+	background: var(--color-background);
 	border-radius: 0.25rem;
 }
 

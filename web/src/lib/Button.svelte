@@ -38,6 +38,7 @@
 		background-color: #000000;
 		cursor: pointer;
 		transition: all 0.5s;
+        @include card-shadow;
 	}
 
 	.button-text {

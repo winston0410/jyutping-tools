@@ -82,6 +82,7 @@
 
 	.switcher-button {
 		@include center;
+        @include card-shadow;
 		padding: 12px;
 		text-transform: capitalize;
 		transition: background 300ms, color 300ms;
