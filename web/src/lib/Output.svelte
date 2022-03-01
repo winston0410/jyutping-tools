@@ -62,8 +62,14 @@
 <style lang="scss">
 	.output-header {
 		display: flex;
-		align-items: center;
-		justify-content: space-between;
+        flex-direction: column;
+        row-gap: 1rem;
+		@include tablet {
+            flex-direction: row;
+            row-gap: 0rem;
+			align-items: center;
+			justify-content: space-between;
+		}
 	}
 
 	.switcher {
@@ -78,28 +84,32 @@
 		@include center;
 		padding: 12px;
 		text-transform: capitalize;
-		min-width: 100px;
-		transition: background 300ms;
+		transition: background 300ms, color 300ms;
 		height: $input-header-height;
+		border-top-left-radius: 0.25rem;
+		border-top-right-radius: 0.25rem;
+        background-color: var(--color-unselected-button);
+		@include tablet {
+            min-width: 8rem;
+		}
 	}
 
-	.switcher-button:hover {
-		background: darken(#be132d, 20%);
+	.switcher-button:not(.active):hover {
+		color: var(--color-contrast-text);
+		background: var(--color-button-highlight);
 	}
 
 	.active {
-		background: #be132d;
-	}
-
-	.active:hover {
-		background: darken(#be132d, 20%);
+		cursor: default;
+		color: var(--color-contrast-text);
+		background: var(--color-button);
 	}
 
 	.overlay-button {
 		@include center;
 		position: absolute;
-		right: 12px;
-		top: 12px;
+		right: 1rem;
+		top: 1rem;
 		background-color: $white;
 	}
 
@@ -112,6 +122,10 @@
 		@include textarea;
 		padding: 0;
 		color: $black;
+		transition: all 500ms;
+	}
+
+	.output:hover {
 	}
 
 	.placeholder {
@@ -121,7 +135,7 @@
 	.output-inner {
 		display: block;
 		height: 100%;
-		padding: 12px;
+		padding: 1rem;
 	}
 
 	.label {

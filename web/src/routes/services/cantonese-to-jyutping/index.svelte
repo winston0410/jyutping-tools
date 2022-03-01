@@ -140,28 +140,35 @@
 	>
 		<span>Cantonese</span>
 		<div slot="error">
-			{#if errorCode === InvalidCode.NoCantoneseCharacter}
-				<span class="error">No Cantonese characters.</span>
-			{:else if errorCode === InvalidCode.EmptySelfInput}
-				<span class="error">The input field is empty.</span>
-			{/if}
+			<div class="error-message">
+				{#if errorCode === InvalidCode.NoCantoneseCharacter}
+					<span class="error">No Cantonese characters.</span>
+				{:else if errorCode === InvalidCode.EmptySelfInput}
+					<span class="error">The input field is empty.</span>
+				{/if}
+			</div>
 		</div>
 		<div slot="warning">
-			{#if warningCode === InvalidCode.FoundArabicNumber}
-				<span class="warning"
-					>Arabic numbers might yield unexpected result.
-					<button class="fix-hints" type="button" on:click={handleReplaceArabicNumber(textareaRef)}
-						>Convert all arabic numbers to Cantonese numbers</button
-					>.</span
-				>
-			{:else if warningCode === InvalidCode.FoundNonCantoneseCharacter}
-				<span class="warning"
-					>Non Cantonese characters might yield unexpected result. <button
-						class="fix-hints"
-						type="button">Strip off all non Cantonese characters</button
-					>.</span
-				>
-			{/if}
+			<div class="error-message">
+				{#if warningCode === InvalidCode.FoundArabicNumber}
+					<span class="warning"
+						>Arabic numbers might yield unexpected result.
+						<button
+							class="fix-hints"
+							type="button"
+							on:click={handleReplaceArabicNumber(textareaRef)}
+							>Convert all arabic numbers to Cantonese numbers</button
+						>.</span
+					>
+				{:else if warningCode === InvalidCode.FoundNonCantoneseCharacter}
+					<span class="warning"
+						>Non Cantonese characters might yield unexpected result. <button
+							class="fix-hints"
+							type="button">Strip off all non Cantonese characters</button
+						>.</span
+					>
+				{/if}
+			</div>
 		</div>
 	</Input>
 
@@ -186,4 +193,8 @@
 		@include center;
 		margin: 1.5rem 0;
 	}
+
+    .error-message {
+        @include input-header-layout;
+    }
 </style>

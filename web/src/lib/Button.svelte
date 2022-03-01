@@ -44,7 +44,7 @@
 		display: block;
 		padding: 12px 26px;
 		border-radius: 5px;
-		background-color: #be132d;
+		background-color: var(--color-button);
 		transform: translateY(-4px);
 		min-width: 100px;
 		text-align: center;
@@ -52,11 +52,11 @@
 	}
 
 	.hover:not(.disabled):hover {
-		background-color: beige;
+		background-color: var(--color-button-highlight);
 	}
 
 	.disabled {
-		background-color: #777777;
+		background-color: var(--color-disabled);
 		cursor: not-allowed;
 	}
 </style>

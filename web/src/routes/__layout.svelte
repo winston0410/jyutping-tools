@@ -16,13 +16,6 @@
 		<slot />
 	</main>
 </Notifications>
-<footer>
-	<nav>
-		<ul role="list">
-			<a href="/credits">Credits</a>
-		</ul>
-	</nav>
-</footer>
 
 <style lang="scss">
 	:global(html) {
@@ -30,11 +23,8 @@
 	}
 	:global(body) {
 		font-family: 'Karla';
-		color: $white;
-	}
-
-	:global(body) {
-		background: $black;
+		color: var(--color-text);
+		background: var(--color-background);
 	}
 
 	:global(button) {
@@ -47,6 +37,7 @@
 
 	.shell {
 		padding: 20px;
+		margin-bottom: 3rem;
 	}
 
 	.header {
@@ -54,6 +45,7 @@
 		padding: 12px;
 		display: flex;
 		align-items: center;
+        background: var(--color-header);
 	}
 
 	.logo {

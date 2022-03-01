@@ -91,21 +91,16 @@
 	}
 
 	.label {
-        height: $input-header-height;
-        display: flex;
-        align-items: center;
+        @include input-header-layout;
 		font-weight: 700;
 	}
-
-	.error-border {
-		outline: $outline-width solid $error;
-	}
-
-	.warning-border {
-		outline: $outline-width solid $warning;
-	}
-
-	.ok-border {
-		outline: $outline-width solid $ok;
-	}
 </style>
+<!--  .error-border {  -->
+    <!--  outline: $outline-width solid $error;  -->
+<!--  }  -->
+<!--  .warning-border {  -->
+    <!--  outline: $outline-width solid $warning;  -->
+<!--  }  -->
+<!--  .ok-border {  -->
+    <!--  outline: $outline-width solid $ok;  -->
+<!--  }  -->
