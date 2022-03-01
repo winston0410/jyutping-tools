@@ -1,5 +1,5 @@
 import type { RequestHandler } from '@sveltejs/kit';
-import { MICROSERVICE_ROOT, CONVERT_ACTION, MICROSERVICE_CREDENTIAL } from '$lib/const';
+import { MICROSERVICE_ROOT, CONVERT_ACTION } from '$lib/const';
 
 type SelectedHeaders = {
 	'cache-control': string;
@@ -21,12 +21,7 @@ const getCacheHeaders = (headers: Headers): SelectedHeaders => {
 
 export const get: RequestHandler = async ({ url }) => {
 	try {
-		const res = await fetch(
-			MICROSERVICE_ROOT + CONVERT_ACTION + `?${url.searchParams.toString()}`,
-			{
-				headers: { Authorization: MICROSERVICE_CREDENTIAL }
-			}
-		);
+		const res = await fetch(MICROSERVICE_ROOT + CONVERT_ACTION + `?${url.searchParams.toString()}`);
 
 		if (!res.ok) {
 			return {

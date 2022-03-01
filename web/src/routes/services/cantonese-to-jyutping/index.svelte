@@ -116,7 +116,12 @@
 	$: warningCode = $warnings[textareaName]?.[0];
 </script>
 
-<MetaData title="Jyutping converter" description="This is the description" url="" image="" />
+<MetaData
+	title="Cantonese to romanization | Cantonese.tools"
+	description="Convert Cantonese characters to romanizations including Jyutping and Yale here with our performant Rust Cantonese NLP engine."
+	url=""
+	image=""
+/>
 <h1>Cantonese to Jyutping</h1>
 <form use:form class="sidebar-layout" {id}>
 	<Input
