@@ -15,14 +15,18 @@
 	import { extractPhonetic } from '$lib/format';
 	import { handleReplaceArabicNumber } from '$lib/handler';
 	import { page } from '$app/stores';
+	import Faq from '$lib/Faq.svelte';
 
-	export const load = async ({ url }) => {
+	export const load = async ({ url, fetch }) => {
 		const { searchParams } = url;
 		const input = searchParams.get('input') ?? '';
 
+		const faqEntities = await (await fetch(PROXY_ROOT + '/ui/faq')).json();
+
 		return {
 			props: {
-				input
+				input,
+				faqEntities
 			}
 		};
 	};
@@ -30,6 +34,7 @@
 
 <script lang="ts">
 	export let input: string;
+	export let faqEntities: Array<FAQEntity>;
 
 	let result: Array<string> | null = null;
 
@@ -189,13 +194,40 @@
 	}}
 />
 
+<div class="lg-separator" />
+
+<div>
+	<h2>Frequently Asked Questions</h2>
+	<ul role="list" class="faq-list">
+		{#each faqEntities as entity (entity.question)}
+			<li>
+				<Faq {entity} questionTag="h3" />
+			</li>
+		{/each}
+	</ul>
+</div>
+
 <style lang="scss">
 	.submit-button {
 		@include center;
 		margin: 1.5rem 0;
 	}
 
-    .error-message {
-        @include input-header-layout;
-    }
+	.error-message {
+		@include input-header-layout;
+	}
+
+	.faq-list {
+		display: grid;
+		padding: 0;
+		row-gap: 2rem;
+		@include tablet {
+			grid-template-columns: repeat(2, 1fr);
+			column-gap: 1rem;
+		}
+	}
+
+	.lg-separator {
+		margin-bottom: 1rem;
+	}
 </style>

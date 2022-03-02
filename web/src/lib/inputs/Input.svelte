@@ -7,7 +7,7 @@
 <script lang="ts">
 	export let name: string;
 	export let type: string;
-    export let ref = null;
+	export let ref = null;
 	export let initValue: string;
 	export let errors: Errors<Obj>;
 	export let warnings: Errors<Obj>;
@@ -30,7 +30,7 @@
 				class:error-border={errors[name]}
 				class:warning-border={!errors[name] && warnings[name]}
 				class:ok-border={!errors[name] && !warnings[name]}
-                bind:this={ref}
+				bind:this={ref}
 				use:storage={{ name, initValue }}
 				{name}
 				{placeholder}
@@ -81,6 +81,20 @@
 		@include textarea;
 	}
 
+	.input:focus {
+		outline: $outline-width dashed var(--color-text);
+	}
+
+	.error-border:focus {
+		outline-color: $error;
+	}
+	.warning-border:focus {
+		outline-color: $warning;
+	}
+	.ok-border:focus {
+		outline-color: $ok;
+	}
+
 	.input::placeholder {
 		@include placeholder-text;
 	}
@@ -91,16 +105,7 @@
 	}
 
 	.label {
-        @include input-header-layout;
+		@include input-header-layout;
 		font-weight: 700;
 	}
 </style>
-<!--  .error-border {  -->
-    <!--  outline: $outline-width solid $error;  -->
-<!--  }  -->
-<!--  .warning-border {  -->
-    <!--  outline: $outline-width solid $warning;  -->
-<!--  }  -->
-<!--  .ok-border {  -->
-    <!--  outline: $outline-width solid $ok;  -->
-<!--  }  -->

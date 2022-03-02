@@ -123,10 +123,10 @@
 		@include textarea;
 		padding: 0;
 		color: $black;
-		transition: all 500ms;
 	}
 
 	.output:hover {
+        outline: $outline-width dashed var(--color-text);
 	}
 
 	.placeholder {
