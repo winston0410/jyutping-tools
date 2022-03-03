@@ -47,6 +47,7 @@
               # For benchmarking
               gnuplot
               cargo-criterion
+              wasm-pack
             ];
             shellHook = ''
               # Disable pre-commit for now
