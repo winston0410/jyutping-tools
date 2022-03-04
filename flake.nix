@@ -42,7 +42,10 @@
               nodejs-16_x
               cargo-watch
               pre-commit
-              (rust-bin.selectLatestNightlyWith (toolchain: toolchain.default))
+              (rust-bin.selectLatestNightlyWith (toolchain:
+                toolchain.default.override {
+                  targets = [ "wasm32-unknown-unknown" ];
+                }))
               cargo-outdated
               # For benchmarking
               gnuplot
