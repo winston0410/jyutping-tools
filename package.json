@@ -10,7 +10,7 @@
     "syncpack": "6.2.0"
   },
   "scripts": {
-    "build:vercel": "cd ./web && npm run build",
+    "build:vercel": "cd ./jyutping-helpers && npm run build && cd .. && cd ./web && npm run build",
     "preinstall": "only-allow npm",
     "syncpack": "syncpack list-mismatches",
     "syncpack:fix": "syncpack fix-mismatches"
