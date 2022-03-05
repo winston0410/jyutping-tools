@@ -1,17 +1,18 @@
 {
   "private": true,
   "workspaces": [
-    "./web",
-    "./jyutping-helpers"
+    "apps/*",
+    "packages/*"
   ],
   "devDependencies": {
     "lint-staged": "12.3.2",
     "only-allow": "1.0.0",
-    "syncpack": "6.2.0"
+    "syncpack": "6.2.0",
+    "turbo": "1.1.5"
   },
   "scripts": {
-    "build:vercel": "cd ./jyutping-helpers && npm run build && cd .. && cd ./web && npm run build",
-    "preinstall": "only-allow yarn",
+    "build": "turbo run build",
+    "preinstall": "only-allow npm",
     "syncpack": "syncpack list-mismatches",
     "syncpack:fix": "syncpack fix-mismatches"
   }
