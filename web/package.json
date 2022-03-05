@@ -47,6 +47,6 @@
   },
   "type": "module",
   "dependencies": {
-    "jyutping-helpers": "file:jyutping-helpers"
+    "jyutping-helpers": "file:../jyutping-helpers"
   }
 }

@@ -11,7 +11,7 @@
   },
   "scripts": {
     "build:vercel": "cd ./jyutping-helpers && npm run build && cd .. && cd ./web && npm run build",
-    "preinstall": "only-allow npm",
+    "preinstall": "only-allow yarn",
     "syncpack": "syncpack list-mismatches",
     "syncpack:fix": "syncpack fix-mismatches"
   }
