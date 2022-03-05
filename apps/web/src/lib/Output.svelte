@@ -117,6 +117,7 @@
 	.output-wrapper {
 		position: relative;
 		cursor: pointer;
+        border-radius: 0.25rem;
 	}
 
 	.output {
@@ -125,7 +126,7 @@
 		color: $black;
 	}
 
-	.output:hover {
+	.output-wrapper:hover {
         outline: $outline-width dashed var(--color-text);
 	}
 
