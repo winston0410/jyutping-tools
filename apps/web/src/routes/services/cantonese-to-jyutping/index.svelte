@@ -5,7 +5,7 @@
 	import Button from '$lib/Button.svelte';
 	import { createForm } from 'felte';
 	import type { ValidatorConfig } from '@felte/validator-zod';
-	import { PROXY_ROOT, CONVERT_ACTION } from '$lib/const';
+	import { PROXY_ROOT, CONVERT_ACTION, MICROSERVICE_ROOT } from '$lib/const';
 	import * as z from 'zod';
 	import { validator } from '@felte/validator-zod';
 	import { hasCantonese, isCantoneseOnly, isTraditionalOnly, hasNumber } from '$lib/predicate';
@@ -16,16 +16,32 @@
 	import { handleReplaceArabicNumber } from '$lib/handler';
 	import { page } from '$app/stores';
 	import Faq from '$lib/Faq.svelte';
+	import { onMount } from 'svelte';
 
 	export const load = async ({ url, fetch }) => {
 		const { searchParams } = url;
 		const input = searchParams.get('input') ?? '';
+		let result = null;
+        let errorMessage = "";
+
+		if (input) {
+			const res = await fetch(MICROSERVICE_ROOT + CONVERT_ACTION + `?${searchParams.toString()}`);
+
+			if (res.ok) {
+				const body = await res.json();
+				result = extractPhonetic(body.results);
+			} else {
+                errorMessage = "Service is temporaily unavailable";
+            }
+		}
 
 		const faqEntities = await (await fetch(PROXY_ROOT + '/ui/faq')).json();
 
 		return {
 			props: {
 				input,
+				result,
+                errorMessage,
 				faqEntities
 			}
 		};
@@ -35,11 +51,26 @@
 <script lang="ts">
 	export let input: string;
 	export let faqEntities: Array<FAQEntity>;
+	export let result: Array<string> | null;
+    export let errorMessage: string;
 
-	let result: Array<string> | null = null;
+    let outputElem: HTMLOutputElement;
 
 	const { addNotification } = getNotificationsContext();
 	const toast = mkToast(addNotification);
+
+	onMount(() => {
+        if(errorMessage){
+            toast.mkError(errorMessage);
+        }
+        
+		if (result?.length > 0) {
+            outputElem.scrollIntoView({
+                behavior: 'smooth'
+            })
+			toast.mkOk('Conversion successful');
+		}
+	});
 
 	const schema = z.object({
 		'convert-characters': z
@@ -80,32 +111,11 @@
 			};
 
 			const query = `?${new URLSearchParams(payload)}`;
-			const res = await fetch(PROXY_ROOT + CONVERT_ACTION + query);
 
-			if (!res.ok) {
-				toast.mkError('Something wrong!');
-				return;
-			}
+			const currentPageUrl = $page.url.origin + $page.url.pathname;
 
-			const body = await res.json();
-
-			const phonetics = extractPhonetic(body.results);
-
-			result = phonetics;
-
-			toast.mkOk('Conversion successful!');
-
-			//  Somehow it is ok to mutate the searchParams of the url here...
-			$page.url.searchParams.set('input', input);
-			history.pushState({}, '', $page.url);
-		},
-		onError: (_: Error) => {
-			// TODO Differentiate errors with err.message and err.name
-			if (navigator.onLine) {
-				toast.mkError('Service is temporaily unavailable.');
-			} else {
-				toast.mkError('You are not connected with the Internet.');
-			}
+			// NOTE For server-side rendering
+			window.location.href = currentPageUrl + query;
 		},
 		extend: validator,
 		validateSchema: schema,
@@ -159,20 +169,15 @@
 				{#if warningCode === InvalidCode.FoundArabicNumber}
 					<span class="warning"
 						>Arabic numbers might yield unexpected result.
-						<button
-							class="link"
-							type="button"
-							on:click={handleReplaceArabicNumber(textareaRef)}
+						<button class="link" type="button" on:click={handleReplaceArabicNumber(textareaRef)}
 							>Convert all arabic numbers to Cantonese numbers</button
 						>.</span
 					>
 				{:else if warningCode === InvalidCode.FoundNonCantoneseCharacter}
 					<span class="warning"
-						>Non Cantonese characters might yield unexpected result. <button
-							class="link"
-							type="button">Strip off all non Cantonese characters</button
-						>.</span
-					>
+						>Non Cantonese characters might yield unexpected result.
+						<!--  <button class="link" type="button">Strip off all non Cantonese characters</button>  -->
+					</span>
 				{/if}
 			</div>
 		</div>
@@ -184,16 +189,18 @@
 </form>
 
 <OutputArea
+	id="romanization"
+    bind:ref={outputElem}
 	name={outputName}
 	{result}
 	systems={Object.values(TargetPhoneticSystem)}
 	form={id}
 	placeholder={'ngo5 hai6 hoeng1 gong2 jan4'}
 	on:copy={() => {
-		toast.mkOk('Copied result to clipboard.');
+		toast.mkOk('Copied result to clipboard');
 	}}
 />
-    
+
 <div class="lg-separator" />
 
 <section>

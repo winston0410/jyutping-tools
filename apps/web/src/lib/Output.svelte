@@ -8,6 +8,9 @@
 </script>
 
 <script lang="ts">
+    //  For scrolling into view
+    export let ref = null;
+    export let id: string;
 	// REF https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output#attr-form
 	export let form: string;
 	export let name: string;
@@ -41,7 +44,7 @@
 		<CopyIcon class="copy-icon" />
 	</button>
 	<div class="output">
-		<output {name} {form} class="output-inner" class:placeholder={!result} use:clipboard on:copy>
+		<output bind:this={ref} {id} {name} {form} class="output-inner" class:placeholder={!result} use:clipboard on:copy>
 			{#if $currentTab === TargetPhoneticSystem.Jyutping}
 				{result ? result.join(' ') : placeholder}
 			{:else if $currentTab === TargetPhoneticSystem.ToneNumberYale}
@@ -137,7 +140,7 @@
 	.output-inner {
 		display: block;
 		height: 100%;
-		padding: 1rem;
+		padding: 1rem 3rem 1rem 1rem;
 	}
 
 	.label {

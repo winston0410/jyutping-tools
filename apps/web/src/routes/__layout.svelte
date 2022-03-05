@@ -20,6 +20,7 @@
 <style lang="scss">
 	:global(html) {
 		font-size: 20px;
+        scroll-behavior: smooth;
 	}
 	:global(body) {
 		font-family: 'Karla';
