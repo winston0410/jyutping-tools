@@ -9,7 +9,7 @@
 </script>
 
 <header class="header">
-	<span class="logo">Cantonese.tool</span>
+	<span class="logo">jyut.info</span>
 </header>
 <Notifications item={Toast}>
 	<main id="main-content" class="shell">
@@ -35,17 +35,28 @@
 		cursor: pointer;
 	}
 
+	:global(.link) {
+		appearance: none;
+		background: none;
+		color: $blue;
+		text-decoration: underline;
+	}
+
+	:global(.link:hover) {
+		color: lighten($blue, 20%);
+	}
+
 	.shell {
-		padding: 20px;
+		padding: 1rem;
 		margin-bottom: 3rem;
 	}
 
 	.header {
 		min-height: $header-height;
-		padding: 12px;
+		padding: 1rem;
 		display: flex;
 		align-items: center;
-        background: var(--color-header);
+		background: var(--color-header);
 	}
 
 	.logo {

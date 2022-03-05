@@ -1,22 +1,16 @@
 <script lang="ts" context="module">
+	import type { Load } from '@sveltejs/kit';
+
+	export const load: Load = () => {
+		return {
+			redirect: '/services/cantonese-to-jyutping',
+			status: 302
+		};
+	};
 </script>
 
 <script lang="ts">
 </script>
-
-<h1>Cantonese tools</h1>
-
-<!--  <p>This website contains tools to help you process Cantonese for learning purposes.</p>  -->
-<!--  <ul role="list">  -->
-<!--  {#each links as { name, href }}  -->
-<!--  <li>  -->
-<!--  <a {href} sveltekit:prefetch>  -->
-<!--  {name}  -->
-<!--  </a>  -->
-<!--  </li>  -->
-<!--  {/each}  -->
-
-<!--  </ul>  -->
 
 <style lang="scss">
 </style>

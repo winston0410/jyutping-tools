@@ -19,7 +19,7 @@
 	{/if}
 	<div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
 		<p itemprop="text">
-			{entity.answer}
+			{@html entity.answer}
 		</p>
 	</div>
 </section>

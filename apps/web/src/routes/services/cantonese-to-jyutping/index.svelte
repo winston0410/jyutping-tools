@@ -160,7 +160,7 @@
 					<span class="warning"
 						>Arabic numbers might yield unexpected result.
 						<button
-							class="fix-hints"
+							class="link"
 							type="button"
 							on:click={handleReplaceArabicNumber(textareaRef)}
 							>Convert all arabic numbers to Cantonese numbers</button
@@ -169,7 +169,7 @@
 				{:else if warningCode === InvalidCode.FoundNonCantoneseCharacter}
 					<span class="warning"
 						>Non Cantonese characters might yield unexpected result. <button
-							class="fix-hints"
+							class="link"
 							type="button">Strip off all non Cantonese characters</button
 						>.</span
 					>
@@ -193,10 +193,10 @@
 		toast.mkOk('Copied result to clipboard.');
 	}}
 />
-
+    
 <div class="lg-separator" />
 
-<div>
+<section>
 	<h2>Frequently Asked Questions</h2>
 	<ul role="list" class="faq-list">
 		{#each faqEntities as entity (entity.question)}
@@ -205,7 +205,7 @@
 			</li>
 		{/each}
 	</ul>
-</div>
+</section>
 
 <style lang="scss">
 	.submit-button {

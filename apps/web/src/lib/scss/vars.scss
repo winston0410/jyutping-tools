@@ -91,16 +91,6 @@ $outline-width: 0.2rem;
 	@include warning-text;
 }
 
-.fix-hints {
-	appearance: none;
-	background: none;
-	color: lighten($blue, 20%);
-	text-decoration: underline;
-}
-
-.fix-hints:hover {
-	color: $blue;
-}
 
 $dark-layer2: rgb(0, 0, 0);
 $dark-layer3: lighten($dark-layer2, 50%);

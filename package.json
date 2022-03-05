@@ -13,6 +13,7 @@
   },
   "scripts": {
     "build": "turbo run build",
+    "dev": "turbo run dev",
     "preinstall": "only-allow npm",
     "syncpack": "syncpack list-mismatches",
     "syncpack:fix": "syncpack fix-mismatches"

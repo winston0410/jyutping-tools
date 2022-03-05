@@ -6,7 +6,7 @@ export const get: RequestHandler = async () => {
 			{
 				question: 'What technologies power this Cantonese to romanization converter?',
 				answer:
-					'This converter is built with a custom Cantonese NLP engine written in Rust, and we use the dataset from words.hk. We do not have any Python dependencies, as it is too slow for handling large amount of text.'
+					'This converter is built with a custom Cantonese NLP engine written in Rust, and we use the datasets from <a class="link" rel="external" href="https://words.hk/">words.hk</a>. We do not have any Python dependencies like <a class="link" rel="external" href="https://pypi.org/project/pycantonese/">PyCantonese</a>, as it is too slow for handling large amount of text.'
 			},
 			{
 				question: 'What romanization can I convert Cantonese characters to with this converter?',
