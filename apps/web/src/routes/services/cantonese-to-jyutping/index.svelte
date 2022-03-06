@@ -17,7 +17,7 @@
 	import { page } from '$app/stores';
 	import Faq from '$lib/Faq.svelte';
 	import { onMount } from 'svelte';
-    import PhaseBanner from '$lib/PhaseBanner.svelte'
+	import PhaseBanner from '$lib/PhaseBanner.svelte';
 
 	export const load = async ({ url, fetch }) => {
 		const { searchParams } = url;
@@ -208,7 +208,7 @@
 
 <div class="lg-separator" />
 
-<section>
+<section itemscope itemtype="https://schema.org/FAQPage">
 	<h2>Frequently Asked Questions</h2>
 	<ul role="list" class="faq-list">
 		{#each faqEntities as entity (entity.question)}
