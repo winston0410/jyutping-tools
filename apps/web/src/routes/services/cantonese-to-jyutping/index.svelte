@@ -17,22 +17,25 @@
 	import { page } from '$app/stores';
 	import Faq from '$lib/Faq.svelte';
 	import { onMount } from 'svelte';
+    import PhaseBanner from '$lib/PhaseBanner.svelte'
 
 	export const load = async ({ url, fetch }) => {
 		const { searchParams } = url;
 		const input = searchParams.get('input') ?? '';
 		let result = null;
-        let errorMessage = "";
+		let errorMessage = '';
 
 		if (input) {
-			const res = await fetch(MICROSERVICE_ROOT + CONVERT_ACTION + `?${searchParams.toString()}`);
+			const res = await fetch(
+				MICROSERVICE_ROOT + CONVERT_ACTION + `?${searchParams.toString()}`
+			).catch((e: unknown) => e);
 
 			if (res.ok) {
 				const body = await res.json();
 				result = extractPhonetic(body.results);
 			} else {
-                errorMessage = "Service is temporaily unavailable";
-            }
+				errorMessage = 'Service is temporaily unavailable';
+			}
 		}
 
 		const faqEntities = await (await fetch(PROXY_ROOT + '/ui/faq')).json();
@@ -41,7 +44,7 @@
 			props: {
 				input,
 				result,
-                errorMessage,
+				errorMessage,
 				faqEntities
 			}
 		};
@@ -52,22 +55,22 @@
 	export let input: string;
 	export let faqEntities: Array<FAQEntity>;
 	export let result: Array<string> | null;
-    export let errorMessage: string;
+	export let errorMessage: string;
 
-    let outputElem: HTMLOutputElement;
+	let outputElem: HTMLOutputElement;
 
 	const { addNotification } = getNotificationsContext();
 	const toast = mkToast(addNotification);
 
 	onMount(() => {
-        if(errorMessage){
-            toast.mkError(errorMessage);
-        }
-        
+		if (errorMessage) {
+			toast.mkError(errorMessage);
+		}
+
 		if (result?.length > 0) {
-            outputElem.scrollIntoView({
-                behavior: 'smooth'
-            })
+			outputElem.scrollIntoView({
+				behavior: 'smooth'
+			});
 			toast.mkOk('Conversion successful');
 		}
 	});
@@ -137,6 +140,8 @@
 	url=""
 	image=""
 />
+<PhaseBanner />
+<div class="lg-separator" />
 <h1>Cantonese to romanization</h1>
 <p>Convert Cantonese characters to romanization easily, supporting Jyutping and Yale.</p>
 <form use:form class="sidebar-layout" {id}>
@@ -190,7 +195,7 @@
 
 <OutputArea
 	id="romanization"
-    bind:ref={outputElem}
+	bind:ref={outputElem}
 	name={outputName}
 	{result}
 	systems={Object.values(TargetPhoneticSystem)}
@@ -232,9 +237,5 @@
 			grid-template-columns: repeat(2, 1fr);
 			column-gap: 1rem;
 		}
-	}
-
-	.lg-separator {
-		margin-bottom: 1rem;
 	}
 </style>

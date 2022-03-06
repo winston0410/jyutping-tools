@@ -4,7 +4,7 @@ $black: hsla(205, 20%, 16%, 1);
 $grey: #ddd;
 $error: #be3a34;
 $warning: #ffc845;
-$info: blue;
+$info: #0f62fe;
 $ok: #00664f;
 $header-height: 5rem;
 $input-header-height: 3rem;
@@ -114,4 +114,13 @@ $light-highlight: $ok;
 	--color-button: #{$light-highlight};
 	--color-button-highlight: #{lighten($light-highlight, 5%)};
 	--color-unselected-button: #{$light-layer3};
+}
+
+
+.md-separator {
+    margin-bottom: 0.5rem;
+}
+
+.lg-separator {
+    margin-bottom: 1rem;
 }

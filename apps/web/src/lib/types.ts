@@ -19,3 +19,8 @@ export enum InvalidCode {
 	NoCantoneseCharacter = 4,
 	EmptySelfInput = 5
 }
+
+export enum DevelopmentPhrase {
+    Alpha,
+    Beta,
+}

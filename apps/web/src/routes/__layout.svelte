@@ -9,7 +9,9 @@
 </script>
 
 <header class="header">
-	<span class="logo">jyut.info</span>
+    <a href="/" alt="To home" title="jyut.info">
+        <span class="logo">jyut.info</span>
+    </a>
 </header>
 <Notifications item={Toast}>
 	<main id="main-content" class="shell">

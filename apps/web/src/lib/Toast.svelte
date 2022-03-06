@@ -52,7 +52,10 @@
 	}
 
 	.jam {
+        min-width: 14rem;
 		padding: 12px;
+        display: flex;
+        justify-content: center;
 	}
 
 	.toast-inner {
