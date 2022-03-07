@@ -45,7 +45,7 @@ $outline-width: 0.2rem;
 }
 
 @mixin card {
-    @include card-shadow;
+	@include card-shadow;
 	background: var(--color-background);
 	border-radius: 0.25rem;
 }
@@ -91,7 +91,6 @@ $outline-width: 0.2rem;
 	@include warning-text;
 }
 
-
 $dark-layer2: rgb(0, 0, 0);
 $dark-layer3: lighten($dark-layer2, 50%);
 
@@ -116,11 +115,28 @@ $light-highlight: $ok;
 	--color-unselected-button: #{$light-layer3};
 }
 
-
 .md-separator {
-    margin-bottom: 0.5rem;
+	margin-bottom: 0.5rem;
 }
 
 .lg-separator {
-    margin-bottom: 1rem;
+	margin-bottom: 1rem;
+}
+
+@mixin icon {
+	background: $info;
+	border-radius: 0.25rem;
+	color: var(--color-contrast-text);
+	@include card-shadow;
+}
+
+.icon {
+    @include icon;
+	padding: 0.25rem;
+}
+
+.xs-icon {
+    @include icon;
+    font-size: 0.5rem;
+	padding: 0.2rem;
 }

@@ -20,14 +20,6 @@
 <hr class="break"/>
 
 <style lang="scss">
-	.icon {
-		background: $info;
-		border-radius: 0.25rem;
-        padding: 0.25rem;
-		color: var(--color-contrast-text);
-        @include card-shadow;
-	}
-
 	.text {
         margin-left: 0.5rem;
 		@include tablet {
