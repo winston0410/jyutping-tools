@@ -4,11 +4,11 @@ import type { ResultTuple } from '$lib/types';
 type ExtractPhonetic = (results: Array<ResultTuple>) => Array<string>;
 
 export const extractPhonetic: ExtractPhonetic = (results) =>
-	results.map(([, phonetic]) => {
-		return phonetic.join('/');
+	results.map(([key, phonetic]) => {
+		return phonetic[0] !== 'unknown' ? phonetic.join('/') : `${phonetic[0]}(${key})`;
 	});
 
 //  export const formatPhonetic: FormatFn = (input: any) => {
-	//  console.log(input);
-	//  return input;
+//  console.log(input);
+//  return input;
 //  };
