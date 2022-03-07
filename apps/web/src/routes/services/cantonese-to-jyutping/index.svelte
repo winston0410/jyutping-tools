@@ -135,7 +135,7 @@
 </script>
 
 <MetaData
-	title="Cantonese to romanization | Cantonese.tools"
+	title="Cantonese to romanization | jyut.info"
 	description="Convert Cantonese characters to romanizations including Jyutping and Yale here with our performant Rust Cantonese NLP engine."
 	url=""
 	image=""
