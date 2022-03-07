@@ -1,11 +1,15 @@
 use std::collections::HashMap;
 use wordseg::Segmenter;
 pub mod data;
+pub mod transformer;
 
 #[derive(Default)]
 pub struct RsCantonese {
     pub segmenter: Segmenter,
     pub conversion_dict: HashMap<String, Vec<String>>,
+    // Accept an array of functions for transforming input
+    // This is needed as we cannot handle punctuation with segmenter, they will only have a count() of 1 and are ignored
+    // transformer: Vec<String>
 }
 
 impl RsCantonese {
@@ -16,6 +20,7 @@ impl RsCantonese {
     {
         let segmented = self.segmenter.predict(unsegmented);
 
+        // Need to handle punctuation here, as their length is one only
         let result: Vec<(String, Vec<String>)> = segmented
             .into_iter()
             .map(|word| -> (String, Vec<String>) {
@@ -26,6 +31,7 @@ impl RsCantonese {
                     .to_owned();
                 (word, jyutpings)
             })
+            .map(transformer::handle_punctuations)
             .collect();
 
         result
@@ -48,4 +54,9 @@ impl RsCantonese {
             .update_constraint();
         self
     }
+    
+    // Apply a transformer function to transform the output of rscantonese
+    // pub fn apply(&mut self, transformer: fn() -> ()) -> &Self {
+        // self
+    // }
 }

@@ -1,7 +1,6 @@
 use std::collections::HashSet;
 use unicode_segmentation::UnicodeSegmentation;
 
-#[derive(Default)]
 pub struct Segmenter {
     pub max_word_length: usize,
     model: HashSet<String>,
@@ -69,5 +68,15 @@ impl Segmenter {
 
         self.max_word_length = longest_length;
         self
+    }
+}
+
+impl Default for Segmenter {
+    fn default() -> Self {
+        Self {
+            // Use 1 as the default value, in order to allow wordseg run properly without training
+            max_word_length: 1,
+            model: HashSet::new()
+        }
     }
 }
