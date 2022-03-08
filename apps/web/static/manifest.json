@@ -1,0 +1,17 @@
+{
+	"short_name": "jyut.info",
+	"name": "jyut.info",
+	"start_url": "/",
+	"icons": [
+		{
+			"src": "Icon-512.png",
+			"type": "image/png",
+			"sizes": "512x512"
+		}
+	],
+	"background_color": "#FFFFFF",
+	"display": "standalone",
+	"scope": "/",
+	"theme_color": "#3367D6",
+	"description": "Website with tools and information related with Cantonese."
+}
