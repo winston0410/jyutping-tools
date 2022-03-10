@@ -6,7 +6,7 @@ export const get: RequestHandler = async (req) => {
 			'Content-Type': 'text/plain'
 		},
 		body: `User-agent: *
-        Allow: /
-        Sitemap: https://${req.url.host}/sitemap.xml`
+Allow: /
+Sitemap: https://${req.url.host}/sitemap.xml`
 	};
 };
