@@ -3,14 +3,22 @@
 	import '@fontsource/karla';
 	import Notifications from 'svelte-notifications';
 	import Toast from '$lib/Toast.svelte';
+	import MetaData from '$lib/MetaData.svelte';
+	import { page } from '$app/stores';
 </script>
 
 <script lang="ts">
 </script>
 
+<MetaData
+	title={$page.stuff.title}
+	description={$page.stuff.description}
+	url={`${$page.url.protocol}//${$page.url.host}${$page.url.pathname}`}
+	image={$page.stuff.image}
+/>
 <header class="header">
-    <span class="logo">jyut.info</span>
-    <span class="xs-icon">Alpha</span>
+	<span class="logo">jyut.info</span>
+	<span class="xs-icon">Alpha</span>
 </header>
 <Notifications item={Toast}>
 	<main id="main-content" class="shell">
@@ -21,7 +29,7 @@
 <style lang="scss">
 	:global(html) {
 		font-size: 20px;
-        scroll-behavior: smooth;
+		scroll-behavior: smooth;
 	}
 	:global(body) {
 		font-family: 'Karla';
@@ -63,7 +71,7 @@
 
 	.logo {
 		font-weight: 700;
-        margin-right: 0.5rem;
+		margin-right: 0.5rem;
 	}
 
 	footer {

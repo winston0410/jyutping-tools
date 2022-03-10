@@ -1,5 +1,4 @@
 <script lang="ts" context="module">
-	import MetaData from '$lib/MetaData.svelte';
 	import Input from '$lib/inputs/Input.svelte';
 	import OutputArea from '$lib/Output.svelte';
 	import Button from '$lib/Button.svelte';
@@ -46,7 +45,12 @@
 				result,
 				errorMessage,
 				faqEntities
-			}
+			},
+            stuff: {
+                title: "Cantonese to romanization | jyut.info",
+                description: "Convert Cantonese characters to romanizations including Jyutping and Yale here with our performant Rust Cantonese NLP engine.",
+                image: ""
+            }
 		};
 	};
 </script>
@@ -134,12 +138,6 @@
 	$: warningCode = $warnings[textareaName]?.[0];
 </script>
 
-<MetaData
-	title="Cantonese to romanization | jyut.info"
-	description="Convert Cantonese characters to romanizations including Jyutping and Yale here with our performant Rust Cantonese NLP engine."
-	url=""
-	image=""
-/>
 <PhaseBanner />
 <div class="lg-separator" />
 <h1>Cantonese to romanization</h1>
