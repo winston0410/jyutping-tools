@@ -34,6 +34,8 @@
             pkgs.callPackage ./jyutping-microservice/image.nix {
               inherit jyutping-microservice;
             };
+          kratosConfig = pkgs.writeText "kratos.yml"
+            (builtins.readFile ./identity/kratos.yml);
         };
         devShell = (({ pkgs, ... }:
           pkgs.mkShell {
@@ -60,7 +62,7 @@
               echo "Pointing PATH to binaries in NPM"
               export PATH=$PATH:$(npm bin)
               # Updating cargo dep
-              cargo outdated
+              cargo update
             '';
           }) { inherit pkgs; });
       });
