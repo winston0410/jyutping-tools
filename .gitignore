@@ -2,6 +2,7 @@
 **/.direnv
 **/target
 **/result
+result
 **/.turbo
 **/dist
 **/build
