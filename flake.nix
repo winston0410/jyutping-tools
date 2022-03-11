@@ -34,10 +34,11 @@
             pkgs.callPackage ./jyutping-microservice/image.nix {
               inherit jyutping-microservice;
             };
-          # kratos-config = pkgs.writeText "kratos.yml"
-            # (builtins.readFile ./identity/kratos.yml);
-          # identity-schema = pkgs.writeText "identity."
-            # (builtins.readFile ./identity/kratos.yml);
+          #NOTE Save two files in two different derivations, as it is likely to reuse kratos.yml
+          kratos-config = pkgs.writeText "kratos.yml"
+            (builtins.readFile ./identity/kratos.yml);
+          identity-schema = pkgs.writeText "identity.schema.json"
+            (builtins.readFile ./identity/identity.schema.json);
         };
         devShell = (({ pkgs, ... }:
           pkgs.mkShell {
