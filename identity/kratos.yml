@@ -1,5 +1,5 @@
 ---
-version: v0.8.0-alpha.3
+version: v0.8.2
 
 dsn: postgres://kratos:secret@postgresd:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
 

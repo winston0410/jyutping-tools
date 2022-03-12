@@ -13,6 +13,8 @@ pub struct RsCantonese {
 }
 
 impl RsCantonese {
+    // Reason why we use Into and AsRef
+    //REF https://discord.com/channels/442252698964721669/947648480799752192
     /// Convert cantonese characters to jyutping
     pub fn characters_to_jyutping<T>(&self, unsegmented: T) -> Vec<(String, Vec<String>)>
     where
@@ -54,9 +56,23 @@ impl RsCantonese {
             .update_constraint();
         self
     }
-    
+
     // Apply a transformer function to transform the output of rscantonese
     // pub fn apply(&mut self, transformer: fn() -> ()) -> &Self {
-        // self
+    // self
+    // }
+
+    /// Check how well is the token of the input can be handled by our dataset
+    // pub fn get_coverage(result: &[(String, Vec<String>)]) -> f64 {
+        
+        // let unknown_token = result.iter().fold(0, |acc, (_, jyutping)| {
+            // if jyutping[0] == "unknown" {
+                // acc + 1
+            // } else {
+                // acc
+            // }
+        // });
+        
+        // 3.0
     // }
 }

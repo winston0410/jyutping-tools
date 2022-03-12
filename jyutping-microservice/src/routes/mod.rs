@@ -1,5 +1,4 @@
 pub mod convert;
-// pub mod segment;
-// pub mod health_check;
+pub mod segment;
 mod types;
 pub use crate::routes::types::HttpError;
