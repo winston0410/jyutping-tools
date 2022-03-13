@@ -46,11 +46,12 @@
 				errorMessage,
 				faqEntities
 			},
-            stuff: {
-                title: "Cantonese to romanization | jyut.info",
-                description: "Convert Cantonese characters to romanizations including Jyutping and Yale here with our performant Rust Cantonese NLP engine.",
-                image: ""
-            }
+			stuff: {
+				title: 'Cantonese to romanization | jyut.info',
+				description:
+					'Convert Cantonese characters to romanizations including Jyutping and Yale here with our performant Rust Cantonese NLP engine.',
+				image: ''
+			}
 		};
 	};
 </script>
@@ -134,6 +135,8 @@
 	const outputName = 'romanization';
 	let textareaRef: HTMLTextAreaElement;
 
+	let hasUnknown = result?.findIndex((x) => x.startsWith('unknown')) >= 0;
+
 	$: errorCode = $errors[textareaName]?.[0];
 	$: warningCode = $warnings[textareaName]?.[0];
 </script>
@@ -159,6 +162,7 @@
 	>
 		<span>Cantonese</span>
 		<div slot="error">
+			<div class="sm-separator" />
 			<div class="error-message">
 				{#if errorCode === InvalidCode.NoCantoneseCharacter}
 					<span class="error">No Cantonese characters.</span>
@@ -168,6 +172,7 @@
 			</div>
 		</div>
 		<div slot="warning">
+			<div class="sm-separator" />
 			<div class="error-message">
 				{#if warningCode === InvalidCode.FoundArabicNumber}
 					<span class="warning"
@@ -202,7 +207,24 @@
 	on:copy={() => {
 		toast.mkOk('Copied result to clipboard');
 	}}
-/>
+>
+	<div slot="warning">
+		{#if hasUnknown}
+			<div class="sm-separator" />
+			<div class="error-message">
+				<span class="warning"
+					>Do you know what those unknown value might be? <a
+						class="link"
+						rel="external"
+						href={`https://github.com/winston0410/jyut.info/issues/new?assignees=&labels=romanization&template=romanization_report.md&title=${encodeURIComponent(
+							`Unknown found: ${input}`
+						)}`}>Help us improve this converter.</a
+					></span
+				>
+			</div>
+		{/if}
+	</div>
+</OutputArea>
 
 <div class="lg-separator" />
 

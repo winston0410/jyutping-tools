@@ -58,7 +58,7 @@ $outline-width: 0.2rem;
 }
 
 @mixin input-header-layout {
-	height: $input-header-height;
+	min-height: $input-header-height;
 	display: flex;
 	align-items: center;
 }
@@ -113,6 +113,10 @@ $light-highlight: $ok;
 	--color-button: #{$light-highlight};
 	--color-button-highlight: #{lighten($light-highlight, 5%)};
 	--color-unselected-button: #{$light-layer3};
+}
+
+.sm-separator {
+	margin-bottom: 0.25rem;
 }
 
 .md-separator {

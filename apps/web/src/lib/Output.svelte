@@ -8,9 +8,9 @@
 </script>
 
 <script lang="ts">
-    //  For scrolling into view
-    export let ref = null;
-    export let id: string;
+	//  For scrolling into view
+	export let ref = null;
+	export let id: string;
 	// REF https://developer.mozilla.org/en-US/docs/Web/HTML/Element/output#attr-form
 	export let form: string;
 	export let name: string;
@@ -21,6 +21,7 @@
 	const { tab, currentTab } = mkTabs({
 		initial: TargetPhoneticSystem.Jyutping
 	});
+
 </script>
 
 <div class="output-header">
@@ -44,7 +45,16 @@
 		<CopyIcon class="copy-icon" />
 	</button>
 	<div class="output">
-		<output bind:this={ref} {id} {name} {form} class="output-inner" class:placeholder={!result} use:clipboard on:copy>
+		<output
+			bind:this={ref}
+			{id}
+			{name}
+			{form}
+			class="output-inner"
+			class:placeholder={!result}
+			use:clipboard
+			on:copy
+		>
 			{#if $currentTab === TargetPhoneticSystem.Jyutping}
 				{result ? result.join(' ') : placeholder}
 			{:else if $currentTab === TargetPhoneticSystem.ToneNumberYale}
@@ -55,6 +65,7 @@
 		</output>
 	</div>
 </div>
+<slot name="warning" />
 <!--  :global(.copy-icon path) {  -->
 <!--  transition: fill 300ms;  -->
 <!--  }  -->
@@ -65,11 +76,11 @@
 <style lang="scss">
 	.output-header {
 		display: flex;
-        flex-direction: column;
-        row-gap: 1rem;
+		flex-direction: column;
+		row-gap: 1rem;
 		@include tablet {
-            flex-direction: row;
-            row-gap: 0rem;
+			flex-direction: row;
+			row-gap: 0rem;
 			align-items: center;
 			justify-content: space-between;
 		}
@@ -85,16 +96,16 @@
 
 	.switcher-button {
 		@include center;
-        @include card-shadow;
+		@include card-shadow;
 		padding: 12px;
 		text-transform: capitalize;
 		transition: background 300ms, color 300ms;
 		height: $input-header-height;
 		border-top-left-radius: 0.25rem;
 		border-top-right-radius: 0.25rem;
-        background-color: var(--color-unselected-button);
+		background-color: var(--color-unselected-button);
 		@include tablet {
-            min-width: 8rem;
+			min-width: 8rem;
 		}
 	}
 
@@ -120,7 +131,7 @@
 	.output-wrapper {
 		position: relative;
 		cursor: pointer;
-        border-radius: 0.25rem;
+		border-radius: 0.25rem;
 	}
 
 	.output {
@@ -130,7 +141,7 @@
 	}
 
 	.output-wrapper:hover {
-        outline: $outline-width dashed var(--color-text);
+		outline: $outline-width dashed var(--color-text);
 	}
 
 	.placeholder {
