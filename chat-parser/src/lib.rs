@@ -12,7 +12,7 @@ pub enum Token {
     Corpus(Vec<corpus::Corpus>),
 }
 
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct Corpora {
     pub meta: meta::Meta,
     pub data: Vec<corpus::Corpus>,
@@ -44,7 +44,6 @@ impl Corpora {
                 },
                 Token::Corpus(mut items) => {
                     result.data.append(&mut items);
-                    ()
                 }
             }
         }
