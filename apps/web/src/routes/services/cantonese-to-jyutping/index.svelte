@@ -216,9 +216,11 @@
 					>Do you know what those unknown value might be? <a
 						class="link"
 						rel="external"
-						href={`https://github.com/winston0410/jyut.info/issues/new?assignees=&labels=romanization&template=romanization_report.md&title=${encodeURIComponent(
+						href={`https://github.com/winston0410/jyut.info/issues/new?assignees=&labels=romanization&title=${encodeURIComponent(
 							`Unknown found: ${input}`
-						)}`}>Help us improve this converter.</a
+						)}&body=${encodeURIComponent(`Current output: ${result.join(' ')}
+Expected output: 
+`)}`}>Help us improve this converter.</a
 					></span
 				>
 			</div>
