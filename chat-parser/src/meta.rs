@@ -7,11 +7,11 @@ use nom::IResult;
 
 #[inline]
 pub fn is_alphabetic_or_space(chr: char) -> bool {
-    let bytes = chr as u8;
+    let bytes = chr as u32;
     // original condition for is_alphabetic
     (bytes >= 0x41 && bytes <= 0x5A) || (bytes >= 0x61 && bytes <= 0x7A) ||
-    // condition from is_space
-    bytes == b' ' || bytes == b'\t' ||
+    // condition from is_space, first one is space, second one is tab
+    bytes == 0x20 || bytes == 0x09 ||
     // condition from is_digit
     bytes >= 0x30 && bytes <= 0x39
 }
