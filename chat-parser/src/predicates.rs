@@ -1,5 +1,6 @@
 //REF https://www.compart.com/en/unicode/category/Po
 //REF https://www.kerryr.net/pioneers/ascii3.htm
+//NOTE doesnt handle cantonese punctuation right now
 pub fn is_punctuation(char: char) -> bool {
     let bytes = char as u32;
     // // 33 - 47

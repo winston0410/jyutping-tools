@@ -56,16 +56,19 @@
               gnuplot
               cargo-criterion
               wasm-pack
+              podman-compose
             ];
             shellHook = ''
               # Disable pre-commit for now
               # Setting pre-commit
               # pre-commit install
               # Setting NPM
-              echo "Pointing PATH to binaries in NPM"
+              echo "Pointing PATH to binaries in NPM..."
               export PATH=$PATH:$(npm bin)
-              # Updating cargo dep
               cargo update
+              echo "Starting Ory Kratos..."
+              netstat -tulpn | rg 4433 || podman-compose up --build --force-recreate
+              echo "All done!"
             '';
           }) { inherit pkgs; });
       });

@@ -1,13 +1,15 @@
 ---
-version: v0.8.2
+version: v0.8.2-alpha.1
 
-dsn: postgres://kratos:secret@postgresd:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
+# NOTE Should be overridible by env var with an actual url for database, but it is not working now
+# REF https://github.com/ory/kratos/discussions/1407
+dsn: postgres://kratos:pwd@postgresd:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
 
 identity:
-  default_schema_url: file:///etc/kratos/identity.schema.json
+  default_schema_url: file:///etc/kratos/contributor.schema.json
   schemas:
-    - id: customer
-      url: file:///etc/kratos/identity.schema.json
+    - id: contributor
+      url: file:///etc/kratos/contributor.schema.json
 
 serve:
   public:
@@ -47,22 +49,6 @@ selfservice:
   methods:
     password:
       enabled: true
-    oidc:
-      enabled: true
-      config:
-        providers:
-          - id: github
-            provider: github
-            client_id: 89c65bdb799addc69955
-            client_secret: b1df9bcd628508be880001d74785a0a2832c048d
-            mapper_url: file:///etc/kratos/oidc/github.jsonnet
-            scope:
-              - user:email
-    link:
-      enabled: true
-#  hashers:
-#  argon2:
-
 courier:
   smtp:
     from_address: no-reply@ory.kratos.sh

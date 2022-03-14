@@ -1,0 +1,33 @@
+---
+version: "3.9"
+services:
+  kratos-migrate:
+    image: docker.io/oryd/kratos:v0.8.2
+    environment:
+      - DSN=postgres://kratos:pwd@postgresd:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
+    command: -c /etc/kratos/kratos.yml migrate sql -e --yes
+    volumes:
+      - ./identity/kratos:/etc/kratos
+    depends_on:
+      - postgresd
+  kratos:
+    image: docker.io/oryd/kratos:v0.8.2
+    volumes:
+      - ./identity/kratos:/etc/kratos
+    command: "serve --config /etc/kratos/kratos.yml --dev --watch-courier"
+    environment:
+      - DSN=postgres://kratos:pwd@postgresd:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
+    ports:
+      - "4433:4433"
+      - "4434:4434"
+    depends_on:
+      - postgresd
+      - kratos-migrate
+  postgresd:
+    image: docker.io/postgres:14.2
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=kratos
+      - POSTGRES_PASSWORD=pwd
+      - POSTGRES_DB=kratos

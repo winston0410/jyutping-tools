@@ -45,7 +45,7 @@ impl Corpus {
     /// concern
     pub fn parse_characters(raw: &str) -> IResult<&str, Vec<&str>> {
         let match_word = separated_list0(
-            space1,
+            alt((space1, line_ending)),
             alt((nom_unicode::complete::alpha1, take_while(is_punctuation))),
         );
 
@@ -56,13 +56,14 @@ impl Corpus {
     /// concern
     pub fn parse_jyutping(raw: &str) -> IResult<&str, Vec<(&str, &str)>> {
         let match_jyutping = separated_list0(
-            space1,
+            alt((space1, line_ending)),
             alt((
                 separated_pair(
                     nom::character::complete::alpha1,
                     tag("|"),
                     nom::character::complete::alphanumeric1,
                 ),
+                //NOTE Need to use pair to match the type for character_parser
                 pair(take_while(is_punctuation), take_while(is_punctuation)),
             )),
         );
@@ -90,6 +91,23 @@ mod test_parse_characters {
             Ok(("", vec!["見", "到", ",", "呵", "?"]))
         );
     }
+
+    #[test]
+    fn should_handle_early_link_break() {
+        assert_eq!(
+            Corpus::parse_characters(
+                "*XXB:	見 到 , 
+呵 ?"
+            ),
+            Ok((
+                "",
+                vec![
+                    "見", "到", ",", //FIXME Remove Incorrectly collected token
+                    "", "呵", "?"
+                ]
+            ))
+        );
+    }
 }
 
 #[cfg(test)]
@@ -101,6 +119,33 @@ mod test_parse_jyutping {
         assert_eq!(
             Corpus::parse_jyutping("%mor:	a|hou2 y|aa1 ."),
             Ok(("", vec![("a", "hou2"), ("y", "aa1"), (".", "")]))
+        );
+    }
+
+    #[test]
+    fn should_handle_early_line_break() {
+        assert_eq!(
+            Corpus::parse_jyutping(
+                "%mor:	c|gam2 v|hai6 y|laa1 , v|gong2 u|faan1 r|ngo5dei6 n|gan6fong3
+ y|aa1 ."
+            ),
+            Ok((
+                "",
+                vec![
+                    ("c", "gam2"),
+                    ("v", "hai6"),
+                    ("y", "laa1"),
+                    (",", ""),
+                    ("v", "gong2"),
+                    ("u", "faan1"),
+                    ("r", "ngo5dei6"),
+                    ("n", "gan6fong3"),
+                    //FIXME Remove Incorrectly collected token
+                    ("", ""),
+                    ("y", "aa1"),
+                    (".", ""),
+                ]
+            ))
         );
     }
 }
