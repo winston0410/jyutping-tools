@@ -5,7 +5,7 @@ use std::env;
 mod middlewares;
 mod routes;
 mod services;
-use rscantonese::data::wordshk;
+// use rscantonese::data::wordshk;
 use rscantonese::RsCantonese;
 
 // Use debug assertion for checking PYTHONPATH
@@ -13,7 +13,7 @@ use rscantonese::RsCantonese;
 const BUILD_TIME: &str = include!("/tmp/timestamp.txt");
 
 pub struct AppData {
-    segmenter: RsCantonese,
+    rscantonese: RsCantonese,
 }
 
 #[actix_web::main]
@@ -26,11 +26,11 @@ async fn main() -> std::io::Result<()> {
         format!("Starting microservice..., built at {}", BUILD_TIME)
     );
 
-    let mut segmenter = RsCantonese::default();
+    let mut rscantonese = RsCantonese::default();
 
-    segmenter.train(&wordshk());
+    // segmenter.train(&wordshk());
 
-    let state = web::Data::new(AppData { segmenter });
+    let state = web::Data::new(AppData { rscantonese });
 
     HttpServer::new(move || {
         App::new()
@@ -50,8 +50,7 @@ async fn main() -> std::io::Result<()> {
                 web::scope("/v1")
                     .wrap(middlewares::CacheHeader::default())
                     .wrap(middleware::DefaultHeaders::new().add((LAST_MODIFIED, BUILD_TIME)))
-                    .configure(routes::convert::setup)
-                    .configure(routes::segment::setup),
+                    .configure(routes::parse::setup),
             )
     })
     .bind("0.0.0.0:8080")?
