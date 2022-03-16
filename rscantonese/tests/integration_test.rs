@@ -1,55 +1,89 @@
 #[cfg(test)]
-mod tests {
-    use rscantonese::data::hkcancor;
+mod integrated_tests {
+    use rscantonese::token::{InputToken, OutputToken};
     use rscantonese::RsCantonese;
-
-    pub fn structure_result((word, jyutpings): (&str, Vec<&str>)) -> (String, Vec<String>) {
-        (
-            word.to_owned(),
-            jyutpings.into_iter().map(String::from).collect(),
-        )
-    }
 
     #[test]
     fn should_convert_cantonese_to_jyutping() {
         let mut rscantonese = RsCantonese::default();
 
-        rscantonese.train(&hkcancor());
+        rscantonese.train(&vec![
+            InputToken {
+                word: "香港人".to_owned(),
+                jyutping: "hoeng1gong2jan4".to_owned(),
+                pos: "n".to_owned(),
+            },
+            InputToken {
+                word: "講".to_owned(),
+                jyutping: "gong2".to_owned(),
+                pos: "v".to_owned(),
+            },
+            InputToken {
+                word: "廣東話".to_owned(),
+                jyutping: "gwong2dung1waa2".to_owned(),
+                pos: "n".to_owned(),
+            },
+        ]);
 
-        // let result = rscantonese.characters_to_jyutping("香港人講廣東話");
+        let result = rscantonese.parse("香港人講廣東話");
 
-        // let expected_result: Vec<(String, Vec<String>)> = vec![
-        // ("香港人", vec!["hoeng1gong2jan4"]),
-        // ("講", vec!["gong2"]),
-        // ("廣東話", vec!["gwong2dung1waa2"]),
-        // ]
-        // .into_iter()
-        // .map(structure_result)
-        // .collect();
+        let expected_result: Vec<(String, Option<Vec<OutputToken>>)> = vec![
+            (
+                "香港人".to_owned(),
+                Some(vec![OutputToken {
+                    jyutping: "hoeng1gong2jan4".to_owned(),
+                    pos: "n".to_owned(),
+                }]),
+            ),
+            (
+                "講".to_owned(),
+                Some(vec![OutputToken {
+                    jyutping: "gong2".to_owned(),
+                    pos: "v".to_owned(),
+                }]),
+            ),
+            (
+                "廣東話".to_owned(),
+                Some(vec![OutputToken {
+                    jyutping: "gwong2dung1waa2".to_owned(),
+                    pos: "n".to_owned(),
+                }]),
+            ),
+        ]
+        .into_iter()
+        .collect();
 
-        // assert_eq!(result, expected_result);
-        assert_eq!(true, false);
+        assert_eq!(result, expected_result);
     }
 
-    // #[test]
-    // fn should_handle_unknown_input() {
-    // let mut rscantonese = RsCantonese::default();
+    #[test]
+    fn should_handle_unknown_input() {
+        let mut rscantonese = RsCantonese::default();
 
-    // rscantonese.train(&wordshk());
+        rscantonese.train(&vec![InputToken {
+            word: "香港".to_owned(),
+            jyutping: "hoeng1gong2".to_owned(),
+            pos: "n".to_owned(),
+        }]);
 
-    // let result = rscantonese.characters_to_jyutping("香港사람");
+        let result = rscantonese.parse("香港사람");
 
-    // let expected_result: Vec<(String, Vec<String>)> = vec![
-    // ("香港", vec!["hoeng1gong2"]),
-    // ("사", vec!["unknown"]),
-    // ("람", vec!["unknown"]),
-    // ]
-    // .into_iter()
-    // .map(structure_result)
-    // .collect();
+        let expected_result: Vec<(String, Option<Vec<OutputToken>>)> = vec![
+            (
+                "香港".to_owned(),
+                Some(vec![OutputToken {
+                    jyutping: "hoeng1gong2".to_owned(),
+                    pos: "n".to_owned(),
+                }]),
+            ),
+            ("사".to_owned(), None),
+            ("람".to_owned(), None),
+        ]
+        .into_iter()
+        .collect();
 
-    // assert_eq!(result, expected_result);
-    // }
+        assert_eq!(result, expected_result);
+    }
 
     // #[test]
     // fn should_handle_punctuation() {
