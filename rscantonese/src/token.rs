@@ -18,6 +18,8 @@ pub struct PuncutationToken(pub String);
 /// This is the enum used for training RsCantonese
 #[derive(Debug, Clone)]
 #[cfg_attr(feature = "tests", derive(PartialEq))]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[serde(untagged)]
 pub enum OutputToken {
     Puncutation(PuncutationToken),
     Word(Vec<WordToken>),

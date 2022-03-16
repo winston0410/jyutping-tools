@@ -1,3 +1,4 @@
+use nom::character::is_alphanumeric;
 //REF https://www.compart.com/en/unicode/category/Po
 //REF https://www.kerryr.net/pioneers/ascii3.htm
 //NOTE doesnt handle cantonese punctuation right now
@@ -36,4 +37,10 @@ mod test_is_punctuation {
     fn should_not_match_characters() {
         assert_eq!(is_punctuation('a'), false);
     }
+}
+
+pub fn is_morphology(char: char) -> bool {
+    //FIXME Overflow is possible
+    //FIXME Extract is_punctuation and not use it directly here
+    is_alphanumeric(char as u8) || char == '|' || is_punctuation(char)
 }

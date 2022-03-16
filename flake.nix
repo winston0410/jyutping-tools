@@ -56,7 +56,15 @@
               gnuplot
               cargo-criterion
               wasm-pack
+              # For starting ory kratos for development
               podman-compose
+              # Investigate paperclip
+              # https://github.com/paperclip-rs/paperclip
+              # For wordshk_tool
+              openssl
+              pkgconfig
+              # For testing postprocessing data with Github Action
+              deno
             ];
             shellHook = ''
               # Disable pre-commit for now

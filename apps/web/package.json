@@ -53,6 +53,7 @@
   },
   "type": "module",
   "dependencies": {
-    "jyutping-helpers": "file:packages/jyutping-helpers"
+    "jyutping-helpers": "file:packages/jyutping-helpers",
+    "just-detect-adblock": "1.1.0"
   }
 }

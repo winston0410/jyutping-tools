@@ -1,8 +1,11 @@
 <script context="module" lang="ts">
 	import type { ErrorLoad } from '@sveltejs/kit';
     // TODO Set Meta
-    import MetaData from "$lib/MetaData.svelte";
 	export const load: ErrorLoad = ({ error, status }) => {
+        if(status === 500){
+            console.error(error)
+        }
+        
 		return {
 			props: {}
 		};
