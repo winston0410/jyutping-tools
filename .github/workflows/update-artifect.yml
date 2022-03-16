@@ -17,6 +17,8 @@ jobs:
           deno-version: v1.10.x
       - name: Check out repo
         uses: actions/checkout@v2
+      - name: Check pwd and ls
+        run: pwd && ls -al
       - name: Fetch data
         uses: githubocto/flat@v3
         with:
