@@ -23,4 +23,4 @@ jobs:
         uses: githubocto/flat@v3
         with:
           http_url: https://words.hk/faiman/analysis/wordslist.json
-          downloaded_filename: data/words.hk/wordslist.json
+          downloaded_filename: ./rscantonese/data/words.hk/wordslist.json
