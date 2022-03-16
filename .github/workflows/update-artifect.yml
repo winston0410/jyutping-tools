@@ -3,24 +3,22 @@ name: Action for updating artifect automatically
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 0 * * 1"
+    - cron: "0 0 * * *"
 defaults:
   run:
     working-directory: ./rscantonese
 jobs:
-  update_artifect:
+  scheduled:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-      - name: Fetch artifect
-        run: curl -o ./data/words.hk/wordslist.json https://words.hk/faiman/analysis/wordslist.json
-      - name: Fetch artifect
-        run: curl -o ./data/words.hk/wordslist.json https://words.hk/faiman/analysis/wordslist.json
-      - name: Update resources
-        uses: test-room-7/action-update-file@v1
+      - name: Setup deno
+        uses: denoland/setup-deno@main
         with:
-          file-path: ./data/words.hk/wordslist.json
-          commit-msg: Update json from wordslist
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          allow-removing: true
+          deno-version: v1.10.x
+      - name: Check out repo
+        uses: actions/checkout@v2
+      - name: Fetch data
+        uses: githubocto/flat@v3
+        with:
+          http_url: https://words.hk/faiman/analysis/wordslist.json
+          downloaded_filename: ./data/words.hk/wordslist.json
