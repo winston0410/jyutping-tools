@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod integrated_tests {
     use rscantonese::token::{InputToken, OutputToken};
-    use rscantonese::RsCantonese;
+    use rscantonese::{RsCantonese, Result};
 
     #[test]
     fn should_convert_cantonese_to_jyutping() {
@@ -27,7 +27,7 @@ mod integrated_tests {
 
         let result = rscantonese.parse("香港人講廣東話");
 
-        let expected_result: Vec<(String, Option<Vec<OutputToken>>)> = vec![
+        let expected_result: Result = vec![
             (
                 "香港人".to_owned(),
                 Some(vec![OutputToken {
@@ -68,7 +68,7 @@ mod integrated_tests {
 
         let result = rscantonese.parse("香港사람");
 
-        let expected_result: Vec<(String, Option<Vec<OutputToken>>)> = vec![
+        let expected_result: Result = vec![
             (
                 "香港".to_owned(),
                 Some(vec![OutputToken {

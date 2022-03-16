@@ -12,6 +12,9 @@ pub struct RsCantonese {
     pub conversion_dict: HashMap<String, Vec<token::OutputToken>>,
 }
 
+/// Output type for using RsCantonese to parse unsegmented string
+pub type Result = Vec<(String, Option<Vec<OutputToken>>)>;
+
 impl RsCantonese {
     // Reason why we use Into and AsRef
     //REF https://discord.com/channels/442252698964721669/947648480799752192
@@ -20,7 +23,7 @@ impl RsCantonese {
     ///
     /// This function is the combination for characters_to_jyutping, segment, and pos in
     /// PyCantonese
-    pub fn parse<T>(&self, unsegmented: T) -> Vec<(String, Option<Vec<OutputToken>>)>
+    pub fn parse<T>(&self, unsegmented: T) -> Result
     where
         T: AsRef<str> + Into<String>,
     {
