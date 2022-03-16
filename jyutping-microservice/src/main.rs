@@ -50,7 +50,8 @@ async fn main() -> std::io::Result<()> {
                 web::scope("/v1")
                     .wrap(middlewares::CacheHeader::default())
                     .wrap(middleware::DefaultHeaders::new().add((LAST_MODIFIED, BUILD_TIME)))
-                    .configure(routes::parse::setup),
+                    .configure(routes::parse::setup)
+                    .configure(routes::coverage::setup),
             )
     })
     .bind("0.0.0.0:8080")?
