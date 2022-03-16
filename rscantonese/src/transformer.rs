@@ -1,9 +1,9 @@
-use crate::token::OutputToken;
+use crate::token::{OutputToken, PuncutationToken};
 use std::collections::HashSet;
 
 pub fn handle_punctuations(
-    (key, jyutping): (String, Option<Vec<OutputToken>>),
-) -> (String, Option<Vec<OutputToken>>) {
+    (key, jyutping): (String, Option<OutputToken>),
+) -> (String, Option<OutputToken>) {
     let punctuations: HashSet<&str> = HashSet::from([
         // Cantonese punctuations
         "，", "！", "？", "；", "：", "（", "）", "［", "］", "【", "】", "。", "『", "』", "「",
@@ -12,9 +12,10 @@ pub fn handle_punctuations(
     ]);
 
     if punctuations.contains(&*key) {
-        //FIXME returning None is not useful for handling the mapping. Should make the Hashmap
-        //accept enum instead
-        (key.to_owned(), None)
+        (
+            key.to_owned(),
+            Some(OutputToken::Puncutation(PuncutationToken(key))),
+        )
     } else {
         (key, jyutping)
     }

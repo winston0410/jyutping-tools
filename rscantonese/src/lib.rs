@@ -3,17 +3,17 @@ use std::collections::HashMap;
 use wordseg::Segmenter;
 pub mod data;
 pub mod token;
-use token::{InputToken, OutputToken};
+use token::{InputToken, OutputToken, PuncutationToken, WordToken};
 pub mod transformer;
 
 #[derive(Default)]
 pub struct RsCantonese {
     pub segmenter: Segmenter,
-    pub conversion_dict: HashMap<String, Vec<token::OutputToken>>,
+    pub conversion_dict: HashMap<String, token::OutputToken>,
 }
 
 /// Output type for using RsCantonese to parse unsegmented string
-pub type Result = Vec<(String, Option<Vec<OutputToken>>)>;
+pub type Result = Vec<(String, Option<OutputToken>)>;
 
 impl RsCantonese {
     // Reason why we use Into and AsRef
@@ -36,7 +36,7 @@ impl RsCantonese {
                 let jyutpings = self.conversion_dict.get(&word).map(ToOwned::to_owned);
                 (word, jyutpings)
             })
-            // .map(transformer::handle_punctuations)
+            .map(transformer::handle_punctuations)
             .collect()
     }
 
@@ -52,15 +52,22 @@ impl RsCantonese {
                 .entry(word.to_owned())
                 .and_modify(|cur| {
                     //Handle merging logic here
-                    cur.push(OutputToken {
-                        jyutping: jyutping.to_owned(),
-                        pos: pos.to_owned(),
-                    })
+                    match cur {
+                        OutputToken::Word(tokens) => {
+                            tokens.push(WordToken {
+                                jyutping: jyutping.to_owned(),
+                                pos: pos.to_owned(),
+                            });
+                        }
+                        OutputToken::Puncutation(..) => {
+                            unreachable!()
+                        }
+                    }
                 })
-                .or_insert(vec![OutputToken {
+                .or_insert(OutputToken::Word(vec![WordToken {
                     jyutping: jyutping.to_owned(),
                     pos: pos.to_owned(),
-                }]);
+                }]));
         }
 
         self.segmenter
@@ -72,8 +79,7 @@ impl RsCantonese {
 
 #[cfg(test)]
 mod unit_tests {
-    use super::token::{InputToken, OutputToken};
-    use super::RsCantonese;
+    use super::*;
 
     #[test]
     fn should_store_multiple_tokens_per_key() {
@@ -94,18 +100,19 @@ mod unit_tests {
 
         let tokens = rscantonese.conversion_dict.get("長").unwrap();
 
+        //NOTE False alarm as rust-analyzer doesnt not have `tests` feature on when running the test
         assert_eq!(
             tokens,
-            &vec![
-                OutputToken {
+            &OutputToken::Word(vec![
+                WordToken {
                     jyutping: "coeng4".to_owned(),
                     pos: "a".to_owned(),
                 },
-                OutputToken {
+                WordToken {
                     jyutping: "zoeng2".to_owned(),
                     pos: "v".to_owned(),
                 }
-            ]
+            ]),
         );
     }
 }

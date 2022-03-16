@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod integrated_tests {
-    use rscantonese::token::{InputToken, OutputToken};
-    use rscantonese::{RsCantonese, Result};
+    use rscantonese::token::{InputToken, OutputToken, PuncutationToken, WordToken};
+    use rscantonese::{Result, RsCantonese};
 
     #[test]
     fn should_convert_cantonese_to_jyutping() {
@@ -30,24 +30,24 @@ mod integrated_tests {
         let expected_result: Result = vec![
             (
                 "香港人".to_owned(),
-                Some(vec![OutputToken {
+                Some(OutputToken::Word(vec![WordToken {
                     jyutping: "hoeng1gong2jan4".to_owned(),
                     pos: "n".to_owned(),
-                }]),
+                }])),
             ),
             (
                 "講".to_owned(),
-                Some(vec![OutputToken {
+                Some(OutputToken::Word(vec![WordToken {
                     jyutping: "gong2".to_owned(),
                     pos: "v".to_owned(),
-                }]),
+                }])),
             ),
             (
                 "廣東話".to_owned(),
-                Some(vec![OutputToken {
+                Some(OutputToken::Word(vec![WordToken {
                     jyutping: "gwong2dung1waa2".to_owned(),
                     pos: "n".to_owned(),
-                }]),
+                }])),
             ),
         ]
         .into_iter()
@@ -71,10 +71,10 @@ mod integrated_tests {
         let expected_result: Result = vec![
             (
                 "香港".to_owned(),
-                Some(vec![OutputToken {
+                Some(OutputToken::Word(vec![WordToken {
                     jyutping: "hoeng1gong2".to_owned(),
                     pos: "n".to_owned(),
-                }]),
+                }])),
             ),
             ("사".to_owned(), None),
             ("람".to_owned(), None),
@@ -85,36 +85,53 @@ mod integrated_tests {
         assert_eq!(result, expected_result);
     }
 
-    // #[test]
-    // fn should_handle_punctuation() {
-    // let rscantonese = RsCantonese::default();
+    #[test]
+    fn should_handle_punctuation() {
+        let rscantonese = RsCantonese::default();
 
-    // let result = rscantonese.characters_to_jyutping("，？。,?.");
+        let result = rscantonese.parse("，？。,?.");
 
-    // let expected_result: Vec<(String, Vec<String>)> = vec![
-    // ("，", vec!["，"]),
-    // ("？", vec!["？"]),
-    // ("。", vec!["。"]),
-    // (",", vec![","]),
-    // ("?", vec!["?"]),
-    // (".", vec!["."]),
-    // ]
-    // .into_iter()
-    // .map(structure_result)
-    // .collect();
+        let expected_result: Result = vec![
+            (
+                "，".to_owned(),
+                Some(OutputToken::Puncutation(PuncutationToken("，".to_owned()))),
+            ),
+            (
+                "？".to_owned(),
+                Some(OutputToken::Puncutation(PuncutationToken("？".to_owned()))),
+            ),
+            (
+                "。".to_owned(),
+                Some(OutputToken::Puncutation(PuncutationToken("。".to_owned()))),
+            ),
+            (
+                ",".to_owned(),
+                Some(OutputToken::Puncutation(PuncutationToken(",".to_owned()))),
+            ),
+            (
+                "?".to_owned(),
+                Some(OutputToken::Puncutation(PuncutationToken("?".to_owned()))),
+            ),
+            (
+                ".".to_owned(),
+                Some(OutputToken::Puncutation(PuncutationToken(".".to_owned()))),
+            ),
+        ]
+        .into_iter()
+        .collect();
 
-    // assert_eq!(result, expected_result);
-    // }
+        assert_eq!(result, expected_result);
+    }
 
-    // #[test]
-    // fn should_get_coverage() {
-    // let mut rscantonese = RsCantonese::default();
-    // rscantonese.train(&wordshk());
+    // // #[test]
+    // // fn should_get_coverage() {
+    // // let mut rscantonese = RsCantonese::default();
+    // // rscantonese.train(&wordshk());
 
-    // let result = rscantonese.characters_to_jyutping("香港사람");
+    // // let result = rscantonese.characters_to_jyutping("香港사람");
 
-    // let coverage = RsCantonese::get_coverage(&result);
+    // // let coverage = RsCantonese::get_coverage(&result);
 
-    // assert_eq!(coverage, 0.5);
-    // }
+    // // assert_eq!(coverage, 0.5);
+    // // }
 }
