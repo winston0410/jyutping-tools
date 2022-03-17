@@ -51,7 +51,6 @@
                 toolchain.default.override {
                   targets = [ "wasm32-unknown-unknown" ];
                 }))
-              cargo-outdated
               # For benchmarking
               gnuplot
               cargo-criterion
