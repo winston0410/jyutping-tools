@@ -24,4 +24,5 @@ use wordshk_tools::parse::parse_dict;
 pub fn wordshk() -> () {
     static DATA_FILE: &'static str = include_str!("../data/words.hk/all.csv");
     let dict = parse_dict(DATA_FILE.as_bytes());
+    println!("{:?}", dict);
 }

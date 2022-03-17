@@ -5,7 +5,8 @@ members = [
     "wordseg",
     "rscantonese",
     "wasmcantonese",
-    "chat-parser"
+    "chat-parser",
+    "variant-map-parser"
 ]
 
 [profile.dev.package."*"]

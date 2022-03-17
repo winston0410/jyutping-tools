@@ -2,6 +2,7 @@
 mod integrated_tests {
     use rscantonese::token::{InputToken, OutputToken, PuncutationToken, WordToken};
     use rscantonese::{Result, RsCantonese};
+    use rscantonese::data::wordshk;
 
     #[test]
     fn should_convert_cantonese_to_jyutping() {
@@ -26,6 +27,8 @@ mod integrated_tests {
         ]);
 
         let result = rscantonese.parse("香港人講廣東話");
+
+        wordshk();
 
         let expected_result: Result = vec![
             (
@@ -53,7 +56,8 @@ mod integrated_tests {
         .into_iter()
         .collect();
 
-        assert_eq!(result, expected_result);
+        // assert_eq!(result, expected_result);
+        assert_eq!(true, false);
     }
 
     #[test]
