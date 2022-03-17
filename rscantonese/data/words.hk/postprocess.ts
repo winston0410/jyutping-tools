@@ -13,9 +13,13 @@ const unzipProcess = Deno.run({
 });
 
 try {
-  const stderr = await unzipProcess.stderrOutput();
-  const error = new TextDecoder().decode(stderr);
-  console.log(`unzip stderr: ${error}`);
+  const { code } = await unzipProcess.status();
+
+  if (code !== 0) {
+    const stderr = await unzipProcess.stderrOutput();
+    const error = new TextDecoder().decode(stderr);
+    console.log(`unzip stderr: ${error}`);
+  }
 } catch (error) {
   console.log("unexpected error: ", error);
 }
