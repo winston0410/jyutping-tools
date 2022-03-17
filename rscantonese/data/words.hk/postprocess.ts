@@ -7,7 +7,7 @@ console.log(`cwd: ${cwd}`);
 const ALL_DATA_ZIP_PATH = `${cwd}/rscantonese/data/words.hk/all.csv.gz`;
 
 const unzipProcess = Deno.run({
-  cmd: ["gunzip", ALL_DATA_ZIP_PATH],
+  cmd: ["gunzip", ALL_DATA_ZIP_PATH, "-f"],
   stdout: "piped",
   stderr: "piped",
 });
