@@ -16,30 +16,16 @@
 
 <div class="output-header">
 	<label for={name} class="label">Romanization</label>
-
 	<slot name="header" />
-
-	<!--  <ul role="list" class="switcher">  -->
-	<!--  {#each systems as system}  -->
-	<!--  <li>  -->
-	<!--  <button  -->
-	<!--  class="switcher-button"  -->
-	<!--  class:active={$currentTab === system}  -->
-	<!--  type="button"  -->
-	<!--  use:tab={system}>{system}</button  -->
-	<!--  >  -->
-	<!--  </li>  -->
-	<!--  {/each}  -->
-	<!--  </ul>  -->
 </div>
 <div class="output-wrapper">
-	<button class="overlay-button" type="button">
+	<button class="overlay-button" type="button" use:clipboard={ref} on:copy>
 		<CopyIcon class="copy-icon" />
 	</button>
 	<div class="output">
 		<!-- TODO get reference to a slot?  -->
 		<!--  class:placeholder={!result}  -->
-		<output bind:this={ref} {id} {name} {form} class="output-inner" use:clipboard on:copy>
+		<output bind:this={ref} {id} {name} {form} class="output-inner" >
 			<slot name="output" />
 		</output>
 	</div>
@@ -71,11 +57,19 @@
 		right: 1rem;
 		top: 1rem;
 		background-color: $white;
+		cursor: pointer;
+	}
+
+	:global(.overlay-button svg path) {
+        fill: $blue;
+	}
+
+	:global(.overlay-button:hover svg path) {
+        fill: darken($blue, 20%);
 	}
 
 	.output-wrapper {
 		position: relative;
-		cursor: pointer;
 		border-radius: 0.25rem;
 	}
 
@@ -85,9 +79,6 @@
 		color: $black;
 	}
 
-	.output-wrapper:hover {
-		outline: $outline-width dashed var(--color-text);
-	}
 
 	.placeholder {
 		@include placeholder-text;
@@ -103,3 +94,6 @@
 		font-weight: 700;
 	}
 </style>
+	<!--  .output-wrapper:hover {  -->
+		<!--  outline: $outline-width dashed var(--color-text);  -->
+	<!--  }  -->

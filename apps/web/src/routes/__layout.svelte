@@ -53,7 +53,7 @@
 	}
 
 	:global(.link:hover) {
-		color: lighten($blue, 20%);
+		color: darken($blue, 20%);
 	}
 
 	.shell {
