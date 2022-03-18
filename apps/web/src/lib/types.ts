@@ -4,7 +4,13 @@ export enum TargetPhoneticSystem {
 	ToneMarkYale = 'yale(tone mark)'
 }
 
-export type ResultTuple = [string, Array<string>];
+export type WordToken = {
+    jyutping: string,
+    pos: string
+}
+
+//  string for punctuation, null for unknown word
+export type ResultTuple = [string, Array<WordToken | string | null>];
 
 export type ConvertResponse = {
 	system_used: TargetPhoneticSystem;

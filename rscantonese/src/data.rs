@@ -1,4 +1,5 @@
-use wordshk_tools::parse::parse_dict;
+// use wordshk_tools::parse::parse_dict;
+use crate::token::InputToken;
 // use chat_parser::corpus::Corpus;
 // use chat_parser::Corpora;
 // use include_dir::{include_dir, Dir};
@@ -20,9 +21,30 @@ use wordshk_tools::parse::parse_dict;
 
 // corpora
 // }
+//
 
-pub fn wordshk() -> () {
-    static DATA_FILE: &'static str = include_str!("../data/words.hk/all.csv");
-    let dict = parse_dict(DATA_FILE.as_bytes());
-    println!("{:?}", dict);
+// pub fn wordshk() -> () {
+    // static DATA_FILE: &'static str = include_str!("../data/words.hk/all.csv");
+    // let dict = parse_dict(DATA_FILE.as_bytes());
+    // println!("{:?}", dict);
+// }
+
+pub fn mock() -> Vec<InputToken> {
+    vec![
+        InputToken {
+            word: "香港人".to_owned(),
+            jyutping: "hoeng1gong2jan4".to_owned(),
+            pos: "n".to_owned(),
+        },
+        InputToken {
+            word: "講".to_owned(),
+            jyutping: "gong2".to_owned(),
+            pos: "v".to_owned(),
+        },
+        InputToken {
+            word: "廣東話".to_owned(),
+            jyutping: "gwong2dung1waa2".to_owned(),
+            pos: "n".to_owned(),
+        },
+    ]
 }

@@ -1,21 +1,23 @@
 <script lang="ts" context="module">
+	import type { ResultTuple } from '$lib/types';
+	import mkTabs from '$lib/actions/mkTabs';
 	import Input from '$lib/inputs/Input.svelte';
 	import OutputArea from '$lib/Output.svelte';
 	import Button from '$lib/Button.svelte';
 	import { createForm } from 'felte';
 	import type { ValidatorConfig } from '@felte/validator-zod';
-	import { PROXY_ROOT, CONVERT_ACTION, MICROSERVICE_ROOT } from '$lib/const';
+	import { PROXY_ROOT, PARSE_ACTION, MICROSERVICE_ROOT } from '$lib/const';
 	import * as z from 'zod';
 	import { validator } from '@felte/validator-zod';
-	import { hasCantonese, isCantoneseOnly, isTraditionalOnly, hasNumber } from '$lib/predicate';
+	import { hasCantonese, isCantoneseOnly, hasNumber } from '$lib/predicate';
 	import mkToast from '$lib/toast';
 	import { getNotificationsContext } from 'svelte-notifications';
 	import { TargetPhoneticSystem, InvalidCode } from '$lib/types';
-	import { extractPhonetic } from '$lib/format';
 	import { handleReplaceArabicNumber } from '$lib/handler';
 	import { page } from '$app/stores';
 	import Faq from '$lib/Faq.svelte';
 	import { onMount } from 'svelte';
+	import { jyutpingToYale, jyutpingToTraditionalYale } from 'jyutping-helpers';
 	import PhaseBanner from '$lib/PhaseBanner.svelte';
 
 	export const load = async ({ url, fetch }) => {
@@ -26,12 +28,12 @@
 
 		if (input) {
 			const res = await fetch(
-				MICROSERVICE_ROOT + CONVERT_ACTION + `?${searchParams.toString()}`
+				MICROSERVICE_ROOT + PARSE_ACTION + `?${searchParams.toString()}`
 			).catch((e: unknown) => e);
 
 			if (res.ok) {
 				const body = await res.json();
-				result = extractPhonetic(body.results);
+				result = body.results;
 			} else {
 				errorMessage = 'Service is temporaily unavailable';
 			}
@@ -59,7 +61,7 @@
 <script lang="ts">
 	export let input: string;
 	export let faqEntities: Array<FAQEntity>;
-	export let result: Array<string> | null;
+	export let result: Array<ResultTuple> | null;
 	export let errorMessage: string;
 
 	let outputElem: HTMLOutputElement;
@@ -130,12 +132,16 @@
 		warnSchema
 	});
 
+	const { tab, currentTab } = mkTabs({
+		initial: TargetPhoneticSystem.Jyutping
+	});
+
 	const id = 'cantonese-to-jyutping';
 	const textareaName = 'convert-characters';
 	const outputName = 'romanization';
 	let textareaRef: HTMLTextAreaElement;
 
-	let hasUnknown = result?.findIndex((x) => x.startsWith('unknown')) >= 0;
+	let hasUnknown = result?.findIndex(([,jyutping]) => !jyutping) >= 0
 
 	$: errorCode = $errors[textareaName]?.[0];
 	$: warningCode = $warnings[textareaName]?.[0];
@@ -200,14 +206,49 @@
 	id="romanization"
 	bind:ref={outputElem}
 	name={outputName}
-	{result}
-	systems={Object.values(TargetPhoneticSystem)}
 	form={id}
 	placeholder={'ngo5 hai6 hoeng1 gong2 jan4'}
 	on:copy={() => {
 		toast.mkOk('Copied result to clipboard');
 	}}
 >
+	<div slot="header">
+		<ul role="list" class="switcher">
+			{#each Object.values(TargetPhoneticSystem) as system}
+				<li>
+					<button
+						class="switcher-button"
+						class:active={$currentTab === system}
+						type="button"
+						use:tab={system}>{system}</button
+					>
+				</li>
+			{/each}
+		</ul>
+	</div>
+	<div slot="output">
+		{#each result as [key, tokens]}
+			{#if !tokens}
+				{`unknown(${key})`}
+			{:else}
+				{#each tokens as token}
+					{#if typeof token === 'string'}
+						{token}
+					{:else}
+						<span class={`pos-${token.pos}`}>
+							{#if $currentTab === TargetPhoneticSystem.Jyutping}
+								{token.jyutping}
+							{:else if $currentTab === TargetPhoneticSystem.ToneNumberYale}
+								{jyutpingToYale(token.jyutping)}
+							{:else if $currentTab === TargetPhoneticSystem.ToneMarkYale}
+								{jyutpingToTraditionalYale(token.jyutping)}
+							{/if}
+						</span>
+					{/if}
+				{/each}
+			{/if}
+		{/each}
+	</div>
 	<div slot="warning">
 		{#if hasUnknown}
 			<div class="sm-separator" />
@@ -259,5 +300,39 @@ Expected output:
 			grid-template-columns: repeat(2, 1fr);
 			column-gap: 1rem;
 		}
+	}
+
+	.switcher {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+		padding: 0;
+		margin: 0;
+	}
+
+	.switcher-button {
+		@include center;
+		@include card-shadow;
+		padding: 12px;
+		text-transform: capitalize;
+		transition: background 300ms, color 300ms;
+		height: $input-header-height;
+		border-top-left-radius: 0.25rem;
+		border-top-right-radius: 0.25rem;
+		background-color: var(--color-unselected-button);
+		@include tablet {
+			min-width: 8rem;
+		}
+	}
+
+	.switcher-button:not(.active):hover {
+		color: var(--color-contrast-text);
+		background: var(--color-button-highlight);
+	}
+
+	.active {
+		cursor: default;
+		color: var(--color-contrast-text);
+		background: var(--color-button);
 	}
 </style>

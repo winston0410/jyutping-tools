@@ -3,7 +3,7 @@ type ConversionDict = {
 };
 // NOTE Assuming the input might have multiple characters per word in the array
 // Example inputs: ['ngo5', 'hai6', 'hoeng1gong2' 'jan4']
-type ConversionFn = (inputs: Array<string>) => Array<string>;
+type ConversionFn = (inputs: string) => string;
 
 const jyutpingToYaleDict: ConversionDict = {
   oe: "eu",
@@ -18,47 +18,39 @@ const jyutpingToYaleDict: ConversionDict = {
   jy: "y",
 };
 
-export const jyutpingToYale: ConversionFn = (inputs) => {
+export const jyutpingToYale: ConversionFn = (word) => {
   const dict = jyutpingToYaleDict;
   const numberRegex = /\d/;
-  const result = [...inputs];
-  let index = 0;
+  let i = 0;
+  let j = 1;
+  const mutable = [...word];
 
-  for (const word of result) {
-    let i = 0;
-    let j = 1;
-    const mutable = [...word];
+  while (i < mutable.length) {
+    const cur = mutable[i];
+    const doubleCur = mutable[i] + mutable[j];
 
-    while (i < mutable.length) {
-      const cur = mutable[i];
-      const doubleCur = mutable[i] + mutable[j];
-
-      // NOTE Check for double letters replacement first, as jyu > yu conversion will be eaten up by j -> y conversion
-      const doubleSub = dict[doubleCur];
-      if (doubleSub) {
-        //Check if ending consonant exists. Only do the conversion when
-        if (doubleCur !== "aa" || numberRegex.test(mutable[j + 1])) {
-          mutable[j] = "";
-          mutable[i] = doubleSub;
-        }
-        i++;
-        j++;
-      } else {
-        // NOTE Check for single letter replacement
-        const sub = dict[cur];
-        if (sub) {
-          mutable[i] = sub;
-        }
+    // NOTE Check for double letters replacement first, as jyu > yu conversion will be eaten up by j -> y conversion
+    const doubleSub = dict[doubleCur];
+    if (doubleSub) {
+      //Check if ending consonant exists. Only do the conversion when
+      if (doubleCur !== "aa" || numberRegex.test(mutable[j + 1])) {
+        mutable[j] = "";
+        mutable[i] = doubleSub;
       }
-
       i++;
       j++;
+    } else {
+      // NOTE Check for single letter replacement
+      const sub = dict[cur];
+      if (sub) {
+        mutable[i] = sub;
+      }
     }
-    result[index] = mutable.join("");
-    index++;
-  }
 
-  return result;
+    i++;
+    j++;
+  }
+  return mutable.join("");
 };
 
 const toneMarkDict: ConversionDict = {
@@ -81,109 +73,102 @@ const vowelDict = {
   n: true,
 };
 
-export const jyutpingToTraditionalYale: ConversionFn = (inputs) => {
+export const jyutpingToTraditionalYale: ConversionFn = (word) => {
   const dict = jyutpingToYaleDict;
   const numberRegex = /\d/;
-  const result = [...inputs];
-  let index = 0;
+  let i = 0;
+  let j = 1;
+  let k = 1;
+  let toneNumber = "";
+  const mutable = [...word];
 
-  for (const word of result) {
-    let i = 0;
-    let j = 1;
-    let k = 1;
-    let toneNumber = "";
-    const mutable = [...word];
+  while (i < mutable.length) {
+    if (!toneNumber && k < mutable.length) {
+      if (numberRegex.test(mutable[k])) {
+        toneNumber = mutable[k];
+        mutable[k] = "";
+      }
+      k++;
+    } else {
+      const cur = mutable[i];
+      const doubleCur = mutable[i] + mutable[j];
 
-    while (i < mutable.length) {
-      if (!toneNumber && k < mutable.length) {
-        if (numberRegex.test(mutable[k])) {
-          toneNumber = mutable[k];
-          mutable[k] = "";
+      // NOTE Check for double letters replacement first, as jyu > yu conversion will be eaten up by j -> y conversion
+      const doubleSub = dict[doubleCur];
+      if (doubleSub) {
+        //  Check if ending consonant exists. Only do the conversion when
+        if (doubleCur !== "aa" || numberRegex.test(mutable[j + 1])) {
+          mutable[j] = doubleSub[1];
+          mutable[i] = doubleSub[0];
         }
-        k++;
       } else {
-        const cur = mutable[i];
-        const doubleCur = mutable[i] + mutable[j];
-
-        // NOTE Check for double letters replacement first, as jyu > yu conversion will be eaten up by j -> y conversion
-        const doubleSub = dict[doubleCur];
-        if (doubleSub) {
-          //  Check if ending consonant exists. Only do the conversion when
-          if (doubleCur !== "aa" || numberRegex.test(mutable[j + 1])) {
-            mutable[j] = doubleSub[1];
-            mutable[i] = doubleSub[0];
-          }
-        } else {
-          // NOTE Check for single letter replacement
-          const sub = dict[cur];
-          if (sub) {
-            mutable[i] = sub;
-          }
+        // NOTE Check for single letter replacement
+        const sub = dict[cur];
+        if (sub) {
+          mutable[i] = sub;
         }
+      }
 
-        //  Handle tone replacement
-        if (vowelDict[cur] && toneNumber) {
-          switch (cur) {
-            case "m":
-              // NOTE Only add tone to m if the next characters is tone
-              if (!mutable[i + 1]) {
-                mutable[i] += toneMarkDict[toneNumber];
-                //  Move i and j forward to the last found tone position, to avoid match again after match
-                i = k;
-                j = i + 1;
-                toneNumber = "";
-              }
-              break;
-            case "n":
-              // NOTE check if being used as a vowel
-              //  The number will be stripped off previously
-              if (!mutable[i + 2]) {
-                mutable[i] += toneMarkDict[toneNumber][0];
-                mutable[i + 1] += toneMarkDict[toneNumber][1];
-                //  Move i and j forward to the last found tone position, to avoid match again after match
-                i = k;
-                j = i + 1;
-                toneNumber = "";
-              }
-              break;
-
-            default:
-              if (
-                toneNumber === "4" ||
-                toneNumber === "5" ||
-                toneNumber === "6"
-              ) {
-                if (
-                  vowelDict[mutable[j]] &&
-                  mutable[j] !== "m" &&
-                  mutable[j] !== "n"
-                ) {
-                  mutable[i] +=
-                    toneMarkDict[toneNumber].length === 1
-                      ? ""
-                      : toneMarkDict[toneNumber][0];
-                  mutable[j] += "h";
-                } else {
-                  mutable[i] += toneMarkDict[toneNumber];
-                }
-              } else {
-                mutable[i] += toneMarkDict[toneNumber];
-              }
+      //  Handle tone replacement
+      if (vowelDict[cur] && toneNumber) {
+        switch (cur) {
+          case "m":
+            // NOTE Only add tone to m if the next characters is tone
+            if (!mutable[i + 1]) {
+              mutable[i] += toneMarkDict[toneNumber];
               //  Move i and j forward to the last found tone position, to avoid match again after match
               i = k;
               j = i + 1;
               toneNumber = "";
-              break;
-          }
-        }
+            }
+            break;
+          case "n":
+            // NOTE check if being used as a vowel
+            //  The number will be stripped off previously
+            if (!mutable[i + 2]) {
+              mutable[i] += toneMarkDict[toneNumber][0];
+              mutable[i + 1] += toneMarkDict[toneNumber][1];
+              //  Move i and j forward to the last found tone position, to avoid match again after match
+              i = k;
+              j = i + 1;
+              toneNumber = "";
+            }
+            break;
 
-        i++;
-        j++;
+          default:
+            if (
+              toneNumber === "4" ||
+              toneNumber === "5" ||
+              toneNumber === "6"
+            ) {
+              if (
+                vowelDict[mutable[j]] &&
+                mutable[j] !== "m" &&
+                mutable[j] !== "n"
+              ) {
+                mutable[i] +=
+                  toneMarkDict[toneNumber].length === 1
+                    ? ""
+                    : toneMarkDict[toneNumber][0];
+                mutable[j] += "h";
+              } else {
+                mutable[i] += toneMarkDict[toneNumber];
+              }
+            } else {
+              mutable[i] += toneMarkDict[toneNumber];
+            }
+            //  Move i and j forward to the last found tone position, to avoid match again after match
+            i = k;
+            j = i + 1;
+            toneNumber = "";
+            break;
+        }
       }
+
+      i++;
+      j++;
     }
-    result[index] = mutable.join("");
-    index++;
   }
 
-  return result;
+  return mutable.join("");
 };

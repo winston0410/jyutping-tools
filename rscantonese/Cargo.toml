@@ -10,7 +10,7 @@ default = ["serde"]
 tests = []
 
 [dependencies]
-wordshk_tools = { git = "https://github.com/AlienKevin/wordshk-tools.git", branch = "main"}
+# wordshk_tools = { git = "https://github.com/AlienKevin/wordshk-tools.git", branch = "main"}
 wordseg = { path = "../wordseg"}
 # Dependencies for hkcancor
 chat-parser = { path = "../chat-parser"}
