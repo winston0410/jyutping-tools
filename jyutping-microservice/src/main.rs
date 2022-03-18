@@ -5,7 +5,7 @@ use std::env;
 mod middlewares;
 mod routes;
 mod services;
-// use rscantonese::data::wordshk;
+use rscantonese::data::mock;
 use rscantonese::RsCantonese;
 
 // Use debug assertion for checking PYTHONPATH
@@ -14,6 +14,7 @@ const BUILD_TIME: &str = include!("/tmp/timestamp.txt");
 
 pub struct AppData {
     rscantonese: RsCantonese,
+    pool: sqlx::Pool<sqlx::Postgres>,
 }
 
 #[actix_web::main]
@@ -28,9 +29,15 @@ async fn main() -> std::io::Result<()> {
 
     let mut rscantonese = RsCantonese::default();
 
-    // segmenter.train(&wordshk());
+    rscantonese.train(&mock());
 
-    let state = web::Data::new(AppData { rscantonese });
+    let state = web::Data::new(AppData {
+        rscantonese,
+        pool: sqlx::postgres::PgPoolOptions::new()
+            .connect(&env::var("DATABASE_URL").expect("You should set env variable DATABASE_URL."))
+            .await
+            .expect("Failed to initialize connection with database"),
+    });
 
     HttpServer::new(move || {
         App::new()
