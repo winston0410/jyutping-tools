@@ -16,6 +16,11 @@ pub struct RsCantonese {
 pub type Result = Vec<(String, Option<OutputToken>)>;
 
 impl RsCantonese {
+    /// Helper function for check if the result has unknown value
+    pub fn has_unknown(result: &[(String, Option<OutputToken>)]) -> bool {
+        result.iter().any(|(_, token)| token.is_none())
+    }
+
     // Reason why we use Into and AsRef
     //REF https://discord.com/channels/442252698964721669/947648480799752192
 
@@ -114,5 +119,16 @@ mod unit_tests {
                 }
             ]),
         );
+    }
+
+    #[test]
+    fn should_detect_unknown() {
+        let mut rscantonese = RsCantonese::default();
+
+        let tokens = rscantonese.parse("長");
+
+        let result = RsCantonese::has_unknown(&tokens);
+
+        assert_eq!(result, true);
     }
 }

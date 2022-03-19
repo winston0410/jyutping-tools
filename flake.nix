@@ -64,6 +64,7 @@
               pkgconfig
               # For testing postprocessing data with Github Action
               deno
+              sqlx-cli
             ];
             shellHook = ''
               # Disable pre-commit for now
