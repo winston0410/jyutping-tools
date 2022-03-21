@@ -9,3 +9,6 @@ build:
 
 check:
 	cargo check
+
+doc:
+	cargo doc --open

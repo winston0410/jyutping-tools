@@ -1,11 +1,5 @@
 #[cfg(test)]
-mod tests {
-    // #[test]
-    // #[should_panic]
-    // fn should_panic_when_given_invalid_max_word_length() {
-    // wordseg::Segmenter::default().max_word_length(0);
-    // }
-
+mod forward_maximal {
     #[test]
     fn should_predicts_english() {
         let data: Vec<String> = vec![
@@ -20,14 +14,16 @@ mod tests {
         // the calling of these functions should not affect the ownership of segmenter
         segmenter.fit(&data).update_constraint();
 
-        let result = segmenter.predict("thatisadog");
+        let result = segmenter.forward_predict("thatisadog");
 
         assert_eq!(result, vec!["that", "is", "a", "d", "o", "g"]);
     }
 
     #[test]
-    fn should_predicts_unicode_characters() {
-        let data: Vec<String> = vec!["我", "係", "香港", "人"]
+    // This test is to show that incorrect result you could get by simple using forward maximal
+    // segmentation
+    fn should_handle_unicode() {
+        let data: Vec<String> = vec!["研究", "研究生", "生命", "命", "的", "起源"]
             .into_iter()
             .map(String::from)
             .collect();
@@ -36,9 +32,9 @@ mod tests {
 
         segmenter.fit(&data).update_constraint();
 
-        let result = segmenter.predict("佢哋係香港人");
+        let result = segmenter.forward_predict("研究生命的起源");
 
-        assert_eq!(result, vec!["佢", "哋", "係", "香港", "人"]);
+        assert_eq!(result, vec!["研究生", "命", "的", "起源"]);
     }
 
     #[test]
@@ -52,8 +48,49 @@ mod tests {
 
         segmenter.fit(&data).update_constraint();
 
-        let result = segmenter.predict("香港人講廣東話");
+        let result = segmenter.forward_predict("香港人講廣東話");
 
         assert_eq!(result, vec!["香港人", "講", "廣東話"]);
     }
 }
+
+#[cfg(test)]
+mod backward_maximal {
+    #[test]
+    // This test is to show that you could get better result by simple using reverse maximal
+    // segmentation
+    fn should_handle_unicode() {
+        let data: Vec<String> = vec!["研究", "研究生", "生命", "命", "的", "起源"]
+            .into_iter()
+            .map(String::from)
+            .collect();
+
+        let mut segmenter = wordseg::Segmenter::default();
+
+        segmenter.fit(&data).update_constraint();
+
+        let result = segmenter.reverse_predict("研究生命的起源");
+
+        assert_eq!(result, vec!["研究", "生命", "的", "起源"]);
+    }
+}
+
+
+// #[cfg(test)]
+// mod bidirectional_maximal {
+    // #[test]
+    // fn should_handle_unicode() {
+        // let data: Vec<String> = vec!["研究", "研究生", "生命", "命", "的", "起源"]
+            // .into_iter()
+            // .map(String::from)
+            // .collect();
+
+        // let mut segmenter = wordseg::Segmenter::default();
+
+        // segmenter.fit(&data).update_constraint();
+
+        // let result = segmenter.bidirectional_predict("研究生命的起源");
+
+        // assert_eq!(result, vec!["研究", "生命", "的", "起源"]);
+    // }
+// }
