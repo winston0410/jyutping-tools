@@ -16,6 +16,28 @@ pub struct RsCantonese {
 pub type Result = Vec<(String, Option<OutputToken>)>;
 
 impl RsCantonese {
+    ///Helper function to get the first and longest unknown token
+    pub fn find_unknown(result: &[(String, Option<OutputToken>)]) -> String {
+        let mut unknown = "".to_owned();
+        let mut found = false;
+
+        for (key, token) in result.iter() {
+            if token.is_none() {
+                if !found {
+                    found = true;
+                }
+                unknown.push_str(key);
+            } else {
+                //This will execute after the iterated on the first known token
+                if found {
+                    return unknown;
+                }
+            }
+        }
+
+        unknown
+    }
+
     /// Helper function for check if the result has unknown value
     pub fn has_unknown(result: &[(String, Option<OutputToken>)]) -> bool {
         result.iter().any(|(_, token)| token.is_none())
@@ -32,7 +54,7 @@ impl RsCantonese {
     where
         T: AsRef<str> + Into<String>,
     {
-        let segmented = self.segmenter.predict(unsegmented);
+        let segmented = self.segmenter.bidirectional_predict(unsegmented);
 
         // Need to handle punctuation here, as their length is one only
         segmented
@@ -45,8 +67,8 @@ impl RsCantonese {
             .collect()
     }
 
-    /// Train the model
-    pub fn train(&mut self, data: &[Corpus]) -> &Self {
+    /// Train the model with multiple tokens
+    pub fn train(&mut self, data: &[InputToken]) -> &Self {
         for InputToken {
             jyutping,
             pos,
@@ -130,5 +152,22 @@ mod unit_tests {
         let result = RsCantonese::has_unknown(&tokens);
 
         assert_eq!(result, true);
+    }
+
+    #[test]
+    fn should_find_unknown() {
+        let mut rscantonese = RsCantonese::default();
+
+        rscantonese.train(&vec![InputToken {
+            word: "香港".to_owned(),
+            jyutping: "hoeng1gong2".to_owned(),
+            pos: "n".to_owned(),
+        }]);
+
+        let tokens = rscantonese.parse("我係香港人");
+
+        let unknown = RsCantonese::find_unknown(&tokens);
+
+        assert_eq!(unknown, "我係".to_owned());
     }
 }

@@ -1,5 +1,15 @@
-pub use chat_parser::corpus::Corpus as InputToken;
 use serde::{Deserialize, Serialize};
+
+#[derive(Debug)]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+pub struct InputToken {
+    /// Cantonese characters
+    pub word: String,
+    // /// Jyutping romanization
+    pub jyutping: String,
+    // /// Part-of-speech
+    pub pos: String,
+}
 
 #[derive(Debug, Clone)]
 // Use feature = "tests" instead of test, as simply using test doesnt cover integrated_test
