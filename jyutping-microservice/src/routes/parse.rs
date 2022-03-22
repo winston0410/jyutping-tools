@@ -1,9 +1,9 @@
-use crate::services;
 use crate::routes::HttpError;
+use crate::services;
 use crate::AppData;
 use actix_web::{web, HttpResponse, Result};
-use serde::{Deserialize, Serialize};
 use rscantonese::RsCantonese;
+use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize)]
 pub struct RequestQuery {
@@ -21,13 +21,20 @@ pub async fn parse_cantonese_characters(
     query: web::Query<RequestQuery>,
     state: web::Data<AppData>,
 ) -> Result<HttpResponse, HttpError> {
-    let results = state.rscantonese.parse(&query.input);
+    let rscantonese = state.rscantonese.lock().unwrap();
+    let results = rscantonese.parse(&query.input);
 
     if RsCantonese::has_unknown(&results) {
-        services::unknown::insert_unknown_sentence(&state.pool, &query.input);
-        //Check if the unknown has been logged previously
-        //
-        //If not, save the unknown sentence to the database
+        let res = services::unknown::insert_unknown_sentence(
+            &state.pool,
+            &RsCantonese::find_unknown(&results),
+            &query.input,
+        )
+        .await;
+
+        if res.is_err() {
+            return Err(HttpError::ServerError {});
+        }
     }
 
     Ok(HttpResponse::Ok().json(ConvertResponseBody { results }))

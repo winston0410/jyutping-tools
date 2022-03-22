@@ -7,13 +7,14 @@ mod routes;
 mod services;
 use rscantonese::data::mock;
 use rscantonese::RsCantonese;
+use std::sync::Mutex;
 
 // Use debug assertion for checking PYTHONPATH
 //REF https://stackoverflow.com/questions/39204908/how-to-check-release-debug-builds-using-cfg-in-rust
 const BUILD_TIME: &str = include!("/tmp/timestamp.txt");
 
 pub struct AppData {
-    rscantonese: RsCantonese,
+    rscantonese: Mutex<RsCantonese>,
     pool: sqlx::Pool<sqlx::Postgres>,
 }
 
@@ -32,7 +33,7 @@ async fn main() -> std::io::Result<()> {
     rscantonese.train(&mock());
 
     let state = web::Data::new(AppData {
-        rscantonese,
+        rscantonese: Mutex::new(rscantonese),
         pool: sqlx::postgres::PgPoolOptions::new()
             .connect(&env::var("DATABASE_URL").expect("You should set env variable DATABASE_URL."))
             .await
@@ -58,7 +59,8 @@ async fn main() -> std::io::Result<()> {
                     .wrap(middlewares::CacheHeader::default())
                     .wrap(middleware::DefaultHeaders::new().add((LAST_MODIFIED, BUILD_TIME)))
                     .configure(routes::parse::setup)
-                    .configure(routes::coverage::setup),
+                    .configure(routes::coverage::setup)
+                    .configure(routes::train::setup),
             )
     })
     .bind("0.0.0.0:8080")?
