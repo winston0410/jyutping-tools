@@ -28,7 +28,10 @@ impl From<actix_web::Error> for HttpError {
 
         if let Some(err) = e.as_error::<actix_web::error::JsonPayloadError>() {
             return match err {
-                _ => Self::ServerError {},
+                actix_web::error::JsonPayloadError::Deserialize(err) => {
+                    Self::InvalidRequest { message: err.to_string() }
+                },
+                _ => Self::ServerError {}
             };
         }
 

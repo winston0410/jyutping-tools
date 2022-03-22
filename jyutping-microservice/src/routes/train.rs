@@ -2,7 +2,6 @@ use crate::routes::HttpError;
 use crate::services;
 use crate::AppData;
 use actix_web::{web, HttpResponse, Result};
-use rscantonese::RsCantonese;
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize)]
@@ -25,13 +24,12 @@ pub async fn train_model(
     rscantonese.train(&unwrapped.tokens);
 
     for token in unwrapped.tokens.iter() {
-        //Insert the new token into database
-
-        //Find and remove identical tokens from the database
+        services::known::insert_known_token(&state.pool, &token.word, &token.jyutping, &token.pos)
+            .await;
         services::unknown::remove_unknown_sentence(&state.pool, &token.word).await;
     }
 
-    Ok(HttpResponse::Ok().finish())
+    Ok(HttpResponse::NoContent().finish())
 }
 
 pub fn setup(cfg: &mut web::ServiceConfig) {
