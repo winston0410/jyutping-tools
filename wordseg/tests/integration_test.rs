@@ -75,22 +75,21 @@ mod backward_maximal {
     }
 }
 
+#[cfg(test)]
+mod bidirectional_maximal {
+    #[test]
+    fn should_handle_unicode() {
+        let data: Vec<String> = vec!["研究", "研究生", "生命", "命", "的", "起源"]
+            .into_iter()
+            .map(String::from)
+            .collect();
 
-// #[cfg(test)]
-// mod bidirectional_maximal {
-    // #[test]
-    // fn should_handle_unicode() {
-        // let data: Vec<String> = vec!["研究", "研究生", "生命", "命", "的", "起源"]
-            // .into_iter()
-            // .map(String::from)
-            // .collect();
+        let mut segmenter = wordseg::Segmenter::default();
 
-        // let mut segmenter = wordseg::Segmenter::default();
+        segmenter.fit(&data).update_constraint();
 
-        // segmenter.fit(&data).update_constraint();
+        let result = segmenter.bidirectional_predict("研究生命的起源");
 
-        // let result = segmenter.bidirectional_predict("研究生命的起源");
-
-        // assert_eq!(result, vec!["研究", "生命", "的", "起源"]);
-    // }
-// }
+        assert_eq!(result, vec!["研究", "生命", "的", "起源"]);
+    }
+}
