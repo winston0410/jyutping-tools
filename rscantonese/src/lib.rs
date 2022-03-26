@@ -60,8 +60,8 @@ impl RsCantonese {
         segmented
             .into_iter()
             .map(|word| {
-                let jyutpings = self.conversion_dict.get(&word).map(ToOwned::to_owned);
-                (word, jyutpings)
+                let output_token = self.conversion_dict.get(&word).map(ToOwned::to_owned);
+                (word, output_token)
             })
             .map(transformer::handle_punctuations)
             .collect()

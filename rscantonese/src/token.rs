@@ -18,6 +18,8 @@ pub struct InputToken {
 pub struct WordToken {
     pub pos: String,
     pub jyutping: String,
+    //TODO Change the type of jyutping into Vec and handle multiple pronunciations per token
+    // pub jyutping: Vec<String>,
 }
 
 #[derive(Debug, Clone)]

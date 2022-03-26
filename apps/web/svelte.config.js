@@ -8,20 +8,21 @@ import { imagetools } from 'vite-imagetools';
 
 const filePath = dirname(fileURLToPath(import.meta.url));
 const sassPath = `${filePath}/src/lib`;
+const mdsvexExtension = ['.svelte', '.svelte.md'];
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	compilerOptions: {
 		immutable: true
 	},
+	extensions: mdsvexExtension,
 	preprocess: [
-		mdsvex({ extensions: ['.md'] }),
+		mdsvex({ extensions: mdsvexExtension }),
 		preprocess({
 			scss: {
 				prependData: `@import '${sassPath}/scss/vars.scss';`
 			}
 		})
 	],
-
 	kit: {
 		adapter: adapter(),
 		vite: {

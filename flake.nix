@@ -71,11 +71,13 @@
               # Setting pre-commit
               # pre-commit install
               # Setting NPM
+              echo "Load all env from .env.local"
+              source "$(pwd)/jyutping-microservice/.env.local"
               echo "Pointing PATH to binaries in NPM..."
               export PATH=$PATH:$(npm bin)
               cargo update
-              echo "Starting Ory Kratos..."
-              netstat -tulpn | rg 4433 || podman-compose up --build --force-recreate
+              # echo "Starting Ory Kratos..."
+              # netstat -tulpn | rg 4433 || podman-compose up --build --force-recreate
               echo "All done!"
             '';
           }) { inherit pkgs; });
