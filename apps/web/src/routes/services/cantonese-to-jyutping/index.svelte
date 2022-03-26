@@ -141,7 +141,7 @@
 	const outputName = 'romanization';
 	let textareaRef: HTMLTextAreaElement;
 
-	let hasUnknown = result?.findIndex(([,jyutping]) => !jyutping) >= 0
+	let hasUnknown = result?.findIndex(([, jyutping]) => !jyutping) >= 0;
 
 	$: errorCode = $errors[textareaName]?.[0];
 	$: warningCode = $warnings[textareaName]?.[0];
@@ -227,27 +227,29 @@
 		</ul>
 	</div>
 	<div slot="output">
-		{#each result as [key, tokens]}
-			{#if !tokens}
-				{`unknown(${key})`}
-			{:else}
-				{#each tokens as token}
-					{#if typeof token === 'string'}
-						{token}
-					{:else}
-						<span class={`pos-${token.pos}`}>
-							{#if $currentTab === TargetPhoneticSystem.Jyutping}
-								{token.jyutping}
-							{:else if $currentTab === TargetPhoneticSystem.ToneNumberYale}
-								{jyutpingToYale(token.jyutping)}
-							{:else if $currentTab === TargetPhoneticSystem.ToneMarkYale}
-								{jyutpingToTraditionalYale(token.jyutping)}
-							{/if}
-						</span>
-					{/if}
-				{/each}
-			{/if}
-		{/each}
+		{#if result}
+			{#each result as [key, tokens]}
+				{#if !tokens}
+					{`unknown(${key})`}
+				{:else}
+					{#each tokens as token}
+						{#if typeof token === 'string'}
+							{token}
+						{:else}
+							<span class={`pos-${token.pos}`}>
+								{#if $currentTab === TargetPhoneticSystem.Jyutping}
+									{token.jyutping}
+								{:else if $currentTab === TargetPhoneticSystem.ToneNumberYale}
+									{jyutpingToYale(token.jyutping)}
+								{:else if $currentTab === TargetPhoneticSystem.ToneMarkYale}
+									{jyutpingToTraditionalYale(token.jyutping)}
+								{/if}
+							</span>
+						{/if}
+					{/each}
+				{/if}
+			{/each}
+		{/if}
 	</div>
 	<div slot="warning">
 		{#if hasUnknown}
