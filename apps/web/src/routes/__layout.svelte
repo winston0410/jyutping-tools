@@ -20,6 +20,7 @@
 	<span class="logo">jyut.info</span>
 	<span class="xs-icon">Alpha</span>
 </header>
+
 <Notifications item={Toast}>
 	<main id="main-content" class="shell">
 		<slot />
