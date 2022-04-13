@@ -2,11 +2,7 @@
 
 members = [
     "jyutping-microservice",
-    "wordseg",
     "rscantonese",
-    "wasmcantonese",
-    "chat-parser",
-    "variant-map-parser"
 ]
 
 [profile.dev.package."*"]
