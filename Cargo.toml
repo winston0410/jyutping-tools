@@ -11,5 +11,5 @@ opt-level = 3
 [profile.release]
 lto = true
 
-[profile.release.package.wasmcantonese]
-opt-level = "s"
+# [profile.release.package.wasmcantonese]
+# opt-level = "s"
