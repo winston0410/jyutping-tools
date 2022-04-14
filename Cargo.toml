@@ -3,6 +3,7 @@
 members = [
     "jyutping-microservice",
     "rscantonese",
+    "wikitext-cleaner"
 ]
 
 [profile.dev.package."*"]
