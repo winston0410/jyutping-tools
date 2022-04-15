@@ -4,7 +4,7 @@ mod lib;
 use std::fs::{read_to_string, write};
 
 
-/// Clean up plain text retrived from Wikipedia
+/// Clean up plain text retrived from Wikipedia. This will transform the file in-place.
 #[derive(Parser, Debug)]
 struct Args {
     /// Path for the file for preprocessing
