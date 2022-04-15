@@ -17,11 +17,14 @@ jobs:
         with:
           command: build
           args: -p wikitext-cleaner --release --all-features
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
+          automatic_release_tag: "${{ steps.date.outputs.date }}"
           prerelease: true
-          title: "wikitext-extractor (${{ steps.date.outputs.date }})"
+          title: "wikitext-extractor"
           files: |
             ./target/release/wikitext-cleaner
