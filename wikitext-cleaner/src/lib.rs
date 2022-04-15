@@ -1,15 +1,15 @@
-use nom::branch::alt;
+
 use nom::branch::permutation;
 use nom::bytes::complete::tag;
 use nom::bytes::complete::take_until;
 use nom::character::complete::line_ending;
-use nom::character::complete::space0;
+
 use nom::combinator::opt;
 use nom::combinator::recognize;
 use nom::multi::many0;
-use nom::multi::separated_list0;
+
 use nom::sequence::delimited;
-use nom::sequence::pair;
+
 use nom::sequence::terminated;
 use nom::IResult;
 

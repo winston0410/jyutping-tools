@@ -1,8 +1,8 @@
 use clap::{Command, ErrorKind, Parser};
 use std::path::Path;
 mod lib;
-use std::fs::{read_to_string, write, File};
-use std::io::{BufRead, BufReader};
+use std::fs::{read_to_string, write};
+
 
 /// Clean up plain text retrived from Wikipedia
 #[derive(Parser, Debug)]
