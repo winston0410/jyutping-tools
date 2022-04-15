@@ -22,7 +22,7 @@ fn main() {
 
     match content {
         Ok(x) => {
-            let transformed = lib::transform(&x);
+            let transformed = lib::transform(&x).replace("__NOEDITSECTION__", "");
             write(&path, transformed).unwrap();
         }
         Err(x) => {

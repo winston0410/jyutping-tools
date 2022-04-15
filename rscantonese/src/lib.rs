@@ -1,14 +1,67 @@
+use tokenizers::decoders::DecoderWrapper;
 use tokenizers::models::bpe::BpeTrainer;
-use tokenizers::tokenizer::{EncodeInput, Tokenizer, TokenizerImpl, AddedToken};
 use tokenizers::models::bpe::BPE;
+use tokenizers::normalizers::BertNormalizer;
 use tokenizers::normalizers::NormalizerWrapper;
+use tokenizers::pre_tokenizers::bert::BertPreTokenizer;
 use tokenizers::pre_tokenizers::PreTokenizerWrapper;
 use tokenizers::processors::PostProcessorWrapper;
-use tokenizers::decoders::DecoderWrapper;
+use tokenizers::tokenizer::{AddedToken, EncodeInput, Tokenizer};
+use tokenizers::TokenizerBuilder;
+use tokenizers::decoders::bpe::BPEDecoder;
+use tokenizers::processors::bert::BertProcessing;
 
 pub struct RsCantoneseConfig {
-    /// Path for saving the trained artifect
-    model_path: std::path::PathBuf
+    /// Path for saving the trained artifect. Default to `$TMP_DIR/rscantonese.json`
+    model_path: std::path::PathBuf,
+    vocab_size: usize,
+    files: Vec<String>
+}
+
+impl RsCantoneseConfig {
+    pub fn train(&self) -> RsCantonese {
+        let mut trainer = BpeTrainer::builder()
+            .vocab_size(self.vocab_size)
+            .special_tokens(vec![AddedToken::from("UNK", true)])
+            .build();
+
+        let mut tokenizer_builder = TokenizerBuilder::<
+            BPE,
+            NormalizerWrapper,
+            PreTokenizerWrapper,
+            PostProcessorWrapper,
+            DecoderWrapper,
+        >::new()
+        .with_model(BPE::default())
+        .with_normalizer(Some(NormalizerWrapper::Sequence(
+            tokenizers::normalizers::utils::Sequence::new(vec![NormalizerWrapper::BertNormalizer(
+                BertNormalizer::new(true, true, None, true),
+            )]),
+        )))
+        .with_pre_tokenizer(Some(PreTokenizerWrapper::Sequence(
+            tokenizers::pre_tokenizers::sequence::Sequence::new(vec![
+                PreTokenizerWrapper::BertPreTokenizer(BertPreTokenizer),
+            ]),
+        )))
+        .with_post_processor(Some(PostProcessorWrapper::Bert(BertProcessing::default())))
+        .with_decoder(Some(
+            DecoderWrapper::BPE(BPEDecoder::default())
+        ))
+        .build()
+        .unwrap();
+
+        // let files = vec!["./data/wikidump/wikitext.raw".into()];
+
+        tokenizer_builder
+            .train_from_files(&mut trainer, self.files.to_owned())
+            .unwrap()
+            .save(&self.model_path, false)
+            .unwrap();
+
+        let tokenizer = Tokenizer::from_file(&self.model_path).unwrap();
+
+        RsCantonese { tokenizer }
+    }
 }
 
 impl Default for RsCantoneseConfig {
@@ -16,42 +69,10 @@ impl Default for RsCantoneseConfig {
         let mut model_path = std::env::temp_dir();
         model_path.push("rscantonese.json");
 
-        RsCantoneseConfig { model_path }
+        RsCantoneseConfig { model_path, vocab_size: 200000, files: Vec::new() }
     }
 }
 
-impl RsCantoneseConfig {
-    pub fn train(&self) -> RsCantonese {
-        let mut trainer = BpeTrainer::builder().special_tokens(vec![
-            AddedToken::from("[UNK]", true)
-        ]).build();
-
-        let mut tokenizerImpl: TokenizerImpl<
-            BPE,
-            NormalizerWrapper,
-            PreTokenizerWrapper,
-            PostProcessorWrapper,
-            DecoderWrapper,
-        > = TokenizerImpl::new(
-            BPE::builder()
-                .unk_token("[UNK]".to_string())
-                .build()
-                .unwrap(),
-        );
-
-        let files = vec![
-            "./data/wikitext.raw".into(),
-        ];
-
-        tokenizerImpl.train_from_files(&mut trainer, files).unwrap();
-
-        tokenizerImpl.save(&self.model_path, false).unwrap();
-
-        let tokenizer = Tokenizer::from_file(&self.model_path).unwrap();
-
-        RsCantonese { tokenizer }
-    }
-}
 pub struct RsCantonese {
     tokenizer: Tokenizer,
 }
