@@ -17,6 +17,7 @@ fn match_doc_tag(input: &str) -> IResult<&str, &str> {
     recognize(permutation((tag("<doc"), take_until(">"), tag(">"))))(input)
 }
 
+#[cfg(test)]
 mod test_doc_tag {
     use super::*;
 
