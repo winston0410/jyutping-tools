@@ -26,7 +26,9 @@ jobs:
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "${{ steps.vars.outputs.sha_short }}"
+          # automatic_release_tag: "${{ steps.vars.outputs.sha_short }}"
+          # Use latest as tag for now
+          automatic_release_tag: "latest"
           prerelease: true
           title: "wikitext-extractor(${{ steps.date.outputs.date }})"
           files: |
