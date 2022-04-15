@@ -1,8 +1,8 @@
-use clap::{Parser, Command, ErrorKind};
+use clap::{Command, ErrorKind, Parser};
 use std::path::Path;
 mod lib;
-use std::fs::{File, read_to_string};
-use std::io::{BufReader, BufRead};
+use std::fs::{read_to_string, write, File};
+use std::io::{BufRead, BufReader};
 
 /// Clean up plain text retrived from Wikipedia
 #[derive(Parser, Debug)]
@@ -22,12 +22,9 @@ fn main() {
 
     match content {
         Ok(x) => {
-            //Parse with nom
             let transformed = lib::transform(&x);
-            println!("{:?}", transformed);
-
-            //Write file
-        },
+            write(&path, transformed).unwrap();
+        }
         Err(x) => {
             cmd.error(ErrorKind::Io, x);
         }
