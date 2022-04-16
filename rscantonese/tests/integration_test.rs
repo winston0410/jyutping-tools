@@ -1,11 +1,17 @@
-// #[cfg(test)]
-// mod tests {
-//     #[test]
-//     fn should_segment_correctly() {
-//         let rscantonese = rscantonese::RsCantoneseConfig::default().train();
-//         // let rscantonese = rscantonese::RsCantonese::new(&cfg);
-//         let result = rscantonese.segment("我係香港人。");
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn should_segment_correctly() {
+        let token = std::env::var("GITHUB_TOKEN").unwrap();
 
-//         assert_eq!(result, ["我", "係", "香港人", "。"]);
-//     }
-// }
+        let fetcher = rscantonese::utils::GitHubFetcher::new(&token);
+
+        let path = &fetcher.get("https://raw.githubusercontent.com/winston0410/nlp-data/develop/wikidump.tar.gz", "wikidump.tar.gz");
+        // let rscantonese = rscantonese::RsCantoneseConfig::default().train();
+        // let result = rscantonese.segment("我係香港人。");
+
+        // assert_eq!(result, ["我", "係", "香港人", "。"]);
+
+        assert_eq!(true, false);
+    }
+}

@@ -8,3 +8,4 @@ result
 **/build
 pgdata
 **/*.gz
+**/.env.local

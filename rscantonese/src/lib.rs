@@ -15,14 +15,14 @@ pub mod utils;
 pub struct RsCantoneseConfig {
     /// Path for saving the trained artifect. Default to `$TMP_DIR/rscantonese.json`
     model_path: std::path::PathBuf,
-    vocab_size: usize,
+    // vocab_size: usize,
     files: Vec<String>,
 }
 
 impl RsCantoneseConfig {
     pub fn train(&self) -> RsCantonese {
         let mut trainer = BpeTrainer::builder()
-            .vocab_size(self.vocab_size)
+            // .vocab_size(self.vocab_size)
             .special_tokens(vec![AddedToken::from("UNK", true)])
             .build();
 
@@ -49,8 +49,6 @@ impl RsCantoneseConfig {
         .build()
         .unwrap();
 
-        // let files = vec!["./data/wikidump/wikitext.raw".into()];
-
         tokenizer_builder
             .train_from_files(&mut trainer, self.files.to_owned())
             .unwrap()
@@ -70,7 +68,7 @@ impl Default for RsCantoneseConfig {
 
         RsCantoneseConfig {
             model_path,
-            vocab_size: 200000,
+            // vocab_size: 200000,
             files: Vec::new(),
         }
     }
