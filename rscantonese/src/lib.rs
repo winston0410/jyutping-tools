@@ -1,3 +1,4 @@
+use tokenizers::decoders::bpe::BPEDecoder;
 use tokenizers::decoders::DecoderWrapper;
 use tokenizers::models::bpe::BpeTrainer;
 use tokenizers::models::bpe::BPE;
@@ -5,17 +6,17 @@ use tokenizers::normalizers::BertNormalizer;
 use tokenizers::normalizers::NormalizerWrapper;
 use tokenizers::pre_tokenizers::bert::BertPreTokenizer;
 use tokenizers::pre_tokenizers::PreTokenizerWrapper;
+use tokenizers::processors::bert::BertProcessing;
 use tokenizers::processors::PostProcessorWrapper;
 use tokenizers::tokenizer::{AddedToken, EncodeInput, Tokenizer};
 use tokenizers::TokenizerBuilder;
-use tokenizers::decoders::bpe::BPEDecoder;
-use tokenizers::processors::bert::BertProcessing;
+pub mod utils;
 
 pub struct RsCantoneseConfig {
     /// Path for saving the trained artifect. Default to `$TMP_DIR/rscantonese.json`
     model_path: std::path::PathBuf,
     vocab_size: usize,
-    files: Vec<String>
+    files: Vec<String>,
 }
 
 impl RsCantoneseConfig {
@@ -44,9 +45,7 @@ impl RsCantoneseConfig {
             ]),
         )))
         .with_post_processor(Some(PostProcessorWrapper::Bert(BertProcessing::default())))
-        .with_decoder(Some(
-            DecoderWrapper::BPE(BPEDecoder::default())
-        ))
+        .with_decoder(Some(DecoderWrapper::BPE(BPEDecoder::default())))
         .build()
         .unwrap();
 
@@ -69,7 +68,11 @@ impl Default for RsCantoneseConfig {
         let mut model_path = std::env::temp_dir();
         model_path.push("rscantonese.json");
 
-        RsCantoneseConfig { model_path, vocab_size: 200000, files: Vec::new() }
+        RsCantoneseConfig {
+            model_path,
+            vocab_size: 200000,
+            files: Vec::new(),
+        }
     }
 }
 

@@ -1,2 +1,2 @@
 test:
-	cargo test --features tests
+	source ./.env.local && cargo test --features tests
