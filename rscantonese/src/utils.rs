@@ -23,6 +23,7 @@ impl GitHubFetcher {
         auth_value.is_sensitive();
 
         headers.insert(reqwest::header::AUTHORIZATION, auth_value);
+        headers.insert(reqwest::header::ACCEPT, reqwest::header::HeaderValue::from_static("application/vnd.github.v3+json"));
 
         GitHubFetcher {
             client: reqwest::ClientBuilder::new()
