@@ -1,5 +1,6 @@
 use async_compression::futures::bufread::GzipDecoder;
 use async_tar::Archive;
+use futures::StreamExt;
 use futures::io::BufReader;
 use futures::io::Error;
 use futures::io::ErrorKind;

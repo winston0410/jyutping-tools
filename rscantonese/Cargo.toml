@@ -14,7 +14,7 @@ tests = []
 tokenizers = { version = "0.11.3", features = [ "http" ] }
 reqwest = { version = "0.11.10", optional = true, features = [ "stream" ] }
 async-compression = { version = "0.3.12", optional = true, features = [ "futures-io", "gzip" ] }
-futures = { version = "0.3.21", optional = true}
+futures = { version = "0.3.21", optional = true }
 async-tar = { version = "0.4.2", optional = true }
 
 [dev-dependencies]
