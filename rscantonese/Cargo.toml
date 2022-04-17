@@ -11,6 +11,7 @@ utils = [ "dep:reqwest", "dep:async-compression", "dep:async-tar", "dep:futures"
 tests = []
 
 [dependencies]
+rust-bert = { version = "0.17.0" }
 tokenizers = { version = "0.11.3", features = [ "http" ] }
 typed-builder = "0.10.0"
 reqwest = { version = "0.11.10", optional = true, features = [ "stream" ] }

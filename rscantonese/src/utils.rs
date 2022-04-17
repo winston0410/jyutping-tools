@@ -131,21 +131,21 @@ impl GitHubFetcher {
     }
 }
 
-#[cfg(test)]
-mod test_get_file {
-    use super::*;
+// #[cfg(test)]
+// mod test_get_file {
+//     use super::*;
 
-    #[tokio::test]
-    async fn should_download_file() {
-        let token = std::env::var("GITHUB_TOKEN").unwrap();
+//     #[tokio::test]
+//     async fn should_download_file() {
+//         let token = std::env::var("GITHUB_TOKEN").unwrap();
 
-        let path = GitHubFetcher::new(&token)
-            .get("https://raw.githubusercontent.com/winston0410/nlp-data/develop/wikidump.tar.gz")
-            .await
-            .unwrap();
+//         let path = GitHubFetcher::new(&token)
+//             .get("https://raw.githubusercontent.com/winston0410/nlp-data/develop/wikidump.tar.gz")
+//             .await
+//             .unwrap();
 
-        assert_eq!(path[0].exists(), true)
-    }
+//         assert_eq!(path[0].exists(), true)
+//     }
 
-    // TODO test if the function writes correctly to the downloaded file
-}
+//     // TODO test if the function writes correctly to the downloaded file
+// }
