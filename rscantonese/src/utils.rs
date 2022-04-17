@@ -1,11 +1,13 @@
+#[cfg(feature = "utils")]
 use async_compression::futures::bufread::GzipDecoder;
 use async_tar::Archive;
 use futures::StreamExt;
+// use futures::FutureExt;
+// use futures::StreamExt;
 use futures::io::BufReader;
 use futures::io::Error;
 use futures::io::ErrorKind;
 use futures::TryStreamExt;
-#[cfg(feature = "utils")]
 use std::collections::HashSet;
 use std::fs::create_dir_all;
 use std::fs::File;
@@ -86,6 +88,16 @@ impl GitHubFetcher {
                 "gz" => {
                     let decoder = GzipDecoder::new(BufReader::new(reader));
                     let archive = Archive::new(decoder);
+                    let mut entries = archive.to_owned().entries().unwrap();
+
+                    while let Some(entry) = entries.next().await {
+                        // Not sure why this doesn't work
+                        // let decompress_file_name = entry.unwrap().path().unwrap();
+                        // file_path.push(decompress_file_name.as_ref());
+
+                        file_path.push(entry.unwrap().path().unwrap().as_ref());
+                    }
+                    
                     archive.unpack(&file_path).await.unwrap();
                 }
                 _ => {
