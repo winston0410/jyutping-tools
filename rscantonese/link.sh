@@ -1,0 +1,1 @@
+# Script for linking with libtorch on M1 Mac
