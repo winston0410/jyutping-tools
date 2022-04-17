@@ -13,6 +13,7 @@ use std::fs::create_dir_all;
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
+use std::path::Component;
 use std::path::PathBuf;
 
 ///Fetcher for fetching from GitHub repository/release. If the downloaded file is compressed, it will be decompressed automatically.
@@ -20,6 +21,8 @@ pub struct GitHubFetcher {
     /// Reqwest client to prevent recreating it again
     client: reqwest::Client,
 }
+
+const ASSET_PATH: &str = "rscantonese/assets";
 
 impl GitHubFetcher {
     /// Accepting Personal Access Token for accessing protected resources
@@ -40,31 +43,10 @@ impl GitHubFetcher {
             reqwest::header::HeaderValue::from_static("application/vnd.github.v3+json"),
         );
 
-        GitHubFetcher {
-            client: reqwest::ClientBuilder::new()
-                .default_headers(headers)
-                .build()
-                .unwrap(),
-        }
-    }
+        let mut assets_dir_path = std::env::temp_dir();
+        assets_dir_path.push(ASSET_PATH);
 
-    /// Get a file from Github and save it in $TMP_DIR/rscantonese, returning the path of that file.
-    /// This function should only be used for **fetching a single file instead of directory**
-    pub async fn get(&self, url: &str) -> Result<PathBuf, reqwest::Error> {
-        let file_name = url.split('/').next_back().unwrap();
-        let extension = Path::new(&file_name)
-            .extension()
-            .and_then(std::ffi::OsStr::to_str)
-            .unwrap();
-        let compressed_extension_list = HashSet::<&str>::from_iter(vec!["gz"]);
-
-        let res = self.client.get(url).send().await?;
-
-        let mut file_path = std::env::temp_dir();
-        file_path.push("rscantonese");
-        file_path.push("assets");
-
-        match create_dir_all(&file_path) {
+        match create_dir_all(&assets_dir_path) {
             Ok(()) => (),
             Err(err) => {
                 let kind = err.kind();
@@ -77,6 +59,29 @@ impl GitHubFetcher {
             }
         };
 
+        GitHubFetcher {
+            client: reqwest::ClientBuilder::new()
+                .default_headers(headers)
+                .build()
+                .unwrap(),
+        }
+    }
+
+    /// Get a file from Github and save it in $TMP_DIR/rscantonese, returning the path of that file.
+    pub async fn get(&self, url: &str) -> Result<Vec<PathBuf>, reqwest::Error> {
+        let file_name = url.split('/').next_back().unwrap();
+        let extension = Path::new(&file_name)
+            .extension()
+            .and_then(std::ffi::OsStr::to_str)
+            .unwrap();
+        let compressed_extension_list = HashSet::<&str>::from_iter(vec!["gz"]);
+        let mut extracts_path: Vec<PathBuf> = Vec::new();
+
+        let res = self.client.get(url).send().await?;
+
+        let mut assets_dir_path = std::env::temp_dir();
+        assets_dir_path.push(ASSET_PATH);
+
         if compressed_extension_list.contains(extension) {
             let reader = res
                 .bytes_stream()
@@ -87,30 +92,45 @@ impl GitHubFetcher {
                 //TODO Handle other extensions later
                 "gz" => {
                     let decoder = GzipDecoder::new(BufReader::new(reader));
-                    let archive = Archive::new(decoder);
-                    let mut entries = archive.to_owned().entries().unwrap();
+                    let archive = Archive::new(decoder);                    
+                    let mut entries = archive.entries().unwrap();
 
                     while let Some(entry) = entries.next().await {
-                        // Not sure why this doesn't work
-                        // let decompress_file_name = entry.unwrap().path().unwrap();
-                        // file_path.push(decompress_file_name.as_ref());
+                        let mut file_path = assets_dir_path.clone();
+                        let mut file = entry.unwrap();
 
-                        file_path.push(entry.unwrap().path().unwrap().as_ref());
+                        //NOTE Has to unpack here as unpacking the whole tarbell will return unknown issue
+                        file.unpack_in(&file_path).await.unwrap();
+
+                        //As the path used in tarbell is relative. Use this to prevent normalizing path
+                        for component in file.path().unwrap().as_ref().components() {
+                            match component {
+                                //Only push normal component into the path. Ignore everything else
+                                Component::Normal(_) => {
+                                    file_path.push(component);
+                                },
+                                _ => {}
+                            }
+                        }
+                        
+                        extracts_path.push(file_path);
                     }
-                    
-                    archive.unpack(&file_path).await.unwrap();
                 }
                 _ => {
                     unreachable!()
                 }
             }
         } else {
+            let mut file_path = assets_dir_path.clone();
             file_path.push(file_name);
+
             let mut buffer = File::create(&file_path).unwrap();
             buffer.write_all(&res.bytes().await.unwrap()).unwrap();
+
+            extracts_path.push(file_path);
         }
 
-        Ok(file_path)
+        Ok(extracts_path)
     }
 }
 
@@ -127,8 +147,7 @@ mod test_get_file {
             .await
             .unwrap();
 
-        // assert_eq!(path.exists(), true)
-        assert_eq!(path.exists(), false)
+        assert_eq!(path[0].exists(), true)
     }
 
     // TODO test if the function writes correctly to the downloaded file
