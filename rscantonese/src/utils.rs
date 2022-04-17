@@ -2,8 +2,6 @@
 use async_compression::futures::bufread::GzipDecoder;
 use async_tar::Archive;
 use futures::StreamExt;
-// use futures::FutureExt;
-// use futures::StreamExt;
 use futures::io::BufReader;
 use futures::io::Error;
 use futures::io::ErrorKind;
@@ -15,14 +13,13 @@ use std::io::Write;
 use std::path::Path;
 use std::path::Component;
 use std::path::PathBuf;
+use crate::constant::ASSET_PATH;
 
 ///Fetcher for fetching from GitHub repository/release. If the downloaded file is compressed, it will be decompressed automatically.
 pub struct GitHubFetcher {
     /// Reqwest client to prevent recreating it again
     client: reqwest::Client,
 }
-
-const ASSET_PATH: &str = "rscantonese/assets";
 
 impl GitHubFetcher {
     /// Accepting Personal Access Token for accessing protected resources
