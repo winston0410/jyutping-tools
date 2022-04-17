@@ -1940,6 +1940,7 @@ dependencies = [
 name = "rscantonese"
 version = "0.1.0"
 dependencies = [
+ "flate2",
  "reqwest",
  "tokenizers",
  "tokio",

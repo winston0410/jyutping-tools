@@ -6,12 +6,16 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [features]
-default = []
+default = [ "utils" ]
+utils = [ "dep:reqwest", "dep:async-compression", "dep:async-tar", "dep:futures" ]
 tests = []
 
 [dependencies]
 tokenizers = { version = "0.11.3", features = [ "http" ] }
-reqwest = { version = "0.11.10" }
+reqwest = { version = "0.11.10", optional = true, features = [ "stream" ] }
+async-compression = { version = "0.3.12", optional = true, features = [ "futures-io", "gzip" ] }
+futures = { version = "0.3.21", optional = true}
+async-tar = { version = "0.4.2", optional = true }
 
 [dev-dependencies]
 tokio = { version = "1.17.0", features = ["rt", "macros"] }
