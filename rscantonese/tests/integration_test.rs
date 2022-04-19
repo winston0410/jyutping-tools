@@ -10,7 +10,7 @@ mod tests {
     #[test]
     fn should_segment_correctly() {
         // REF https://docs.rs/rust-bert/latest/rust_bert/xlnet/struct.XLNetForTokenClassification.html
-        let config_path = Path::new("./data/config.json");
+        let config_path = Path::new("./config.json");
         let device = Device::Cpu;
         let p = nn::VarStore::new(device);
         let config = XLNetConfig::from_file(config_path);
