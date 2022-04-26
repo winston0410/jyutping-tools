@@ -1,10 +1,9 @@
 from transformers import XLNetTokenizerFast, XLNetTokenizer
 import os
 
-tokenizer = XLNetTokenizer()
-
-print(tokenizer)
+# vocab_file should be given *.model instead of *.vocab
+tokenizer = XLNetTokenizer(vocab_file="./dummy.model")
 
 # Save dataset to $TMPDIR
-# tmp_dir = os.getenv('TMPDIR')
-# tokenizer.save_to_disk(tmp_dir + "tokenizer")
+tmp_dir = os.getenv('TMPDIR')
+tokenizer.save_pretrained(tmp_dir + "tokenizer")
