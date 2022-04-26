@@ -1,5 +1,6 @@
 from datasets import load_dataset
 from operator import itemgetter
+import os
 
 dataset_raw = load_dataset("text", data_files="mock_data.txt")
 
@@ -11,4 +12,6 @@ validation_set, test_set = itemgetter("train", "test")(dataset["test"].train_tes
 dataset["test"] = test_set
 dataset["validation"] = validation_set
 
-dataset.save_to_disk("./.generated_datasets")
+# Save dataset to $TMPDIR
+tmp_dir = os.getenv('TMPDIR')
+dataset.save_to_disk(tmp_dir + "datasets")
