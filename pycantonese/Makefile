@@ -1,11 +1,16 @@
 # export SHELL = /bin/zsh
-
-run:
-	python3.10 index.py
+run@model:
+	python3.10 model.py
+run@model@example:
+	python3.10 ./examples/model.py
 run@tokenizer:
 	python3.10 tokenizer.py
 run@tokenizer@example:
 	python3.10 ./examples/tokenizer.py
+run@dataset:
+	python3.10 dataset.py
+run@dataset@example:
+	python3.10 ./examples/dataset.py
 run@sentencepiece:
 	spm_train --input=./dummy.txt --model_prefix=dummy --vocab_size=18 --character_coverage=0.9995
 update:

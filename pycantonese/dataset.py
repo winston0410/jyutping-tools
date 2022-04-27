@@ -2,7 +2,7 @@ from datasets import load_dataset
 from operator import itemgetter
 import os
 
-dataset_raw = load_dataset("text", data_files="mock_data.txt")
+dataset_raw = load_dataset("text", data_files="dummy_dataset.txt")
 
 dataset = dataset_raw["train"].train_test_split(test_size=0.4)
 

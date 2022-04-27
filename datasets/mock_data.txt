@@ -1,5 +1,0 @@
-abc
-def
-ghk
-foo bar
-hello world
