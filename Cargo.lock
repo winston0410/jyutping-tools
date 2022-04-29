@@ -2995,6 +2995,7 @@ dependencies = [
  "clap",
  "nom",
  "nom-unicode",
+ "regex",
 ]
 
 [[package]]

@@ -22,8 +22,15 @@ fn main() {
 
     match content {
         Ok(x) => {
-            let transformed = lib::transform(&x).replace("__NOEDITSECTION__", "");
-            write(&path, transformed).unwrap();
+            let transformed = lib::transform(&x)
+            .replace("__NOEDITSECTION__", "");
+            let handled_parenthesis = lib::remove_parenthesis(transformed);
+            let handled_footstop = lib::linebreak_based_on_footstop(handled_parenthesis);
+            let handled_excessive_linebreak = lib::remove_excessive_linebreak(handled_footstop);
+
+            write(&path, 
+                handled_excessive_linebreak
+            ).unwrap();
         }
         Err(x) => {
             cmd.error(ErrorKind::Io, x);
