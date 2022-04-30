@@ -24,12 +24,13 @@ fn main() {
         Ok(x) => {
             let transformed = lib::transform(&x)
             .replace("__NOEDITSECTION__", "");
-            let handled_parenthesis = lib::remove_parenthesis(transformed);
-            let handled_footstop = lib::linebreak_based_on_footstop(handled_parenthesis);
+            let handled_footstop = lib::linebreak_based_on_footstop(transformed);
             let handled_excessive_linebreak = lib::remove_excessive_linebreak(handled_footstop);
+            //Handle parenthesis in the very end, as linebreak would affect regex's result
+            let handled_parenthesis = lib::remove_parenthesis(handled_excessive_linebreak);
 
             write(&path, 
-                handled_excessive_linebreak
+                handled_parenthesis
             ).unwrap();
         }
         Err(x) => {
