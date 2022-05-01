@@ -13,6 +13,8 @@ run@dataset@example:
 	python3.10 ./examples/dataset.py
 run@sentencepiece:
 	spm_train --input=./dummy.txt --model_prefix=dummy --vocab_size=18 --character_coverage=0.9995
+run@sentencepiece@unwanted_token:
+	spm_train --input=./dummy_unwanted_token.txt --model_prefix=dummy --vocab_size=87 --character_coverage=0.9995
 update:
 	conda env update --file environment.yml
 # Cannot run conda activate pycantonese in make, not even if you have set the shell to zsh
