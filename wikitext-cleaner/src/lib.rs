@@ -71,16 +71,6 @@ mod test_transform {
 }
 
 ///Remove parenthesis in sentence
-/// 
-/// Input:
-/// ```
-/// 香港（，）係華南一城埠。
-/// ```
-/// 
-/// Output:
-/// ```
-/// 香港係華南一城埠。
-/// ```
 pub fn remove_parenthesis<T>(input: T) -> String 
     where T: AsRef<str> + Into<String> 
 {
@@ -102,16 +92,6 @@ mod test_remove_parenthesis {
 }
 
 ///Add linebreak based on footstop.
-/// 
-/// Input:
-/// ```
-/// 香港係華南一城埠。香港開埠於1841年。
-/// ```
-/// 
-/// Output:
-/// ```
-/// 香港係華南一城埠。\n香港開埠於1841年。\n
-/// ```
 pub fn linebreak_based_on_footstop<T>(input: T) -> String 
 where T: AsRef<str> + Into<String> {
     input.as_ref().replace("。", "。\n")
@@ -131,16 +111,6 @@ mod test_linebreak_based_on_footstop {
 }
 
 ///Remove excessive linebreak.
-/// 
-/// Input:
-/// ```
-/// \n\n
-/// ```
-/// 
-/// Output:
-/// ```
-/// \n
-/// ```
 pub fn remove_excessive_linebreak<T>(input: T) -> String 
 where T: AsRef<str> + Into<String> {
     let regex = Regex::new(r"\n+").unwrap();
@@ -159,21 +129,21 @@ mod test_remove_excessive_linebreak {
     }
 }
 
-//Should we remove all English?
-// pub fn remove_english<T>(input: T) -> String 
-// where T: AsRef<str> + Into<String> {
-//     let regex = Regex::new(r"\n+").unwrap();
-//     regex.replace_all(input.as_ref(), "\n").to_string()
-// }
+///Remove all ASCII characters, excluding linebreak and CR
+pub fn remove_ascii<T>(input: T) -> String 
+where T: AsRef<str> + Into<String> {
+    let regex = Regex::new(r"[\x00-\x09\x0e-\x2f\x3a-\xFF]+").unwrap();
+    regex.replace_all(input.as_ref(), "").to_string()
+}
 
-// #[cfg(test)]
-// mod test_remove_english {
-//     use super::*;
-//     #[test]
-//     fn should_remove_english() {
-//         let raw = "我去咗Central London食飯。";
-//         let replaced = remove_english(raw);
+#[cfg(test)]
+mod test_remove_ascii {
+    use super::*;
+    #[test]
+    fn should_remove_ascii() {
+        let raw = "我去咗Central London食飯。";
+        let replaced = remove_ascii(raw);
         
-//         assert_eq!(replaced, "我去咗食飯。");
-//     }
-// }
+        assert_eq!(replaced, "我去咗食飯。");
+    }
+}
