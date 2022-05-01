@@ -7,6 +7,8 @@ run@tokenizer:
 	python3.10 tokenizer.py
 run@tokenizer@example:
 	python3.10 ./examples/tokenizer.py
+run@tokenizer@example@incompatible_tokenizer:
+	python3.10 ./examples/incompatible_tokenizer.py
 run@dataset:
 	python3.10 dataset.py
 run@dataset@example:
